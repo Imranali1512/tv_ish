@@ -1,12 +1,43 @@
-# React + Vite
+# tv_ish
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a modern login/signup project built using **React**, **Vite**, and **Tailwind CSS**.
 
-Currently, two official plugins are available:
+It provides a sleek UI with animated poster grid, authentication forms, and mobile responsiveness. The project is designed for learning, practicing frontend development, or use as a base for bigger applications.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🔧 Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- ⚛️ React (with Vite for fast dev environment)
+- 🎨 Tailwind CSS
+- 🧠 ESLint (with recommended settings)
+- 🎬 Framer Motion (for animations)
+- 🔒 React Icons (for UI icons)
+- 🌐 React Router DOM (for navigation)
+
+---
+
+## 🚀 Features
+
+- Login/Signup pages with social media icons
+- Animated poster grid on the login page
+- Responsive design (mobile + desktop)
+- Password visibility toggle
+- Navigation between login and signup pages
+
+---
+
+## 📁 Folder Structure
+
+```plaintext
+tv-ish/
+├── public/
+│   └── images/, icons/, logo/
+├── src/
+│   ├── pages/       → All main screens (Login, Signup, Forgot Password, etc.)
+│   ├── assets/      → Static assets like icons
+│   ├── App.jsx
+│   └── main.jsx
+├── index.html
+├── package.json
+└── tailwind.config.js
