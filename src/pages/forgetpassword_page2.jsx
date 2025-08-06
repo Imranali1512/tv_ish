@@ -9,7 +9,6 @@ const ForgotPasswordPage2 = () => {
 
   const [code, setCode] = useState(new Array(6).fill(""));
   const inputsRef = useRef([]);
-
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
@@ -19,7 +18,6 @@ const ForgotPasswordPage2 = () => {
 
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", handleResize);
-
     inputsRef.current[0]?.focus();
 
     return () => window.removeEventListener("resize", handleResize);
@@ -64,7 +62,7 @@ const ForgotPasswordPage2 = () => {
   };
 
   const images = Array.from({ length: 15 }, (_, i) => `/images/login_img${i + 1}.png`);
-  const imagesToShow = isMobile ? images.slice(0, 9) : images.slice(0, 10);
+  const imagesToShow = isMobile ? [] : images.slice(0, 10); // ❌ Hide posters on mobile
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -78,45 +76,57 @@ const ForgotPasswordPage2 = () => {
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col md:flex-row overflow-hidden">
-      {/* Left: Posters & Logo */}
+      
+      {/* ✅ Left: Glowing Logo + Posters (desktop only) */}
       <div className="relative md:w-1/2 p-4 flex flex-col items-start overflow-hidden">
-        <div className="w-[180px] h-[100px] mb-4 ml-2">
-          <video
-            src="/logo/tv-ish_logo.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="w-full h-full object-contain"
+        
+        {/* ✅ Glowing Logo */}
+        <div
+          className="z-50 mt-10 relative"
+          style={{
+            marginLeft: "-12px",
+            transform: "translateY(-10px)",
+            width: isMobile ? "150px" : "200px",
+            height: isMobile ? "65px" : "85px",
+            filter: `
+              drop-shadow(0 0 15px rgba(200, 200, 200, 0.9)) 
+              drop-shadow(0 0 30px rgba(180, 180, 180, 0.7)) 
+              drop-shadow(0 0 45px rgba(150, 150, 150, 0.5))
+            `,
+          }}
+        >
+          <img
+            src="/logo/tv-ish.png"
+            alt="TV Ish Logo"
+            className="object-contain w-full h-full"
           />
         </div>
 
-        {/* Fades */}
-        <div className="absolute top-[100px] left-0 w-full h-32 bg-gradient-to-b from-black/60 to-transparent z-20 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/60 to-transparent z-20 pointer-events-none" />
+        {/* ✅ Posters Grid (desktop only) */}
+        {!isMobile && (
+          <>
+            <div className="absolute top-[100px] left-0 w-full h-32 bg-gradient-to-b from-black/60 to-transparent z-20 pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/60 to-transparent z-20 pointer-events-none" />
 
-        {/* Posters Grid */}
-        <motion.div
-          className={`grid gap-3 relative z-0 overflow-hidden ${
-            isMobile ? "grid-cols-3" : "grid-cols-5"
-          }`}
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {imagesToShow.map((img, index) => (
-            <motion.img
-              key={index}
-              src={img}
-              alt={`Poster ${index + 1}`}
-              className={`object-cover rounded-md ${
-                isMobile ? "w-[110px] h-[180px]" : "w-[173.8px] h-[359.67px]"
-              }`}
-              variants={imageVariants}
-              loading="lazy"
-            />
-          ))}
-        </motion.div>
+            <motion.div
+              className="grid grid-cols-5 gap-3 relative z-0 overflow-hidden"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              {imagesToShow.map((img, index) => (
+                <motion.img
+                  key={index}
+                  src={img}
+                  alt={`Poster ${index + 1}`}
+                  className="object-cover rounded-md w-[173.8px] h-[359.67px]"
+                  variants={imageVariants}
+                  loading="lazy"
+                />
+              ))}
+            </motion.div>
+          </>
+        )}
       </div>
 
       {/* Right: OTP Form */}
@@ -165,7 +175,7 @@ const ForgotPasswordPage2 = () => {
             ))}
           </div>
 
-          {/* Next Button */}
+          {/* Verify Button */}
           <button
             onClick={handleVerify}
             className="w-full mt-6 bg-blue-600 hover:bg-blue-700 transition p-3 rounded-md font-semibold"

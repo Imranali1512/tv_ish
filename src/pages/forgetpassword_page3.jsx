@@ -50,18 +50,39 @@ const ForgotPasswordPage3 = () => {
     navigate("/");
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+  };
+
+  const imageVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  };
+
   return (
     <div className="min-h-screen bg-black text-white flex flex-col md:flex-row overflow-hidden">
-      {/* Left Side – Posters Grid */}
+      {/* Left Side – Logo & Posters Grid */}
       <div className="relative md:w-1/2 p-4 flex flex-col items-start overflow-hidden">
-        <div className="w-[180px] h-[100px] mb-4 ml-2">
-          <video
-            src="/logo/tv-ish_logo.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="w-full h-full object-contain"
+        {/* Logo */}
+        <div
+          className="z-50 mt-10 relative"
+          style={{
+            marginLeft: "-12px",
+            transform: "translateY(-10px)",
+            width: isMobile ? "150px" : "200px",
+            height: isMobile ? "65px" : "85px",
+            filter: `
+              drop-shadow(0 0 15px rgba(200, 200, 200, 0.9)) 
+              drop-shadow(0 0 30px rgba(180, 180, 180, 0.7)) 
+              drop-shadow(0 0 45px rgba(150, 150, 150, 0.5))
+            `,
+          }}
+        >
+          <img
+            src="/logo/tv-ish.png"
+            alt="TV Ish Logo"
+            className="object-contain w-full h-full"
           />
         </div>
 
@@ -69,36 +90,26 @@ const ForgotPasswordPage3 = () => {
         <div className="absolute top-[100px] left-0 w-full h-32 bg-gradient-to-b from-black/60 to-transparent z-20 pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/60 to-transparent z-20 pointer-events-none" />
 
-        <motion.div
-          className={`grid gap-3 relative z-0 overflow-hidden ${
-            isMobile ? "grid-cols-3" : "grid-cols-5"
-          }`}
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: { opacity: 0 },
-            visible: {
-              opacity: 1,
-              transition: { staggerChildren: 0.1 },
-            },
-          }}
-        >
-          {imagesToShow.map((img, index) => (
-            <motion.img
-              key={index}
-              src={img}
-              alt={`Poster ${index + 1}`}
-              className={`object-cover rounded-md ${
-                isMobile ? "w-[110px] h-[180px]" : "w-[173.8px] h-[359.67px]"
-              }`}
-              loading="lazy"
-              variants={{
-                hidden: { opacity: 0, y: 30 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-              }}
-            />
-          ))}
-        </motion.div>
+        {/* Posters Grid - only show on non-mobile */}
+        {!isMobile && (
+          <motion.div
+            className="grid gap-3 relative z-0 overflow-hidden grid-cols-5"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            {imagesToShow.map((img, index) => (
+              <motion.img
+                key={index}
+                src={img}
+                alt={`Poster ${index + 1}`}
+                className="object-cover rounded-md w-[173.8px] h-[359.67px]"
+                variants={imageVariants}
+                loading="lazy"
+              />
+            ))}
+          </motion.div>
+        )}
       </div>
 
       {/* Right Side – Form */}
@@ -125,9 +136,7 @@ const ForgotPasswordPage3 = () => {
 
           {/* Header */}
           <h2 className="text-red-500 text-2xl font-bold">Create New Password</h2>
-          <p className="text-sm text-gray-300">
-            Enter the new password for your account.
-          </p>
+          <p className="text-sm text-gray-300">Enter the new password for your account.</p>
 
           {/* New Password */}
           <div>
@@ -143,7 +152,7 @@ const ForgotPasswordPage3 = () => {
               <FaLock className="absolute left-3 top-3 text-gray-400" />
               <span
                 onClick={() => setShowNew(!showNew)}
-                className="absolute right-3 top-3 text-xl text-gray-500 cursor-pointer"
+                className="absolute right-3 top-3 text-xl text-gray-500 cursor-pointer select-none"
               >
                 {showNew ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
               </span>
@@ -164,7 +173,7 @@ const ForgotPasswordPage3 = () => {
               <FaLock className="absolute left-3 top-3 text-gray-400" />
               <span
                 onClick={() => setShowConfirm(!showConfirm)}
-                className="absolute right-3 top-3 text-xl text-gray-500 cursor-pointer"
+                className="absolute right-3 top-3 text-xl text-gray-500 cursor-pointer select-none"
               >
                 {showConfirm ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
               </span>

@@ -14,7 +14,7 @@ const ForgotPasswordPage = () => {
   }, []);
 
   const images = Array.from({ length: 15 }, (_, i) => `/images/login_img${i + 1}.png`);
-  const imagesToShow = isMobile ? images.slice(0, 9) : images.slice(0, 10);
+  const imagesToShow = isMobile ? [] : images.slice(0, 10); // ❌ hide posters on mobile
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -38,53 +38,63 @@ const ForgotPasswordPage = () => {
       return;
     }
 
-    // ✅ Correct route path
     navigate("/forgetpassword_page2", { state: { email: email.trim() } });
   };
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col md:flex-row overflow-hidden">
-      {/* Left Side — Posters + Logo */}
+      
+      {/* ✅ Left Side — Glowing Logo + Posters (Desktop Only) */}
       <div className="relative md:w-1/2 p-4 flex flex-col items-start overflow-hidden">
-        <div className="w-[180px] h-[100px] mb-4 ml-2">
-          <video
-            src="/logo/tv-ish_logo.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="w-full h-full object-contain"
-            aria-label="TV Ish Logo"
+        
+        {/* ✅ Glowing Logo (always visible) */}
+        <div
+          className="z-50 mt-10 relative"
+          style={{
+            marginLeft: "-12px",
+            transform: "translateY(-10px)",
+            width: isMobile ? "150px" : "200px",
+            height: isMobile ? "65px" : "85px",
+            filter: `
+              drop-shadow(0 0 15px rgba(200, 200, 200, 0.9)) 
+              drop-shadow(0 0 30px rgba(180, 180, 180, 0.7)) 
+              drop-shadow(0 0 45px rgba(150, 150, 150, 0.5))
+            `,
+          }}
+        >
+          <img
+            src="/logo/tv-ish.png"
+            alt="TV Ish Logo"
+            className="object-contain w-full h-full"
           />
         </div>
 
-        {/* Gradient Fades */}
-        <div className="absolute top-[100px] left-0 w-full h-32 bg-gradient-to-b from-black/60 to-transparent z-20 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/60 to-transparent z-20 pointer-events-none" />
+        {/* ✅ Posters only on desktop */}
+        {!isMobile && (
+          <>
+            <div className="absolute top-[100px] left-0 w-full h-32 bg-gradient-to-b from-black/60 to-transparent z-20 pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/60 to-transparent z-20 pointer-events-none" />
 
-        {/* Posters Grid */}
-        <motion.div
-          className={`grid gap-3 relative z-0 overflow-hidden ${
-            isMobile ? "grid-cols-3" : "grid-cols-5"
-          }`}
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          aria-label="Login posters gallery"
-        >
-          {imagesToShow.map((img, index) => (
-            <motion.img
-              key={index}
-              src={img}
-              alt={`Poster ${index + 1}`}
-              className={`object-cover rounded-md ${
-                isMobile ? "w-[110px] h-[180px]" : "w-[173.8px] h-[359.67px]"
-              }`}
-              variants={imageVariants}
-              loading="lazy"
-            />
-          ))}
-        </motion.div>
+            <motion.div
+              className="grid grid-cols-5 gap-3 relative z-0 overflow-hidden"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              aria-label="Login posters gallery"
+            >
+              {imagesToShow.map((img, index) => (
+                <motion.img
+                  key={index}
+                  src={img}
+                  alt={`Poster ${index + 1}`}
+                  className="object-cover rounded-md w-[173.8px] h-[359.67px]"
+                  variants={imageVariants}
+                  loading="lazy"
+                />
+              ))}
+            </motion.div>
+          </>
+        )}
       </div>
 
       {/* Right Side — Forgot Password Form */}
@@ -95,6 +105,7 @@ const ForgotPasswordPage = () => {
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
         <div className="w-full max-w-md space-y-6" role="main">
+          
           {/* Top Nav */}
           <div className="w-full flex items-center justify-between text-sm text-gray-300 mb-2">
             <button
@@ -102,10 +113,7 @@ const ForgotPasswordPage = () => {
               className="flex items-center gap-1 text-blue-400 hover:underline focus:outline-none focus:ring-2 focus:ring-blue-400 rounded"
               aria-label="Go back to home"
             >
-              <span className="text-lg" aria-hidden="true">
-                &larr;
-              </span>{" "}
-              Back
+              <span className="text-lg" aria-hidden="true">&larr;</span> Back
             </button>
             <div className="text-right">
               <p className="text-xs text-gray-400">Step 1 of 3</p>

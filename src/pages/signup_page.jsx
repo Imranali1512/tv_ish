@@ -15,7 +15,7 @@ const SignupPage = () => {
   }, []);
 
   const images = Array.from({ length: 15 }, (_, i) => `/images/login_img${i + 1}.png`);
-  const imagesToShow = isMobile ? images.slice(0, 9) : images.slice(0, 10);
+  const imagesToShow = isMobile ? [] : images.slice(0, 10); // Posters hidden on mobile
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -29,51 +29,61 @@ const SignupPage = () => {
 
   return (
     <div className="min-h-screen md:h-[150vh] bg-black text-white flex flex-col md:flex-row overflow-hidden">
-      {/* Left Side — Posters */}
+      
+      {/* Left Side — Logo and Posters (Posters only on Desktop) */}
       <div className="relative md:w-1/2 p-4 flex flex-col items-start overflow-hidden">
-
-        {/* Logo Video */}
-        <div className="w-[180px] h-[100px] mb-4 ml-2">
-          <video
-            src="/logo/tv-ish_logo.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="w-full h-full object-contain"
+        
+        {/* Logo Always Visible */}
+        <div
+          className="z-50 mt-10 relative"
+          style={{
+            marginLeft: "-12px",
+            transform: "translateY(-10px)",
+            width: isMobile ? "150px" : "200px",
+            height: isMobile ? "65px" : "85px",
+            filter: `
+              drop-shadow(0 0 15px rgba(200, 200, 200, 0.9)) 
+              drop-shadow(0 0 30px rgba(180, 180, 180, 0.7)) 
+              drop-shadow(0 0 45px rgba(150, 150, 150, 0.5))
+            `,
+          }}
+        >
+          <img
+            src="/logo/tv-ish.png"
+            alt="TV Ish Logo"
+            className="object-contain w-full h-full"
           />
         </div>
 
-        {/* Fades */}
-        <div className="absolute top-[100px] left-0 w-full h-32 bg-gradient-to-b from-black/60 to-transparent z-20 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/60 to-transparent z-20 pointer-events-none" />
+        {/* Posters Only on Desktop */}
+        {!isMobile && (
+          <>
+            {/* Fades */}
+            <div className="absolute top-[100px] left-0 w-full h-32 bg-gradient-to-b from-black/60 to-transparent z-20 pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/60 to-transparent z-20 pointer-events-none" />
 
-        {/* Posters Grid */}
-        <motion.div
-          className={`grid gap-3 relative z-0 overflow-hidden ${
-            isMobile ? "grid-cols-3" : "grid-cols-5"
-          }`}
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {imagesToShow.map((img, index) => (
-            <motion.img
-              key={index}
-              src={img}
-              alt={`Poster ${index + 1}`}
-              className={`object-cover rounded-md ${
-                isMobile
-                  ? "w-[110px] h-[180px]"
-                  : "w-[173.8px] h-[359.67px]"
-              }`}
-              variants={imageVariants}
-            />
-          ))}
-        </motion.div>
+            {/* Posters Grid */}
+            <motion.div
+              className="grid grid-cols-5 gap-3 relative z-0 overflow-hidden"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              {imagesToShow.map((img, index) => (
+                <motion.img
+                  key={index}
+                  src={img}
+                  alt={`Poster ${index + 1}`}
+                  className="object-cover rounded-md w-[173.8px] h-[359.67px]"
+                  variants={imageVariants}
+                />
+              ))}
+            </motion.div>
+          </>
+        )}
       </div>
 
-      {/* Right Side — Form */}
+      {/* Right Side — Signup Form */}
       <motion.div
         className="flex-1 flex items-center justify-center p-6 overflow-auto"
         initial={{ opacity: 0, x: 50 }}
@@ -82,7 +92,7 @@ const SignupPage = () => {
       >
         <div className="w-full max-w-md space-y-6">
 
-          {/* Top Nav in Form */}
+          {/* Form Header Navigation */}
           <div className="w-full flex items-center justify-between text-sm text-gray-300 mb-2">
             <button
               onClick={() => navigate("/")}
@@ -96,10 +106,12 @@ const SignupPage = () => {
             </div>
           </div>
 
-          {/* Header */}
+          {/* Title */}
           <div>
             <h2 className="text-red-500 text-2xl font-bold">Register your account</h2>
-            <p className="text-sm text-gray-300 mt-1">Fill the details below to submit register account.</p>
+            <p className="text-sm text-gray-300 mt-1">
+              Fill the details below to submit register account.
+            </p>
           </div>
 
           {/* First & Last Name */}
@@ -130,7 +142,7 @@ const SignupPage = () => {
             className="w-full p-2 rounded-md bg-gray-800 border border-gray-700 text-white"
           />
 
-          {/* Password */}
+          {/* Password Field */}
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
@@ -154,7 +166,7 @@ const SignupPage = () => {
             <span className="text-blue-400 underline cursor-pointer">Privacy Policy.</span>
           </p>
 
-          {/* Submit */}
+          {/* Submit Button */}
           <button
             className="w-full bg-blue-700 hover:bg-blue-800 transition p-2 rounded-md"
             onClick={() => navigate("/signup_page2")}
@@ -162,7 +174,7 @@ const SignupPage = () => {
             Continue
           </button>
 
-          {/* Back to login */}
+          {/* Already have an account */}
           <p className="text-center text-sm text-gray-400">
             Already have account?{" "}
             <button

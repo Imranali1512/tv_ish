@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { FaFacebook, FaGoogle, FaLinkedin, FaEye, FaEyeSlash } from "react-icons/fa";
+import {
+  FaFacebook,
+  FaGoogle,
+  FaLinkedin,
+  FaEye,
+  FaEyeSlash,
+} from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
@@ -15,46 +21,62 @@ const LoginPage = () => {
   }, []);
 
   const images = Array.from({ length: 15 }, (_, i) => `/images/login_img${i + 1}.png`);
-  const imagesToShow = isMobile ? images.slice(0, 9) : images.slice(0, 10);
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col md:flex-row overflow-hidden relative">
       {/* LEFT SIDE — Posters + Logo */}
       <div className="relative md:w-1/2 p-4 flex flex-col items-start overflow-hidden">
-        {/* Logo Video */}
-        <div className="w-[180px] h-[75px] mb-4 ml-2 z-20 relative bg-black">
-          <video
-            src="/logo/tv-ish_logo.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="w-full h-full object-contain bg-black"
+
+        {/* Logo positioned near page left border with enhanced dark white glow */}
+        <div
+          className="z-50 mt-10 relative"
+          style={{
+            marginLeft: "-12px",
+            transform: "translateY(-10px)",
+            width: isMobile ? "150px" : "200px",
+            height: isMobile ? "65px" : "85px",
+            filter: `
+              drop-shadow(0 0 15px rgba(200, 200, 200, 0.9)) 
+              drop-shadow(0 0 30px rgba(180, 180, 180, 0.7)) 
+              drop-shadow(0 0 45px rgba(150, 150, 150, 0.5))
+            `,
+          }}
+        >
+          <img
+            src="/logo/tv-ish.png"
+            alt="TV Ish Logo"
+            className="object-contain w-full h-full"
           />
         </div>
 
-        {/* Top & Bottom Fades */}
+        {/* Top & Bottom Fade overlays */}
         <div className="absolute top-[100px] left-0 w-full h-32 bg-gradient-to-b from-black/60 to-transparent z-20 pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/60 to-transparent z-20 pointer-events-none" />
 
-        {/* Poster Grid */}
-        <div className={`grid gap-3 relative z-10 overflow-hidden ${isMobile ? "grid-cols-3" : "grid-cols-5"}`}>
-          {imagesToShow.map((img, index) => (
-            <motion.img
-              key={index}
-              src={img}
-              alt={`Poster ${index + 1}`}
-              className="object-cover rounded-md"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.1 }}
-              style={{
-                width: isMobile ? "110px" : "173.8px",
-                height: isMobile ? "180px" : "359.67px",
-              }}
-            />
-          ))}
-        </div>
+        {/* Poster Grid - hidden on mobile */}
+        {!isMobile && (
+          <div className="grid gap-3 relative z-10 overflow-hidden grid-cols-5">
+            {images.slice(0, 10).map((img, index) => (
+              <motion.img
+                key={index}
+                src={img}
+                alt={`Poster ${index + 1}`}
+                className="object-cover rounded-md"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.6,
+                  ease: "easeOut",
+                  delay: index * 0.1,
+                }}
+                style={{
+                  width: "173.8px",
+                  height: "359.67px",
+                }}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* RIGHT SIDE — Login Form */}
@@ -68,14 +90,14 @@ const LoginPage = () => {
           <h2 className="text-red-500 text-2xl font-bold">Welcome</h2>
           <p className="text-sm text-white">Login to continue</p>
 
-          {/* Email */}
+          {/* Email Input */}
           <input
             type="email"
             placeholder="Your Email"
             className="w-full p-2 rounded-md bg-gray-800 border border-gray-700 text-white"
           />
 
-          {/* Password */}
+          {/* Password Input */}
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
@@ -112,7 +134,7 @@ const LoginPage = () => {
             Login
           </button>
 
-          {/* Signup */}
+          {/* Signup Link */}
           <p className="text-center text-sm text-gray-400">
             Don’t have an account?{" "}
             <button
@@ -131,7 +153,7 @@ const LoginPage = () => {
             <hr className="flex-1 border-gray-600" />
           </div>
 
-          {/* Social Icons */}
+          {/* Social Login Icons */}
           <div className="flex justify-center gap-6">
             <motion.div whileHover={{ scale: 1.2, transition: { duration: 0.3 } }}>
               <FaFacebook className="text-3xl cursor-pointer hover:text-blue-500" />
