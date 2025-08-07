@@ -149,21 +149,24 @@ const SignupPage = () => {
           />
 
           {/* Password Field */}
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Your password"
-              className="w-full p-2 rounded-md bg-gray-800 border border-gray-700 text-white pr-10"
-            />
-            <button
-              type="button"
-              className="absolute right-2 top-2 text-white"
-              onClick={() => setShowPassword(!showPassword)}
-              aria-label={showPassword ? "Hide password" : "Show password"}
-            >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
-            </button>
-          </div>
+          <div className="relative"> 
+                      <input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Your Password"
+                      className="w-full p-3 pr-12 rounded-md bg-gray-800 border border-gray-700 text-white"
+                      />
+                      <button
+                        type="button"
+                        className="absolute inset-y-0 right-3 flex items-center text-white"
+                        onClick={() => setShowPassword(!showPassword)}
+                        aria-label={showPassword ? "Hide password" : "Show password"}
+                      >
+                        
+                        {showPassword ? <FaEyeSlash className="text-lg" /> : <FaEye className="text-lg" />}
+                        
+                      </button>
+                    
+                    </div>
 
           {/* Terms */}
           <p className="text-xs text-gray-400">

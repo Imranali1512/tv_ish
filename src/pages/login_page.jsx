@@ -105,21 +105,25 @@ const LoginPage = () => {
           />
 
           {/* Password Input */}
-          <div className="relative">
+          <div className="relative"> 
             <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Your Password"
-              className="w-full p-2 rounded-md bg-gray-800 border border-gray-700 text-white pr-10"
+            type={showPassword ? "text" : "password"}
+            placeholder="Your Password"
+            className="w-full p-3 pr-12 rounded-md bg-gray-800 border border-gray-700 text-white"
             />
             <button
               type="button"
-              className="absolute right-2 top-2 text-white"
+              className="absolute inset-y-0 right-3 flex items-center text-white"
               onClick={() => setShowPassword(!showPassword)}
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
+              
+              {showPassword ? <FaEyeSlash className="text-lg" /> : <FaEye className="text-lg" />}
+              
             </button>
+          
           </div>
+
 
           {/* Remember + Forgot */}
           <div className="flex justify-between text-sm text-gray-400">

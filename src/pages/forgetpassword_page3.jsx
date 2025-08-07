@@ -148,43 +148,46 @@ const ForgotPasswordPage3 = () => {
           <div>
             <label className="block text-sm text-gray-400 mb-1">New Password</label>
             <div className="relative">
-              <input
+                <input
                 type={showNew ? "text" : "password"}
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className="w-full p-2 pl-10 pr-10 rounded-md bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 pl-10 pr-12 rounded-md bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="************"
-              />
-              <FaLock className="absolute left-3 top-3 text-gray-400" />
-              <span
+                />
+                <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <span
                 onClick={() => setShowNew(!showNew)}
-                className="absolute right-3 top-3 text-xl text-gray-500 cursor-pointer select-none"
-              >
-                {showNew ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-              </span>
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xl text-gray-500 cursor-pointer select-none"
+                >
+                    {showNew ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                </span>
             </div>
-          </div>
+        </div>
+
 
           {/* Confirm Password */}
           <div>
             <label className="block text-sm text-gray-400 mb-1">Confirm Password</label>
             <div className="relative">
-              <input
+                <input
                 type={showConfirm ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full p-2 pl-10 pr-10 rounded-md bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 pl-10 pr-12 rounded-md bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="************"
-              />
-              <FaLock className="absolute left-3 top-3 text-gray-400" />
-              <span
+                />
+                
+                <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <span
                 onClick={() => setShowConfirm(!showConfirm)}
-                className="absolute right-3 top-3 text-xl text-gray-500 cursor-pointer select-none"
-              >
-                {showConfirm ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-              </span>
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xl text-gray-500 cursor-pointer select-none"
+                >
+                    {showConfirm ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                </span>
             </div>
-          </div>
+        </div>
+
 
           {/* Password Rules */}
           <ul className="text-sm text-gray-300 space-y-1 mt-2">
