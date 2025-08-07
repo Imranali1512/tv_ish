@@ -81,24 +81,30 @@ const ForgotPasswordPage2 = () => {
       <div className="relative md:w-1/2 p-4 flex flex-col items-start overflow-hidden">
         
         {/* ✅ Glowing Logo */}
-        <div
-          className="z-50 mt-10 relative"
+        <div 
+          className="z-50 mt-10 relative" 
           style={{
-            marginLeft: "-12px",
+            marginLeft: "-12px",  
             transform: "translateY(-10px)",
             width: isMobile ? "150px" : "200px",
-            height: isMobile ? "65px" : "85px",
-            filter: `
-              drop-shadow(0 0 15px rgba(200, 200, 200, 0.9)) 
-              drop-shadow(0 0 30px rgba(180, 180, 180, 0.7)) 
-              drop-shadow(0 0 45px rgba(150, 150, 150, 0.5))
+            height: isMobile ? "65px" : "85px", 
+            filter: isMobile 
+            
+            ? `
+            drop-shadow(0 0 4px rgba(255, 255, 255, 0.5)) 
+            drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))
+            `
+            : `
+            drop-shadow(0 0 15px rgba(200, 200, 200, 0.9)) 
+            drop-shadow(0 0 30px rgba(180, 180, 180, 0.7)) 
+            drop-shadow(0 0 45px rgba(150, 150, 150, 0.5))
             `,
           }}
         >
           <img
-            src="/logo/tv-ish.png"
-            alt="TV Ish Logo"
-            className="object-contain w-full h-full"
+          src="/logo/tv-ish.png"
+          alt="TV Ish Logo"
+          className="object-contain w-full h-full"
           />
         </div>
 
