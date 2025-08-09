@@ -12,6 +12,8 @@ import { useNavigate } from "react-router-dom";
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,39 +24,41 @@ const LoginPage = () => {
 
   const images = Array.from({ length: 15 }, (_, i) => `/images/login_img${i + 1}.png`);
 
+  const handleLogin = () => {
+    if (!email || !password) {
+      alert("Please enter both email and password.");
+      return;
+    }
+
+    // Add your authentication logic here if needed
+    navigate("/home_page");
+  };
+
   return (
     <div className="min-h-screen bg-black text-white flex flex-col md:flex-row overflow-hidden relative">
+      
       {/* LEFT SIDE — Posters + Logo */}
       <div className="relative md:w-1/2 p-4 flex flex-col items-start overflow-hidden">
 
-        {/* Logo positioned near page left border with enhanced dark white glow */}
+        {/* Logo */}
         <div 
           className="z-50 mt-10 relative" 
           style={{
-            marginLeft: "-12px",  
+            marginLeft: "-12px",
             transform: "translateY(-10px)",
             width: isMobile ? "150px" : "200px",
             height: isMobile ? "65px" : "85px", 
             filter: isMobile 
-            
-            ? `
-            drop-shadow(0 0 4px rgba(255, 255, 255, 0.5)) 
-            drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))
-            `
-            : `
-            drop-shadow(0 0 15px rgba(200, 200, 200, 0.9)) 
-            drop-shadow(0 0 30px rgba(180, 180, 180, 0.7)) 
-            drop-shadow(0 0 45px rgba(150, 150, 150, 0.5))
-            `,
+              ? `drop-shadow(0 0 4px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))`
+              : `drop-shadow(0 0 15px rgba(200, 200, 200, 0.9)) drop-shadow(0 0 30px rgba(180, 180, 180, 0.7)) drop-shadow(0 0 45px rgba(150, 150, 150, 0.5))`,
           }}
         >
           <img
-          src="/logo/tv-ish.png"
-          alt="TV Ish Logo"
-          className="object-contain w-full h-full"
+            src="/logo/tv-ish.png"
+            alt="TV Ish Logo"
+            className="object-contain w-full h-full"
           />
         </div>
-
 
         {/* Top & Bottom Fade overlays */}
         <div className="absolute top-[100px] left-0 w-full h-32 bg-gradient-to-b from-black/60 to-transparent z-20 pointer-events-none" />
@@ -101,15 +105,19 @@ const LoginPage = () => {
           <input
             type="email"
             placeholder="Your Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full p-2 rounded-md bg-gray-800 border border-gray-700 text-white"
           />
 
           {/* Password Input */}
-          <div className="relative"> 
+          <div className="relative">
             <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Your Password"
-            className="w-full p-3 pr-12 rounded-md bg-gray-800 border border-gray-700 text-white"
+              type={showPassword ? "text" : "password"}
+              placeholder="Your Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-3 pr-12 rounded-md bg-gray-800 border border-gray-700 text-white"
             />
             <button
               type="button"
@@ -117,13 +125,9 @@ const LoginPage = () => {
               onClick={() => setShowPassword(!showPassword)}
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
-              
               {showPassword ? <FaEyeSlash className="text-lg" /> : <FaEye className="text-lg" />}
-              
             </button>
-          
           </div>
-
 
           {/* Remember + Forgot */}
           <div className="flex justify-between text-sm text-gray-400">
@@ -141,7 +145,10 @@ const LoginPage = () => {
           </div>
 
           {/* Login Button */}
-          <button className="w-full bg-blue-700 hover:bg-blue-800 transition p-2 rounded-md">
+          <button
+            className="w-full bg-blue-700 hover:bg-blue-800 transition p-2 rounded-md"
+            onClick={handleLogin}
+          >
             Login
           </button>
 
