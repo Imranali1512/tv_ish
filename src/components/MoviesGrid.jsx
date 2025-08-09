@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const MoviesGrid = ({ title = "Popular Movies", movies = [], showProgress = false }) => {
@@ -24,7 +24,6 @@ const MoviesGrid = ({ title = "Popular Movies", movies = [], showProgress = fals
     }
   };
 
-  // Update activeDot on manual scroll (drag or mouse wheel)
   const handleScroll = () => {
     if (!scrollRef.current) return;
     const scrollLeft = scrollRef.current.scrollLeft;
@@ -32,7 +31,6 @@ const MoviesGrid = ({ title = "Popular Movies", movies = [], showProgress = fals
     setActiveDot(newActiveDot);
   };
 
-  // Touch & Mouse event handlers for drag-to-scroll
   const handleDragStart = (e) => {
     setIsDragging(true);
     dragStartX.current = e.type === "touchstart" ? e.touches[0].pageX : e.pageX;
@@ -61,10 +59,10 @@ const MoviesGrid = ({ title = "Popular Movies", movies = [], showProgress = fals
           <button
             onClick={() => scroll("left")}
             disabled={activeDot === 0}
-            className={`rounded-full p-2 md:p-3 text-sm md:text-base transition-colors ${
+            className={`rounded-full p-2 md:p-3 text-sm md:text-base transition-transform duration-300 ease-in-out ${
               activeDot === 0
                 ? "bg-gray-700 cursor-not-allowed text-gray-400"
-                : "bg-gray-800 hover:bg-gray-700 text-white cursor-pointer"
+                : "bg-gray-800 hover:bg-gray-700 text-white cursor-pointer active:scale-90"
             }`}
             aria-label="Scroll Left"
           >
@@ -76,8 +74,10 @@ const MoviesGrid = ({ title = "Popular Movies", movies = [], showProgress = fals
             {Array.from({ length: totalDots }).map((_, index) => (
               <div
                 key={index}
-                className={`w-3 h-3 rounded-full transition-colors ${
-                  index === activeDot ? "bg-red-600" : "bg-gray-600"
+                className={`w-3 h-3 rounded-full transform transition-all duration-300 ${
+                  index === activeDot
+                    ? "bg-red-600 scale-125"
+                    : "bg-gray-600 scale-100"
                 }`}
               />
             ))}
@@ -86,10 +86,10 @@ const MoviesGrid = ({ title = "Popular Movies", movies = [], showProgress = fals
           <button
             onClick={() => scroll("right")}
             disabled={activeDot === totalDots - 1}
-            className={`rounded-full p-2 md:p-3 text-sm md:text-base transition-colors ${
+            className={`rounded-full p-2 md:p-3 text-sm md:text-base transition-transform duration-300 ease-in-out ${
               activeDot === totalDots - 1
                 ? "bg-gray-700 cursor-not-allowed text-gray-400"
-                : "bg-gray-800 hover:bg-gray-700 text-white cursor-pointer"
+                : "bg-gray-800 hover:bg-gray-700 text-white cursor-pointer active:scale-90"
             }`}
             aria-label="Scroll Right"
           >
@@ -114,19 +114,21 @@ const MoviesGrid = ({ title = "Popular Movies", movies = [], showProgress = fals
           style={{ scrollBehavior: "smooth" }}
         >
           {movies.map((movie, index) => (
-            <div key={index} className="flex-shrink-0 w-48 md:w-52 lg:w-56 relative">
-              <div className="relative">
+            <div
+              key={index}
+              className="flex-shrink-0 w-48 md:w-52 lg:w-56 relative transform transition duration-500 hover:scale-105 hover:-translate-y-1 hover:shadow-lg"
+            >
+              <div className="relative animate-fadeInUp">
                 <img
                   src={movie.image}
                   alt={movie.title}
                   className="rounded-lg object-cover w-full h-72"
                 />
-
                 {/* Progress Bar Overlay */}
                 {showProgress && movie.progress !== undefined && (
                   <div className="absolute bottom-0 left-0 w-full h-2 bg-gray-700 rounded-b-lg overflow-hidden">
                     <div
-                      className="h-full bg-red-600"
+                      className="h-full bg-red-600 transition-all duration-500 ease-in-out"
                       style={{ width: `${movie.progress * 100}%` }}
                     ></div>
                   </div>
@@ -139,7 +141,7 @@ const MoviesGrid = ({ title = "Popular Movies", movies = [], showProgress = fals
 
       {/* View All Button */}
       <div className="mt-6 text-center">
-        <button className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded inline-flex items-center transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2">
+        <button className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded inline-flex items-center transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 active:scale-95">
           <svg className="w-5 h-5 mr-2" fill="white" viewBox="0 0 20 20" aria-hidden="true">
             <path d="M4 3h1v14H4V3zm11 7l-6 4V6l6 4z" />
           </svg>

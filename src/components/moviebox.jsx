@@ -7,7 +7,6 @@ import {
   FaChevronRight,
 } from "react-icons/fa";
 
-// Movie Data
 const movies = [
   {
     title: "Avengers : Endgame",
@@ -58,7 +57,6 @@ const MovieBox = () => {
     goToIndex(nextIndex);
   };
 
-  // Drag/Touch Handlers
   const handleDragStart = (e) => {
     if (isAnimating) return;
     isDragging.current = true;
@@ -89,30 +87,32 @@ const MovieBox = () => {
 
   return (
     <div className="bg-black text-white p-6 md:p-10 select-none">
-      {/* Header with Arrows + Dots aligned like MoviesGrid */}
+      {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold">Top Rated</h2>
-
         <div className="bg-gray-900 rounded-full px-3 py-1 flex items-center space-x-3">
           <button
             onClick={handlePrev}
             disabled={isAnimating}
-            className={`rounded-full p-2 md:p-3 text-sm md:text-base transition-colors ${
+            className={`rounded-full p-2 md:p-3 text-sm md:text-base transition-transform duration-300 ${
               isAnimating
                 ? "bg-gray-700 cursor-not-allowed text-gray-400"
-                : "bg-gray-800 hover:bg-gray-700 text-white cursor-pointer"
+                : "bg-gray-800 hover:bg-gray-700 text-white active:scale-90"
             }`}
             aria-label="Previous Movie"
           >
             <FaChevronLeft />
           </button>
 
+          {/* Dots */}
           <div className="flex space-x-1 items-center">
             {movies.map((_, idx) => (
               <div
                 key={idx}
-                className={`w-3 h-3 rounded-full transition-colors ${
-                  idx === currentIndex ? "bg-red-600" : "bg-gray-600"
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  idx === currentIndex
+                    ? "bg-red-600 scale-125"
+                    : "bg-gray-600 scale-100"
                 }`}
               />
             ))}
@@ -121,10 +121,10 @@ const MovieBox = () => {
           <button
             onClick={handleNext}
             disabled={isAnimating}
-            className={`rounded-full p-2 md:p-3 text-sm md:text-base transition-colors ${
+            className={`rounded-full p-2 md:p-3 text-sm md:text-base transition-transform duration-300 ${
               isAnimating
                 ? "bg-gray-700 cursor-not-allowed text-gray-400"
-                : "bg-gray-800 hover:bg-gray-700 text-white cursor-pointer"
+                : "bg-gray-800 hover:bg-gray-700 text-white active:scale-90"
             }`}
             aria-label="Next Movie"
           >
@@ -133,7 +133,7 @@ const MovieBox = () => {
         </div>
       </div>
 
-      {/* Movie Box */}
+      {/* Movie Slide */}
       <div
         className="relative w-full max-w-full h-[750px] mx-auto rounded-lg overflow-hidden bg-black"
         onMouseDown={handleDragStart}
@@ -149,41 +149,42 @@ const MovieBox = () => {
           key={movies[currentIndex].image}
           src={movies[currentIndex].image}
           alt={movies[currentIndex].title}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
-            isAnimating ? "opacity-60" : "opacity-90"
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out ${
+            isAnimating ? "opacity-60 scale-105" : "opacity-90 scale-100"
           }`}
         />
 
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
 
-        {/* Content */}
+        {/* Slide Content */}
         <div
-          className="relative z-10 flex flex-col justify-end items-center h-full text-center px-6 sm:px-8 md:px-12 pb-12 md:pb-20 transition-opacity duration-300"
-          style={{ opacity: isAnimating ? 0.6 : 1 }}
+          className={`relative z-10 flex flex-col justify-end items-center h-full text-center px-6 sm:px-8 md:px-12 pb-12 md:pb-20 transition-opacity duration-500 ease-in-out ${
+            isAnimating ? "opacity-50 scale-95" : "opacity-100 scale-100"
+          }`}
         >
-          <h2 className="text-2xl md:text-4xl font-bold mb-2">
+          <h2 className="text-2xl md:text-4xl font-bold mb-2 transition-all duration-500 ease-in-out">
             {movies[currentIndex].title}
           </h2>
-          <p className="text-xs md:text-sm max-w-xl opacity-70 mb-6">
+          <p className="text-xs md:text-sm max-w-xl opacity-70 mb-6 transition-all duration-500 ease-in-out">
             {movies[currentIndex].description}
           </p>
 
-          {/* Action Buttons */}
+          {/* Buttons */}
           <div className="flex space-x-3 items-center">
-            <button className="bg-red-600 px-4 py-2 rounded flex items-center hover:bg-red-700 transition duration-300">
+            <button className="bg-red-600 px-4 py-2 rounded flex items-center hover:bg-red-700 active:scale-95 transition-all duration-300">
               <svg className="w-4 h-4 mr-2 fill-white" viewBox="0 0 20 20">
                 <path d="M4 3h1v14H4V3zm11 7l-6 4V6l6 4z" />
               </svg>
               Play Now
             </button>
-            <button className="bg-gray-700 p-2 rounded hover:bg-gray-600 transition duration-300">
+            <button className="bg-gray-700 p-2 rounded hover:bg-gray-600 active:scale-90 transition-all duration-300">
               <FaPlus />
             </button>
-            <button className="bg-gray-700 p-2 rounded hover:bg-gray-600 transition duration-300">
+            <button className="bg-gray-700 p-2 rounded hover:bg-gray-600 active:scale-90 transition-all duration-300">
               <FaThumbsUp />
             </button>
-            <button className="bg-gray-700 p-2 rounded hover:bg-gray-600 transition duration-300">
+            <button className="bg-gray-700 p-2 rounded hover:bg-gray-600 active:scale-90 transition-all duration-300">
               <FaVolumeUp />
             </button>
           </div>
