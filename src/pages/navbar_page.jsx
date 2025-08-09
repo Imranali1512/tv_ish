@@ -26,7 +26,7 @@ const NavbarPage = () => {
   }, []);
 
   const navItems = [
-    { name: "Home", path: "/home_page" },
+    { name: "Home", path: "/" },
     { name: "Movies", path: "/movies" },
     { name: "TV shows", path: "/tvshows" },
     { name: "Podcast", path: "/podcast" },
