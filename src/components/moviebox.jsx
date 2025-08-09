@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
-  FaArrowLeft,
-  FaArrowRight,
   FaPlus,
   FaThumbsUp,
   FaVolumeUp,
+  FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa";
 
 // Movie Data
@@ -13,7 +13,7 @@ const movies = [
     title: "Avengers : Endgame",
     description:
       "With the help of remaining allies, the Avengers must assemble once more in order to undo Thanos's actions and undo the chaos to the universe, no matter what consequences may be in store, and no matter who they face... Avenge the fallen.",
-    image: "/images/Container.png", // make sure this file exists in public/images
+    image: "/images/Container.png",
   },
   {
     title: "Inception",
@@ -33,29 +33,117 @@ const MovieBox = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  const handlePrev = () => {
+  const dragStartX = useRef(0);
+  const isDragging = useRef(false);
+
+  const animationDuration = 500;
+  const totalSlides = movies.length;
+
+  const goToIndex = (index) => {
+    if (isAnimating) return;
     setIsAnimating(true);
-    setTimeout(() => {
-      setCurrentIndex((prev) =>
-        prev === 0 ? movies.length - 1 : prev - 1
-      );
-      setIsAnimating(false);
-    }, 300); // delay index update to allow fade
+    setCurrentIndex(index);
+    setTimeout(() => setIsAnimating(false), animationDuration);
+  };
+
+  const handlePrev = () => {
+    if (isAnimating) return;
+    const prevIndex = currentIndex === 0 ? totalSlides - 1 : currentIndex - 1;
+    goToIndex(prevIndex);
   };
 
   const handleNext = () => {
-    setIsAnimating(true);
-    setTimeout(() => {
-      setCurrentIndex((prev) =>
-        prev === movies.length - 1 ? 0 : prev + 1
-      );
-      setIsAnimating(false);
-    }, 300);
+    if (isAnimating) return;
+    const nextIndex = currentIndex === totalSlides - 1 ? 0 : currentIndex + 1;
+    goToIndex(nextIndex);
+  };
+
+  // Drag/Touch Handlers
+  const handleDragStart = (e) => {
+    if (isAnimating) return;
+    isDragging.current = true;
+    dragStartX.current = e.type === "touchstart" ? e.touches[0].clientX : e.clientX;
+  };
+
+  const handleDragMove = (e) => {
+    if (!isDragging.current) return;
+    e.preventDefault();
+  };
+
+  const handleDragEnd = (e) => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
+    const dragEndX =
+      e.type === "touchend" && e.changedTouches
+        ? e.changedTouches[0].clientX
+        : e.clientX;
+    const diff = dragStartX.current - dragEndX;
+
+    const swipeThreshold = 50;
+    if (diff > swipeThreshold) {
+      handleNext();
+    } else if (diff < -swipeThreshold) {
+      handlePrev();
+    }
   };
 
   return (
-    <div className="bg-black text-white py-0 px-0 select-none">
-      <div className="relative w-full max-w-full h-[750px] mx-auto rounded-lg overflow-hidden bg-black">
+    <div className="bg-black text-white p-6 md:p-10 select-none">
+      {/* Header with Arrows + Dots aligned like MoviesGrid */}
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-semibold">Top Rated</h2>
+
+        <div className="bg-gray-900 rounded-full px-3 py-1 flex items-center space-x-3">
+          <button
+            onClick={handlePrev}
+            disabled={isAnimating}
+            className={`rounded-full p-2 md:p-3 text-sm md:text-base transition-colors ${
+              isAnimating
+                ? "bg-gray-700 cursor-not-allowed text-gray-400"
+                : "bg-gray-800 hover:bg-gray-700 text-white cursor-pointer"
+            }`}
+            aria-label="Previous Movie"
+          >
+            <FaChevronLeft />
+          </button>
+
+          <div className="flex space-x-1 items-center">
+            {movies.map((_, idx) => (
+              <div
+                key={idx}
+                className={`w-3 h-3 rounded-full transition-colors ${
+                  idx === currentIndex ? "bg-red-600" : "bg-gray-600"
+                }`}
+              />
+            ))}
+          </div>
+
+          <button
+            onClick={handleNext}
+            disabled={isAnimating}
+            className={`rounded-full p-2 md:p-3 text-sm md:text-base transition-colors ${
+              isAnimating
+                ? "bg-gray-700 cursor-not-allowed text-gray-400"
+                : "bg-gray-800 hover:bg-gray-700 text-white cursor-pointer"
+            }`}
+            aria-label="Next Movie"
+          >
+            <FaChevronRight />
+          </button>
+        </div>
+      </div>
+
+      {/* Movie Box */}
+      <div
+        className="relative w-full max-w-full h-[750px] mx-auto rounded-lg overflow-hidden bg-black"
+        onMouseDown={handleDragStart}
+        onMouseMove={handleDragMove}
+        onMouseUp={handleDragEnd}
+        onMouseLeave={handleDragEnd}
+        onTouchStart={handleDragStart}
+        onTouchMove={handleDragMove}
+        onTouchEnd={handleDragEnd}
+      >
         {/* Background Image */}
         <img
           key={movies[currentIndex].image}
@@ -71,7 +159,7 @@ const MovieBox = () => {
 
         {/* Content */}
         <div
-          className="relative z-10 flex flex-col justify-end items-center h-full text-center text-white px-6 sm:px-8 md:px-12 pb-12 md:pb-20 transition-opacity duration-300"
+          className="relative z-10 flex flex-col justify-end items-center h-full text-center px-6 sm:px-8 md:px-12 pb-12 md:pb-20 transition-opacity duration-300"
           style={{ opacity: isAnimating ? 0.6 : 1 }}
         >
           <h2 className="text-2xl md:text-4xl font-bold mb-2">
@@ -99,34 +187,6 @@ const MovieBox = () => {
               <FaVolumeUp />
             </button>
           </div>
-        </div>
-
-        {/* Navigation Arrows */}
-        <button
-          onClick={handlePrev}
-          className="absolute left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 rounded-full p-3 hover:bg-opacity-75 transition-all duration-300 text-white active:scale-90 focus:outline-none"
-          aria-label="Previous Movie"
-        >
-          <FaArrowLeft size={20} />
-        </button>
-        <button
-          onClick={handleNext}
-          className="absolute right-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 rounded-full p-3 hover:bg-opacity-75 transition-all duration-300 text-white active:scale-90 focus:outline-none"
-          aria-label="Next Movie"
-        >
-          <FaArrowRight size={20} />
-        </button>
-
-        {/* Navigation Dots */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
-          {movies.map((_, idx) => (
-            <div
-              key={idx}
-              className={`w-3 h-1 rounded ${
-                idx === currentIndex ? "bg-red-600" : "bg-gray-600"
-              } transition-colors duration-300`}
-            />
-          ))}
         </div>
       </div>
     </div>

@@ -121,7 +121,7 @@ const HomePage = () => {
       <MoviesGrid title="Popular Movies" movies={popularMovies} />
 
       {/* Movie Banner Section */}
-      <div className="mt-16 px-4 md:px-10 max-w-6xl mx-auto">
+      <div className="mt-16 px-0 md:px-10 max-w-15xl mx-auto">
         <MovieBox />
       </div>
 
