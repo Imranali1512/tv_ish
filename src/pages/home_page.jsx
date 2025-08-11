@@ -18,15 +18,23 @@ const HomePage = () => {
   ];
 
   const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 640);
+    const handleResize = () => {
+      const width = window.innerWidth;
+      setIsMobile(width < 640); // Mobile: less than 640px
+      setIsTablet(width >= 640 && width < 1024); // Tablet: 640px to 1023px
+    };
+
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const displayedImages = isMobile ? backgroundImages.slice(0, 12) : backgroundImages;
+  const displayedImages = isMobile || isTablet
+    ? backgroundImages.slice(0, 12)
+    : backgroundImages;
 
   const popularMovies = [
     { title: "Captain Marvel", image: "/images/captonmarval.png" },
@@ -45,7 +53,6 @@ const HomePage = () => {
     { title: "Joker", image: "/images/13.jpg", progress: 0.9 },
     { title: "Scream", image: "/images/captonmarval.png", progress: 0.25 },
     { title: "Iron Man", image: "/images/homepic11.png", progress: 0.6 },
-
     { title: "Deadpool", image: "/images/rambo.png", progress: 0.8 },
   ];
 
@@ -59,15 +66,7 @@ const HomePage = () => {
     { title: "Narcos", image: "/images/homepic5.png" },
   ];
 
-  const getInOnTheAction = [
-    { title: "Stranger Things", image: "/images/13.jpg" },
-    { title: "The Witcher", image: "/images/login_img13.png" },
-    { title: "Loki", image: "/images/login_img15.png" },
-    { title: "Money Heist", image: "/images/12.jpg" },
-    { title: "Breaking Bad", image: "/images/login_img4.png" },
-    { title: "Narcos", image: "/images/homepic9.png" },
-    { title: "Narcos", image: "/images/homepic5.png" },
-  ];
+  const getInOnTheAction = [...popularShows];
 
   const popularPodcasts = [
     { title: "The Daily Boost", image: "/images/pod1.png" },
@@ -101,13 +100,12 @@ const HomePage = () => {
       images: ["/images/homepic20.png", "/images/homepic21.png", "/images/homepic22.png", "/images/homepic23.png"]
     },
     {
-    name: "Sci-Fi",
-    images: ["/images/homepic24.png", "/images/homepic25.png", "/images/homepic26.png", "/images/homepic27.png"]
+      name: "Sci-Fi",
+      images: ["/images/homepic24.png", "/images/homepic25.png", "/images/homepic26.png", "/images/homepic27.png"]
     },
-
   ];
 
-  const LoveThese  = [
+  const LoveThese = [
     { title: "The Daily Boost", image: "/images/12.jpg" },
     { title: "TED Talks Daily", image: "/images/13.jpg" },
     { title: "Joe Rogan Experience", image: "/images/14.jpg" },
@@ -117,7 +115,7 @@ const HomePage = () => {
     { title: "Science Vs", image: "/images/homepic7.png" },
   ];
 
-  const Snips  = [
+  const Snips = [
     { title: "The Daily Boost", image: "/images/snip1.png" },
     { title: "TED Talks Daily", image: "/images/snip3.png" },
     { title: "Joe Rogan Experience", image: "/images/snip4.png" },
@@ -127,7 +125,7 @@ const HomePage = () => {
     { title: "Science Vs", image: "/images/snip6.png" },
   ];
 
-  const music  = [
+  const music = [
     { title: "The Daily Boost", image: "/images/16.jpg" },
     { title: "TED Talks Daily", image: "/images/17.jpg" },
     { title: "Joe Rogan Experience", image: "/images/18.jpg" },
@@ -137,11 +135,30 @@ const HomePage = () => {
     { title: "Science Vs", image: "/images/snip6.png" },
   ];
 
+  const featuredMovies = [
+    {
+      title: "Avengers : Endgame",
+      description:
+        "With the help of remaining allies, the Avengers must assemble once more in order to undo Thanos's actions and restore balance to the universe.",
+      image: "/images/Container.png",
+    },
+    {
+      title: "Inception",
+      description:
+        "A thief who steals corporate secrets through dream-sharing technology is tasked with planting an idea into a CEO’s mind.",
+      image: "/images/14.jpg",
+    },
+    {
+      title: "Interstellar",
+      description:
+        "A group of explorers travel through a wormhole in space to ensure humanity's survival.",
+      image: "/images/15.jpg",
+    },
+  ];
 
   return (
     <div className="bg-black text-white min-h-screen relative select-none">
-
-      {/* Background Image Grid */}
+      {/* Background Grid */}
       <div
         className={`grid gap-0 px-1 pt-2 ${
           isMobile
@@ -167,80 +184,45 @@ const HomePage = () => {
         ))}
       </div>
 
-      {/* Hero */}
-      <motion.div
-        className="relative px-4 sm:px-10 md:px-16 max-w-6xl mx-auto text-center z-10 mt-10"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }}
-      >
-        <h1 className="text-3xl sm:text-4xl font-bold mb-4 sm:mb-5">
-          The Best Streaming Experience
-        </h1>
-        <p className="text-gray-300 max-w-3xl mx-auto mb-8 sm:mb-10 text-sm sm:text-base">
-          Enjoy seamless streaming with movies, shows, exclusive podcasts,
-          music, and original content – anytime, anywhere.
-        </p>
-        <button className="bg-red-600 px-5 py-2 sm:px-6 sm:py-3 rounded-full hover:bg-red-700 transition font-semibold">
-          ▶️ Start Watching Now
-        </button>
-      </motion.div>
-
-      {/* Sections */}
+      {/* Other Grids */}
       <MoviesGrid title="Popular Movies" movies={popularMovies} />
+
+      {/* Hero Section */}
       <div className="mt-16 px-0 md:px-10 max-w-15xl mx-auto">
-        <MovieBox />
+        <MovieBox
+          heading="Top Rated"
+          movies={featuredMovies}
+          showArrows={true}
+          showTrailerButton={false}
+        />
       </div>
+
       <MoviesGrid title="Continue Watching" movies={continueWatchingList} showProgress />
       <MoviesGrid title="Popular Shows" movies={popularShows} />
       <MoviesGrid title="Get In on the Action" movies={getInOnTheAction} />
-
-      {/* ✅ Podcasts with custom corner radius */}
       <MoviesGrid
         title="Popular Podcasts"
-        movies={popularPodcasts.map(podcast => ({
-          ...podcast,
-          customClass: "rounded-[15px]",
-        }))}
+        movies={popularPodcasts.map((p) => ({ ...p, customClass: "rounded-[15px]" }))}
       />
-
-      {/* ✅ Category Slider - Placed Below Podcasts */}
       <div className="mt-15 px-4 md:px-5 max-w-15xl mx-auto">
         <CategorySlider categories={categoriesData} />
       </div>
-
-      {/* ✅ "We Think  You'll  Love These" with custom corner radius */}
       <MoviesGrid
-        title="We Think  You'll  Love These "
-        movies={LoveThese .map(LoveThese  => ({
-          ...LoveThese ,
-          customClass: "rounded-[15px]",
-        }))}
+        title="We Think You'll Love These"
+        movies={LoveThese.map((m) => ({ ...m, customClass: "rounded-[15px]" }))}
       />
-
-      {/* ✅ "Snips" with custom corner radius */}
       <MoviesGrid
         title="Popular Snips"
-        movies={Snips .map(Snips  => ({
-          ...Snips ,
-          customClass: "rounded-[15px]",
-        }))}  
+        movies={Snips.map((m) => ({ ...m, customClass: "rounded-[15px]" }))}
       />
-
-            {/* ✅ "music" with custom corner radius */}
       <MoviesGrid
         title="Popular Music"
-        movies={music .map(music  => ({
-          ...music ,
-          customClass: "rounded-[15px]",
-        }))}  
+        movies={music.map((m) => ({ ...m, customClass: "rounded-[15px]" }))}
       />
 
-      {/* FAQ */}
       <div className="mt-10 px-4 md:px-10 max-w-10xl mx-auto">
         <FAQ />
       </div>
-
-      {/* Banner */}
       <div className="mt-10 px-4 md:px-50 max-w-6xl mx-auto pb-10">
         <Container />
       </div>

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 const Footer = () => {
   return (
-    <footer className="bg-zinc-900 text-white py-10 px-4 sm:px-10">
+    <footer className="bg-zinc-900 text-white py-10 px-4 sm:px-10 mt-10 mb-20">
       <div className="max-w-7xl mx-auto">
         {/* Top grid links */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-8 text-sm">
@@ -63,14 +63,13 @@ const Footer = () => {
         >
           <motion.span
             className="text-sm font-semibold text-white cursor-default"
-            whileHover={{ color: "#60A5FA" }} // light blue on hover
+            whileHover={{ color: "#60A5FA" }}
             transition={{ duration: 0.3 }}
           >
             Connect With Us
           </motion.span>
 
           <div className="flex gap-3">
-            {/* Facebook */}
             <motion.a
               href="#"
               aria-label="Facebook"
@@ -80,7 +79,6 @@ const Footer = () => {
               <FaFacebookF size={18} />
             </motion.a>
 
-            {/* Twitter */}
             <motion.a
               href="#"
               aria-label="Twitter"
@@ -90,7 +88,6 @@ const Footer = () => {
               <FaTwitter size={18} />
             </motion.a>
 
-            {/* LinkedIn */}
             <motion.a
               href="#"
               aria-label="LinkedIn"

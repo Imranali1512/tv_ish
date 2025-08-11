@@ -6,18 +6,23 @@ import {
   FaShieldAlt,
   FaBars,
   FaTimes,
+  FaHome,
+  FaVideo,
 } from "react-icons/fa";
 import { NavLink, Link } from "react-router-dom";
 
 const NavbarPage = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [recentSearches, setRecentSearches] = useState([]);
 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
       if (window.innerWidth >= 768) {
-        setMenuOpen(false); // Close menu if resized to desktop
+        setMenuOpen(false);
       }
     };
 
@@ -25,10 +30,34 @@ const NavbarPage = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    const storedSearches = JSON.parse(localStorage.getItem("recentSearches")) || [];
+    setRecentSearches(storedSearches);
+  }, []);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+
+    const updatedSearches = [
+      searchQuery,
+      ...recentSearches.filter((item) => item !== searchQuery),
+    ].slice(0, 5); // limit to 5 recent items
+
+    setRecentSearches(updatedSearches);
+    localStorage.setItem("recentSearches", JSON.stringify(updatedSearches));
+
+    console.log("Searching for:", searchQuery);
+    // Add your navigation or search result logic here
+
+    setSearchQuery("");
+    setShowSearch(false);
+  };
+
   const navItems = [
     { name: "Home", path: "/" },
     { name: "Movies", path: "/movies" },
-    { name: "TV shows", path: "/tvshows" },
+    { name: "TV Shows", path: "/tvshows" },
     { name: "Podcast", path: "/podcast" },
     { name: "Snips", path: "/snips" },
     { name: "Music", path: "/music" },
@@ -36,41 +65,138 @@ const NavbarPage = () => {
     { name: "Sports", path: "/sports" },
   ];
 
+  const bottomNavItems = [
+    { name: "Home", icon: <FaHome />, path: "/" },
+    { name: "Search", icon: <FaSearch />, path: "/search" },
+    { name: "Snips", icon: <FaVideo />, path: "/snips" },
+    { name: "Notifications", icon: <FaBell />, path: "/notification" },
+    { name: "Account", icon: <FaUser />, path: "/account" },
+  ];
+
   return (
-    <nav className="fixed top-0 w-full z-50 bg-black/30 backdrop-blur-sm px-4 py-3 sm:px-10">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Logo */}
-        <div
-          className="relative z-50"
-          style={{
-            width: isMobile ? "110px" : "140px",
-            height: isMobile ? "50px" : "60px",
-            filter: `
-              drop-shadow(0 0 10px rgba(200, 200, 200, 0.8)) 
-              drop-shadow(0 0 20px rgba(180, 180, 180, 0.5)) 
-              drop-shadow(0 0 30px rgba(150, 150, 150, 0.3))
-            `,
-          }}
-        >
-          <img
-            src="/logo/tv-ish.png"
-            alt="TV-ish Logo"
-            className="object-contain w-full h-full"
-          />
+    <>
+      <nav className="fixed top-0 w-full z-50 bg-black/30 backdrop-blur-sm px-4 py-3 sm:px-10">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          {/* Logo */}
+          <div
+            className="relative z-50"
+            style={{
+              width: isMobile ? "110px" : "140px",
+              height: isMobile ? "50px" : "60px",
+              filter: `
+                drop-shadow(0 0 10px rgba(200, 200, 200, 0.8)) 
+                drop-shadow(0 0 20px rgba(180, 180, 180, 0.5)) 
+                drop-shadow(0 0 30px rgba(150, 150, 150, 0.3))
+              `,
+            }}
+          >
+            <img
+              src="/logo/tv-ish.png"
+              alt="TV-ish Logo"
+              className="object-contain w-full h-full"
+            />
+          </div>
+
+          {/* Desktop Menu */}
+          {!isMobile && (
+            <div className="bg-zinc-900 rounded-xl px-6 py-2 flex flex-wrap justify-center gap-3 shadow-lg">
+              {navItems.map((item, index) => (
+                <NavLink
+                  key={index}
+                  to={item.path}
+                  className={({ isActive }) =>
+                    `relative px-4 py-1.5 rounded-lg font-medium transition-all duration-300 ${
+                      isActive
+                        ? "text-white bg-zinc-800 text-lg font-semibold after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-2/3 after:h-[2px] after:bg-red-500 after:rounded-full"
+                        : "text-zinc-400 hover:text-white hover:after:absolute hover:after:bottom-0 hover:after:left-1/2 hover:after:-translate-x-1/2 hover:after:w-2/3 hover:after:h-[2px] hover:after:bg-red-500 hover:after:rounded-full"
+                    }`
+                  }
+                >
+                  {item.name}
+                </NavLink>
+              ))}
+            </div>
+          )}
+
+          {/* Right Icons / Hamburger */}
+          <div className="flex items-center space-x-4 text-lg text-white">
+            {!isMobile ? (
+              <>
+                <FaSearch
+                  className="cursor-pointer hover:text-blue-400 transition duration-200"
+                  onClick={() => setShowSearch(!showSearch)}
+                />
+                <FaBell className="cursor-pointer hover:text-red-400 transition duration-200" />
+                <Link to="/login">
+                  <FaUser className="cursor-pointer hover:text-green-400 transition duration-200" />
+                </Link>
+                <FaShieldAlt className="cursor-pointer hover:text-purple-400 transition duration-200" />
+              </>
+            ) : (
+              <button
+                onClick={() => setMenuOpen(!menuOpen)}
+                className="p-2 bg-zinc-800 rounded-md text-white"
+                aria-label="Toggle menu"
+              >
+                {menuOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
+              </button>
+            )}
+          </div>
         </div>
 
-        {/* Desktop Menu */}
-        {!isMobile && (
-          <div className="bg-zinc-900 rounded-xl px-6 py-2 flex flex-wrap justify-center gap-3 shadow-lg">
+        {/* Desktop Search Bar */}
+        {showSearch && !isMobile && (
+          <div className="absolute top-full left-0 right-0 bg-zinc-800 px-4 py-3 z-40 shadow-lg">
+            <form onSubmit={handleSearch} className="flex items-center space-x-3">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search..."
+                className="flex-1 bg-zinc-700 text-white px-4 py-2 rounded-lg outline-none"
+              />
+              <button
+                type="submit"
+                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
+              >
+                Search
+              </button>
+            </form>
+
+            {recentSearches.length > 0 && (
+              <div className="mt-3">
+                <h4 className="text-zinc-400 text-sm mb-2">Recent Searches:</h4>
+                <ul className="space-y-1">
+                  {recentSearches.map((item, index) => (
+                    <li
+                      key={index}
+                      className="text-zinc-200 hover:text-white cursor-pointer"
+                      onClick={() => {
+                        setSearchQuery(item);
+                      }}
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Mobile Dropdown Menu */}
+        {isMobile && menuOpen && (
+          <div className="bg-zinc-900 mt-3 p-4 rounded-lg shadow-lg space-y-2">
             {navItems.map((item, index) => (
               <NavLink
                 key={index}
                 to={item.path}
+                onClick={() => setMenuOpen(false)}
                 className={({ isActive }) =>
-                  `relative px-4 py-1.5 rounded-lg font-medium transition-all duration-300 ${
+                  `block px-4 py-2 rounded-md text-sm font-medium transition ${
                     isActive
-                      ? "text-white bg-zinc-800 text-lg font-semibold after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-2/3 after:h-[2px] after:bg-red-500 after:rounded-full"
-                      : "text-zinc-400 hover:text-white hover:after:absolute hover:after:bottom-0 hover:after:left-1/2 hover:after:-translate-x-1/2 hover:after:w-2/3 hover:after:h-[2px] hover:after:bg-red-500 hover:after:rounded-full"
+                      ? "bg-red-500 text-white"
+                      : "text-zinc-300 hover:bg-zinc-800"
                   }`
                 }
               >
@@ -79,53 +205,28 @@ const NavbarPage = () => {
             ))}
           </div>
         )}
+      </nav>
 
-        {/* Right Icons / Hamburger */}
-        <div className="flex items-center space-x-4 text-lg text-white">
-          {!isMobile ? (
-            <>
-              <FaSearch className="cursor-pointer hover:text-blue-400 transition duration-200" />
-              <FaBell className="cursor-pointer hover:text-red-400 transition duration-200" />
-
-              {/* User icon wrapped in Link */}
-              <Link to="/login">
-                <FaUser className="cursor-pointer hover:text-green-400 transition duration-200" />
-              </Link>
-
-              <FaShieldAlt className="cursor-pointer hover:text-purple-400 transition duration-200" />
-            </>
-          ) : (
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="p-2 bg-zinc-800 rounded-md text-white"
-              aria-label="Toggle menu"
-            >
-              {menuOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Mobile Dropdown Menu */}
-      {isMobile && menuOpen && (
-        <div className="bg-zinc-900 mt-3 p-4 rounded-lg shadow-lg space-y-2">
-          {navItems.map((item, index) => (
+      {/* Bottom Mobile Navigation */}
+      {isMobile && (
+        <div className="fixed bottom-0 left-0 right-0 z-50 bg-zinc-900 border-t-[3px] border-zinc-700 flex justify-around items-center py-4 md:hidden">
+          {bottomNavItems.map((item, index) => (
             <NavLink
               key={index}
               to={item.path}
-              onClick={() => setMenuOpen(false)} // Close menu after click
               className={({ isActive }) =>
-                `block px-4 py-2 rounded-md text-sm font-medium transition ${
-                  isActive ? "bg-red-500 text-white" : "text-zinc-300 hover:bg-zinc-800"
+                `flex flex-col items-center text-sm font-semibold transition-all ${
+                  isActive ? "text-red-500" : "text-zinc-300 hover:text-white"
                 }`
               }
             >
-              {item.name}
+              <div className="text-lg mb-0.5">{item.icon}</div>
+              <span className="text-[13px]">{item.name}</span>
             </NavLink>
           ))}
         </div>
       )}
-    </nav>
+    </>
   );
 };
 
