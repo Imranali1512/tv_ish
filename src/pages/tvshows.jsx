@@ -29,43 +29,43 @@ const Movies = [
 
 // Popular Shows
 const popularShows = [
-  { title: "Captain Marvel", image: "/images/2.png" },
-  { title: "Captain America", image: "/images/4.png" },
-  { title: "Jai Ho Rambo", image: "/images/6.png" },
-  { title: "Gold", image: "/images/7.png" },
-  { title: "Avengers: Ultron", image: "/images/9.png" },
-  { title: "Black Panther", image: "/images/9-2.jpg" },
-  { title: "Spider-Man", image: "/images/9-4.jpg" },
+  { title: "Stranger Think", image: "/images/2.png" },
+  { title: "Lucifer", image: "/images/4.png" },
+  { title: "High Town", image: "/images/6.png" },
+  { title: "Mirzapur", image: "/images/7.png" },
+  { title: "Breathe Into The Shadows", image: "/images/9.png" },
+  { title: "Money Heist", image: "/images/9-2.png" },
+  { title: "Stranget Think: 3", image: "/images/9-4.png" },
 ];
 
 // Trending Shows
 const Toptrending = [
   {
-    title: "Morbius",
+    title: "High Town",
     image: "/images/1.png",
     duration: "1h 30min",
     views: "2K",
   },
   {
-    title: "Kisi Ka Bhai Kisi Ki Jaan",
+    title: "Stranger Think",
     image: "/images/2.png",
     duration: "1h 57min",
     views: "1.5K",
   },
   {
-    title: "Suraj Pe Mangal Bhari",
+    title: "Money Heist",
     image: "/images/3.png",
     duration: "2h 10min",
     views: "1.8K",
   },
   {
-    title: "Pathaan",
+    title: "Lucifer",
     image: "/images/4.png",
     duration: "2h 20min",
     views: "3K",
   },
   {
-    title: "Ant-Man",
+    title: "The Grey Man",
     image: "/images/5.png",
     duration: "1h 42min",
     views: "5K",
@@ -87,13 +87,13 @@ const Toptrending = [
 // New Releases
 const newReleases = [
   {
-    title: "Capton Marvel",
+    title: "Peaky Blinders",
     image: "/images/8.png",
     releaseDate: "14 April 2026",
     progress: 0.5,
   },
   {
-    title: "Pathan",
+    title: "Breathe Into The Shadows",
     image: "/images/9.png",
     releaseDate: "01 Sept 2025",
     progress: 0.3,
@@ -103,29 +103,29 @@ const newReleases = [
 // Top Rated Movies
 const topRatedshows = [
   {
-    title: "Kantara",
-    image: "/images/9-1.jpg",
+    title: "Duranga",
+    image: "/images/9-1.png",
     duration: "1h 57min",
     views: "20K",
     rating: 5,
   },
   {
-    title: "Pushpa 2",
-    image: "/images/9-2.jpg",
+    title: "Money Heist 3",
+    image: "/images/9-2.png",
     duration: "1h 30min",
     views: "20K",
     rating: 4,
   },
   {
-    title: "Blade Runner",
-    image: "/images/9-3.jpg",
+    title: "MAI",
+    image: "/images/9-3.png",
     duration: "1h 42min",
     views: "20K",
     rating: 4,
   },
   {
-    title: "Adipurush",
-    image: "/images/9-4.jpg",
+    title: "Stranger Think",
+    image: "/images/9-4.png",
     duration: "2h 10min",
     views: "20K",
     rating: 3,
@@ -152,7 +152,7 @@ const categoriesData = [
   },
   {
     name: "Horror",
-    images: ["/images/9-3.png", "/images/9-4.png", "/images/12.png", "/images/13.png"],
+    images: ["/images/9-3.png", "/images/9-4.png", "/images/12.jpg", "/images/13.jpg"],
   },
   {
     name: "Sci-Fi",
@@ -162,13 +162,13 @@ const categoriesData = [
 
 // horor zone
 const hororzone = [
-  { title: "Captain Marvel", image: "/images/4.png" },
-  { title: "Captain America", image: "/images/5.png" },
-  { title: "Jai Ho Rambo", image: "/images/6.png" },
-  { title: "Gold", image: "/images/7.png" },
-  { title: "Avengers: Ultron", image: "/images/8.png" },
-  { title: "Black Panther", image: "/images/9.jpg" },
-  { title: "Spider-Man", image: "/images/9-1.jpg" },
+  { title: "Lucifer", image: "/images/4.png" },
+  { title: "The Grey Man", image: "/images/5.png" },
+  { title: "High Town", image: "/images/6.png" },
+  { title: "Mirzapur", image: "/images/7.png" },
+  { title: "Peaky Blender", image: "/images/8.png" },
+  { title: "Breathe /into The Shadow", image: "/images/9.png" },
+  { title: "Duranga", image: "/images/9-1.png" },
 ];
 
 const TVSHOWSPAGE = () => {
