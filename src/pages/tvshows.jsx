@@ -8,77 +8,77 @@ import CategorySlider from "../components/CategorySlider"; // ✅ Make sure this
 // Featured Movies
 const Movies = [
   {
-    title: "Avengers : Endgame",
+    title: "Stranger Think  ",
     description:
-      "With the help of remaining allies, the Avengers must assemble once more in order to undo Thanos's actions and restore balance to the universe.",
-    image: "/images/Container.png",
+      "In a small town, a group of kids discovers a secret world filled with supernatural dangers, testing their courage, friendship, and the bonds that hold them together.",
+    image: "/images/show1.png",
   },
   {
-    title: "Inception",
+    title: "Money Heist",
     description:
-      "A thief who steals corporate secrets through dream-sharing technology is tasked with planting an idea into a CEO’s mind.",
-    image: "/images/14.jpg",
+      "A group of unlikely heroes comes together to pull off the greatest heist in history, risking everything for freedom and revenge, challenging the system that tried to break them.",
+    image: "/images/show2.jpg",
   },
   {
-    title: "Interstellar",
+    title: "The Witcher",
     description:
-      "A group of explorers travel through a wormhole in space to ensure humanity's survival.",
-    image: "/images/15.jpg",
+      "In a land torn by war and dark magic, a monster hunter struggles to find his place in a world where the lines between good and evil are blurred.",
+    image: "/images/show3.jpg",
   },
 ];
 
-// Popular Movies
-const popularMovies = [
-  { title: "Captain Marvel", image: "/images/captonmarval.png" },
-  { title: "Captain America", image: "/images/captain america.png" },
-  { title: "Jai Ho Rambo", image: "/images/rambo.png" },
-  { title: "Gold", image: "/images/gold.png" },
-  { title: "Avengers: Ultron", image: "/images/captain america.png" },
-  { title: "Black Panther", image: "/images/12.jpg" },
-  { title: "Spider-Man", image: "/images/13.jpg" },
+// Popular Shows
+const popularShows = [
+  { title: "Captain Marvel", image: "/images/2.png" },
+  { title: "Captain America", image: "/images/4.png" },
+  { title: "Jai Ho Rambo", image: "/images/6.png" },
+  { title: "Gold", image: "/images/7.png" },
+  { title: "Avengers: Ultron", image: "/images/9.png" },
+  { title: "Black Panther", image: "/images/9-2.jpg" },
+  { title: "Spider-Man", image: "/images/9-4.jpg" },
 ];
 
-// Trending Movies
+// Trending Shows
 const Toptrending = [
   {
     title: "Morbius",
-    image: "/images/Image (42).png",
+    image: "/images/1.png",
     duration: "1h 30min",
     views: "2K",
   },
   {
     title: "Kisi Ka Bhai Kisi Ki Jaan",
-    image: "/images/Image (43).png",
+    image: "/images/2.png",
     duration: "1h 57min",
     views: "1.5K",
   },
   {
     title: "Suraj Pe Mangal Bhari",
-    image: "/images/Image (44).png",
+    image: "/images/3.png",
     duration: "2h 10min",
     views: "1.8K",
   },
   {
     title: "Pathaan",
-    image: "/images/Image (45).png",
+    image: "/images/4.png",
     duration: "2h 20min",
     views: "3K",
   },
   {
     title: "Ant-Man",
-    image: "/images/Image (46).png",
+    image: "/images/5.png",
     duration: "1h 42min",
     views: "5K",
   },
   {
     title: "Iron Man",
-    image: "/images/ironman.jpg",
+    image: "/images/6.png",
     duration: "2h 6min",
     views: "4.2K",
   },
   {
     title: "The Dark Knight",
-    image: "/images/darkknight.jpg",
+    image: "/images/7.jpg",
     duration: "2h 32min",
     views: "6K",
   },
@@ -88,44 +88,44 @@ const Toptrending = [
 const newReleases = [
   {
     title: "Capton Marvel",
-    image: "/images/captonmarval.png",
+    image: "/images/8.png",
     releaseDate: "14 April 2026",
     progress: 0.5,
   },
   {
     title: "Pathan",
-    image: "/images/Image (45).png",
+    image: "/images/9.png",
     releaseDate: "01 Sept 2025",
     progress: 0.3,
   },
 ];
 
 // Top Rated Movies
-const topRatedMovies = [
+const topRatedshows = [
   {
     title: "Kantara",
-    image: "/images/kantara.jpg",
+    image: "/images/9-1.jpg",
     duration: "1h 57min",
     views: "20K",
     rating: 5,
   },
   {
     title: "Pushpa 2",
-    image: "/images/pushpa2.jpg",
+    image: "/images/9-2.jpg",
     duration: "1h 30min",
     views: "20K",
     rating: 4,
   },
   {
     title: "Blade Runner",
-    image: "/images/blade.jpg",
+    image: "/images/9-3.jpg",
     duration: "1h 42min",
     views: "20K",
     rating: 4,
   },
   {
     title: "Adipurush",
-    image: "/images/adipurush.jpg",
+    image: "/images/9-4.jpg",
     duration: "2h 10min",
     views: "20K",
     rating: 3,
@@ -136,23 +136,23 @@ const topRatedMovies = [
 const categoriesData = [
   {
     name: "Action",
-    images: ["/images/rambo.png", "/images/captain america.png", "/images/gold.png", "/images/homepic4.png"],
+    images: ["/images/1.png", "/images/2.png", "/images/3.png", "/images/4.png"],
   },
   {
     name: "Adventure",
-    images: ["/images/homepic5.png", "/images/12.jpg", "/images/homepic7.png", "/images/homepic8.png"],
+    images: ["/images/5.png", "/images/12.jpg", "/images/7.png", "/images/8.png"],
   },
   {
     name: "Comedy",
-    images: ["/images/login_img15.png", "/images/login_img13.png", "/images/homepic9.png", "/images/homepic10.png"],
+    images: ["/images/15.png", "/images/6.png", "/images/7.png", "/images/8.png"],
   },
   {
     name: "Drama",
-    images: ["/images/homepic11.png", "/images/13.jpg", "/images/homepic12.png", "/images/homepic13.png"],
+    images: ["/images/9.png", "/images/13.jpg", "/images/9-1.png", "/images/9-2.png"],
   },
   {
     name: "Horror",
-    images: ["/images/homepic20.png", "/images/homepic21.png", "/images/homepic22.png", "/images/homepic23.png"],
+    images: ["/images/9-3.png", "/images/9-4.png", "/images/12.png", "/images/13.png"],
   },
   {
     name: "Sci-Fi",
@@ -162,16 +162,16 @@ const categoriesData = [
 
 // horor zone
 const hororzone = [
-  { title: "Captain Marvel", image: "/images/captonmarval.png" },
-  { title: "Captain America", image: "/images/captain america.png" },
-  { title: "Jai Ho Rambo", image: "/images/rambo.png" },
-  { title: "Gold", image: "/images/gold.png" },
-  { title: "Avengers: Ultron", image: "/images/captain america.png" },
-  { title: "Black Panther", image: "/images/12.jpg" },
-  { title: "Spider-Man", image: "/images/13.jpg" },
+  { title: "Captain Marvel", image: "/images/4.png" },
+  { title: "Captain America", image: "/images/5.png" },
+  { title: "Jai Ho Rambo", image: "/images/6.png" },
+  { title: "Gold", image: "/images/7.png" },
+  { title: "Avengers: Ultron", image: "/images/8.png" },
+  { title: "Black Panther", image: "/images/9.jpg" },
+  { title: "Spider-Man", image: "/images/9-1.jpg" },
 ];
 
-const MoviesPage = () => {
+const TVSHOWSPAGE = () => {
   return (
     <div className="bg-black min-h-screen text-white">
       <section className="px-4 md:px-10">
@@ -185,7 +185,7 @@ const MoviesPage = () => {
 
       <MoviesGrid
         title="Our Choice"
-        movies={popularMovies}
+        movies={popularShows}
         showViewAllButton={false}
       />
 
@@ -204,8 +204,8 @@ const MoviesPage = () => {
       />
 
       <MoviesGrid
-        title="Most - Watch Movies"
-        movies={topRatedMovies}
+        title="Most - Watch Shows"
+        movies={topRatedshows}
         showViewAllButton={false}
       />
 
@@ -224,4 +224,4 @@ const MoviesPage = () => {
   );
 };
 
-export default MoviesPage;
+export default TVSHOWSPAGE;

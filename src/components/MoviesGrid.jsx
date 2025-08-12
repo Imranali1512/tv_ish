@@ -6,7 +6,7 @@ const MoviesGrid = ({
   title = "Popular Movies",
   movies = [],
   showProgress = false,
-  showViewAllButton = true, // controlled by parent
+  showViewAllButton = true,
 }) => {
   const scrollRef = useRef(null);
   const [activeDot, setActiveDot] = useState(0);
@@ -131,26 +131,29 @@ const MoviesGrid = ({
           {movies.map((movie, index) => (
             <div
               key={index}
-              className="flex-shrink-0 w-44 md:w-48 lg:w-52 bg-[#0f172a] rounded-lg overflow-hidden hover:scale-105 hover:-translate-y-1 transform transition duration-300"
+              className="flex-shrink-0 w-44 md:w-48 lg:w-56 bg-[#0f172a] rounded-lg overflow-hidden hover:scale-105 hover:-translate-y-1 transform transition duration-300"
             >
-              <img
-                src={movie.image}
-                alt={movie.title}
-                className="w-full h-60 object-cover rounded-t-lg"
-              />
+              <div className="relative animate-fadeInUp">
+                <img
+                  src={movie.image}
+                  alt={movie.title}
+                  className="w-full h-72 object-cover rounded-t-lg"
+                />
 
-              {showProgress && movie.progress !== undefined && (
-                <div className="absolute bottom-0 left-0 w-full h-2 bg-gray-700">
-                  <div
-                    className="h-full bg-red-600 transition-all"
-                    style={{ width: `${movie.progress * 100}%` }}
-                  />
-                </div>
-              )}
+                {showProgress && movie.progress !== undefined && (
+                  <div className="absolute bottom-0 left-0 w-full h-2 bg-gray-700 rounded-b-lg overflow-hidden">
+                    <div
+                      className="h-full bg-red-600 transition-all duration-500 ease-in-out"
+                      style={{ width: `${movie.progress * 100}%` }}
+                    />
+                  </div>
+                )}
+              </div>
 
-              <div className="p-3">
-                <h3 className="text-white text-sm font-semibold mb-2">{movie.title}</h3>
+              <div className="p-3 space-y-1">
+                <h3 className="text-white text-sm font-semibold truncate">{movie.title}</h3>
 
+                {/* ✅ Restored Release Date */}
                 {movie.releaseDate && (
                   <div className="text-xs text-gray-300 bg-[#1E293B] rounded-full px-3 py-1 inline-block mb-2">
                     Released at {movie.releaseDate}
@@ -160,20 +163,20 @@ const MoviesGrid = ({
                 {(movie.duration || movie.rating || movie.views) && (
                   <div className="flex flex-wrap gap-2 text-gray-300 text-sm">
                     {movie.duration && (
-                      <div className="flex items-center gap-1 bg-[#1E293B] rounded-full px-2 py-1">
+                      <div className="flex items-center gap-1 bg-[#1E293B] rounded-full px-2 py-1 text-xs">
                         <PiClockFill size={14} />
                         <span>{movie.duration}</span>
                       </div>
                     )}
 
                     {movie.rating && (
-                      <div className="flex items-center bg-[#1E293B] rounded-full px-2 py-1">
+                      <div className="flex items-center bg-[#1E293B] rounded-full px-2 py-1 text-xs">
                         {renderStars(movie.rating)}
                       </div>
                     )}
 
                     {movie.views && (
-                      <div className="flex items-center gap-1 bg-[#1E293B] rounded-full px-2 py-1">
+                      <div className="flex items-center gap-1 bg-[#1E293B] rounded-full px-2 py-1 text-xs">
                         <FaEye size={14} />
                         <span>{movie.views}</span>
                       </div>
@@ -189,7 +192,7 @@ const MoviesGrid = ({
       {/* View All Button */}
       {showViewAllButton && (
         <div className="mt-6 text-center">
-          <button className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded inline-flex items-center transition focus:ring-2 focus:ring-red-400 focus:ring-offset-2 active:scale-95">
+          <button className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded inline-flex items-center transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 active:scale-95">
             <svg className="w-5 h-5 mr-2" fill="white" viewBox="0 0 20 20">
               <path d="M4 3h1v14H4V3zm11 7l-6 4V6l6 4z" />
             </svg>
