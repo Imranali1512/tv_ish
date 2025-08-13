@@ -255,6 +255,9 @@ const PodcastPage = () => {
       description="Here are the podcasters with the highest followers and viewers. Immediately follow to follow the podcast"
     />
 
+    <div className="mt-10 px-4 md:px-50 max-w-6xl mx-auto pb-10">
+        <Container />
+      </div>
     </div>
   );
 };

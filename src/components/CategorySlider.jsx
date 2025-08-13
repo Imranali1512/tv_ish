@@ -1,7 +1,11 @@
 import React, { useRef, useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-const CategorySlider = ({ categories = [] }) => {
+const CategorySlider = ({
+  categories = [],
+  mainHeading = "Explore our wide variety of categories",
+  subHeading = "Whether you're looking for a comedy to make you laugh, a drama to make you think, or a documentary to learn something new.",
+}) => {
   const scrollRef = useRef(null);
   const [activeDot, setActiveDot] = useState(0);
 
@@ -56,10 +60,10 @@ const CategorySlider = ({ categories = [] }) => {
       <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
         <div className="max-w-3xl">
           <h2 className="text-2xl sm:text-3xl font-bold">
-            Explore our wide variety of categories
+            {mainHeading}
           </h2>
           <p className="text-gray-400 text-sm mt-1">
-            Whether you're looking for a comedy to make you laugh, a drama to make you think, or a documentary to learn something new.
+            {subHeading}
           </p>
         </div>
 

@@ -14,6 +14,7 @@ import HomePage from "./pages/home_page";
 import MoviesPage from "./pages/movies";
 import TVSHOWSPAGE from "./pages/tvshows";
 import PodcastPage from "./pages/podcast"; // ✅ NEW IMPORT
+import Snip from "./pages/snips";
 
 // Layout wrapper to conditionally show Navbar/Footer
 const Layout = ({ children }) => {
@@ -50,7 +51,8 @@ function App() {
           <Route path="/HomePage" element={<HomePage />} />
           <Route path="/movies" element={<MoviesPage />} /> 
           <Route path="/tvshows" element={<TVSHOWSPAGE />} /> 
-          <Route path="/podcast" element={<PodcastPage />} /> {/* ✅ NEW ROUTE */}
+          <Route path="/podcast" element={<PodcastPage />} /> 
+          <Route path="/snips" element={<Snip/>} /> {/* ✅ NEW ROUTE */}
 
           {/* Auth Routes (without layout) */}
           <Route path="/login" element={<LoginPage />} />

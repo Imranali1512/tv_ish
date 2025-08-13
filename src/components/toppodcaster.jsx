@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
-const LeftArrow = ({ disabled }) => (
+const LeftArrow = () => (
   <svg
-    className={`w-10 h-10 text-red-600 hover:text-red-400 transition-colors ${
-      disabled ? 'opacity-40 cursor-not-allowed hover:text-red-600' : 'cursor-pointer'
-    }`}
+    className="w-10 h-10 text-red-600 transition-colors cursor-pointer"
     fill="none"
     stroke="currentColor"
     strokeWidth={2}
@@ -16,11 +14,9 @@ const LeftArrow = ({ disabled }) => (
   </svg>
 );
 
-const RightArrow = ({ disabled }) => (
+const RightArrow = () => (
   <svg
-    className={`w-10 h-10 text-red-600 hover:text-red-400 transition-colors ${
-      disabled ? 'opacity-40 cursor-not-allowed hover:text-red-600' : 'cursor-pointer'
-    }`}
+    className="w-10 h-10 text-red-600 transition-colors cursor-pointer"
     fill="none"
     stroke="currentColor"
     strokeWidth={2}
@@ -40,45 +36,10 @@ const TopPodcaster = ({ podcasters, title, description }) => {
     }, {})
   );
 
-  const [cardsToShow, setCardsToShow] = useState(3);
+  const scrollRef = useRef(null);
+  const cardRefs = useRef([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [cardWidth, setCardWidth] = useState(0);
-
-  const cardRef = useRef(null);
-
-  const touchStartX = useRef(0);
-  const touchEndX = useRef(0);
-
-  useEffect(() => {
-    const updateLayout = () => {
-      const width = window.innerWidth;
-
-      if (width < 640) {
-        setCardsToShow(1);
-      } else if (width < 1024) {
-        setCardsToShow(2);
-      } else {
-        setCardsToShow(3);
-      }
-
-      setCurrentIndex(0);
-    };
-
-    updateLayout();
-    window.addEventListener('resize', updateLayout);
-    return () => window.removeEventListener('resize', updateLayout);
-  }, []);
-
-  useEffect(() => {
-    if (cardRef.current) {
-      setCardWidth(cardRef.current.offsetWidth + 16); // gap-4 = 16px
-    }
-  }, [cardsToShow, podcasters]);
-
-  const maxIndex = Math.max(podcasters.length - cardsToShow, 0);
-
-  const handlePrev = () => setCurrentIndex((prev) => Math.max(prev - 1, 0));
-  const handleNext = () => setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
+  const maxIndex = Math.max(podcasters.length - 1, 0);
 
   const toggleFollow = (id) => {
     setFollowStates((prev) => ({
@@ -87,46 +48,46 @@ const TopPodcaster = ({ podcasters, title, description }) => {
     }));
   };
 
-  // Touch swipe handlers
-  const handleTouchStart = (e) => {
-    touchStartX.current = e.touches[0].clientX;
+  const scrollToCard = (index) => {
+    if (cardRefs.current[index]) {
+      cardRefs.current[index].scrollIntoView({
+        behavior: 'smooth',
+        inline: 'start',
+        block: 'nearest',
+      });
+      setCurrentIndex(index);
+    }
   };
 
-  const handleTouchMove = (e) => {
-    touchEndX.current = e.touches[0].clientX;
+  const handlePrev = () => {
+    if (currentIndex > 0) {
+      scrollToCard(currentIndex - 1);
+    }
   };
 
-  const handleTouchEnd = () => {
-    const delta = touchStartX.current - touchEndX.current;
-    if (Math.abs(delta) > 50) {
-      if (delta > 0 && currentIndex < maxIndex) {
-        handleNext(); // Swipe Left
-      } else if (delta < 0 && currentIndex > 0) {
-        handlePrev(); // Swipe Right
-      }
+  const handleNext = () => {
+    if (currentIndex < maxIndex) {
+      scrollToCard(currentIndex + 1);
     }
   };
 
   return (
     <div className="bg-black min-h-screen flex items-center justify-center px-4 py-10 overflow-hidden">
       <div className="bg-gray-900 w-full max-w-7xl rounded-lg shadow-xl flex flex-col lg:flex-row gap-10 p-6 lg:p-10 relative opacity-0 animate-fadeIn">
-        
+
         {/* Podcaster Cards */}
         <div className="relative w-full overflow-hidden">
           <div
-            className="flex gap-4 transition-transform duration-500 ease-in-out"
-            style={{ transform: `translateX(-${currentIndex * cardWidth}px)` }}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
+            ref={scrollRef}
+            className="hide-scrollbar flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory"
           >
             {podcasters.map(({ id, name, category, podcasts, followers, image }, index) => {
               const followed = followStates[id];
               return (
                 <div
                   key={id}
-                  ref={index === 0 ? cardRef : null}
-                  className="bg-gray-700 flex-shrink-0 w-[90%] sm:w-[45%] lg:w-56 flex flex-col items-center p-5 rounded-md shadow-md hover:shadow-lg transition duration-300 transform hover:scale-105"
+                  ref={(el) => (cardRefs.current[index] = el)}
+                  className="snap-start flex-shrink-0 w-[90%] sm:w-[45%] lg:w-56 bg-gray-700 flex flex-col items-center p-5 rounded-md shadow-md hover:shadow-lg transition duration-300 transform hover:scale-105"
                 >
                   <img
                     src={image}
@@ -169,26 +130,31 @@ const TopPodcaster = ({ podcasters, title, description }) => {
           <div className="mt-6 lg:mt-0 flex gap-6 justify-end">
             <button
               onClick={handlePrev}
-              disabled={currentIndex === 0}
               className="p-2 rounded-full shadow-lg bg-gray-800 hover:bg-red-700 transition-colors animate-bounce-slow"
               aria-label="Previous creators"
             >
-              <LeftArrow disabled={currentIndex === 0} />
+              <LeftArrow />
             </button>
             <button
               onClick={handleNext}
-              disabled={currentIndex === maxIndex}
               className="p-2 rounded-full shadow-lg bg-gray-800 hover:bg-red-700 transition-colors animate-bounce-slow delay-150"
               aria-label="Next creators"
             >
-              <RightArrow disabled={currentIndex === maxIndex} />
+              <RightArrow />
             </button>
           </div>
         </div>
       </div>
 
-      {/* Tailwind Animations */}
+      {/* Custom Styles */}
       <style>{`
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
         @keyframes fadeIn {
           to {
             opacity: 1;
