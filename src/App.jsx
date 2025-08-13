@@ -12,7 +12,8 @@ import ForgotPasswordPage2 from "./pages/forgetpassword_page2";
 import ForgotPasswordPage3 from "./pages/forgetpassword_page3";
 import HomePage from "./pages/home_page";
 import MoviesPage from "./pages/movies";
-import TVSHOWSPAGE from "./pages/tvshows"; // ✅ NEW IMPORT
+import TVSHOWSPAGE from "./pages/tvshows";
+import PodcastPage from "./pages/podcast"; // ✅ NEW IMPORT
 
 // Layout wrapper to conditionally show Navbar/Footer
 const Layout = ({ children }) => {
@@ -48,7 +49,8 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/HomePage" element={<HomePage />} />
           <Route path="/movies" element={<MoviesPage />} /> 
-          <Route path="/tvshows" element={<TVSHOWSPAGE />} /> {/* ✅ NEW ROUTE */}
+          <Route path="/tvshows" element={<TVSHOWSPAGE />} /> 
+          <Route path="/podcast" element={<PodcastPage />} /> {/* ✅ NEW ROUTE */}
 
           {/* Auth Routes (without layout) */}
           <Route path="/login" element={<LoginPage />} />

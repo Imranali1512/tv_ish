@@ -7,6 +7,8 @@ const MoviesGrid = ({
   movies = [],
   showProgress = false,
   showViewAllButton = true,
+  showChannel = false,   // NEW prop: show channel only if true and value present
+  showDuration = false,  // NEW prop: show duration only if true and value present
 }) => {
   const scrollRef = useRef(null);
   const [activeDot, setActiveDot] = useState(0);
@@ -153,16 +155,20 @@ const MoviesGrid = ({
               <div className="p-3 space-y-1">
                 <h3 className="text-white text-sm font-semibold truncate">{movie.title}</h3>
 
-                {/* ✅ Restored Release Date */}
+                {/* Show channel only if showChannel=true and movie.channel exists */}
+                {showChannel && movie.channel && (
+                  <div className="text-xs text-gray-300 truncate">{movie.channel}</div>
+                )}
+
                 {movie.releaseDate && (
                   <div className="text-xs text-gray-300 bg-[#1E293B] rounded-full px-3 py-1 inline-block mb-2">
                     Released at {movie.releaseDate}
                   </div>
                 )}
 
-                {(movie.duration || movie.rating || movie.views) && (
+                {( (showDuration && movie.duration) || movie.rating || movie.views) && (
                   <div className="flex flex-wrap gap-2 text-gray-300 text-sm">
-                    {movie.duration && (
+                    {showDuration && movie.duration && (
                       <div className="flex items-center gap-1 bg-[#1E293B] rounded-full px-2 py-1 text-xs">
                         <PiClockFill size={14} />
                         <span>{movie.duration}</span>
