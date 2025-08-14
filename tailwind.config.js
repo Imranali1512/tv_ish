@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       keyframes: {
-        'slide-in-right': {
+        slideInRight: {
           '0%': {
             opacity: '0',
             transform: 'translateX(100%) scale(0.95)',
@@ -17,7 +17,7 @@ export default {
             transform: 'translateX(0) scale(1)',
           },
         },
-        'slide-in-left': {
+        slideInLeft: {
           '0%': {
             opacity: '0',
             transform: 'translateX(-100%) scale(0.95)',
@@ -27,32 +27,48 @@ export default {
             transform: 'translateX(0) scale(1)',
           },
         },
-
-        // New added keyframes
         fadeInZoom: {
-          '0%': { opacity: '0', transform: 'scale(0.95) translateY(40px)' },
-          '100%': { opacity: '1', transform: 'scale(1) translateY(0)' },
+          '0%': {
+            opacity: '0',
+            transform: 'scale(0.95) translateY(40px)',
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'scale(1) translateY(0)',
+          },
         },
-        shine: {
-          '0%': { backgroundPosition: '200% center' },
-          '100%': { backgroundPosition: '-200% center' },
+        shineSwipe: {
+          '0%': {
+            left: '-75%',
+          },
+          '100%': {
+            left: '125%',
+          },
         },
         floatUp: {
           '0%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-15px)' },
           '100%': { transform: 'translateY(0)' },
         },
+        fadeUp: {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-6px)' },
+        },
       },
       animation: {
-        'slide-in-right': 'slide-in-right 0.7s ease-in-out forwards',
-        'slide-in-left': 'slide-in-left 0.7s ease-in-out forwards',
-        
-        // Added new animations
+        slideInRight: 'slideInRight 0.7s ease-in-out forwards',
+        slideInLeft: 'slideInLeft 0.7s ease-in-out forwards',
         fadeInZoom: 'fadeInZoom 1.5s ease-out both',
-        shine: 'shine 2s linear infinite',
-        'pulse-slow': 'pulse 5s infinite',
+        shineSwipe: 'shineSwipe 1s ease-in-out forwards',
+        pulseSlow: 'pulse 5s infinite',
         bounce: 'bounce 2s infinite',
         floatUp: 'floatUp 8s ease-in-out infinite',
+        fadeUp: 'fadeUp 1s ease-out both',
+        float: 'float 4s ease-in-out infinite',
       },
     },
   },
