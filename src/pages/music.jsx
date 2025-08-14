@@ -229,6 +229,9 @@ const Music = () => {
 
       <TrendingDJ/>
 
+      <div className="mt-10 px-4 md:px-50 max-w-6xl mx-auto pb-10">
+              <Container />
+      </div>
 
     </div>
   );

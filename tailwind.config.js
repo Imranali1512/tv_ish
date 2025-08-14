@@ -58,7 +58,21 @@ export default {
           '0%, 100%': { transform: 'translateY(0px)' },
           '50%': { transform: 'translateY(-6px)' },
         },
+
+        // 🔥 NEW: Energy Glow + Grow
+        energyGrow: {
+          '0%': { transform: 'scale(0.95)', boxShadow: '0 0 0px rgba(255, 255, 255, 0.1)' },
+          '50%': { transform: 'scale(1.1)', boxShadow: '0 0 25px rgba(255, 255, 255, 0.5)' },
+          '100%': { transform: 'scale(1)', boxShadow: '0 0 8px rgba(255, 255, 255, 0.2)' },
+        },
+
+        // 🔁 Optional: Combined floating energy effect
+        floatEnergy: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-8px)' },
+        },
       },
+
       animation: {
         slideInRight: 'slideInRight 0.7s ease-in-out forwards',
         slideInLeft: 'slideInLeft 0.7s ease-in-out forwards',
@@ -69,6 +83,10 @@ export default {
         floatUp: 'floatUp 8s ease-in-out infinite',
         fadeUp: 'fadeUp 1s ease-out both',
         float: 'float 4s ease-in-out infinite',
+
+        // 🔥 NEW animations
+        energyGrow: 'energyGrow 2.5s ease-in-out forwards',
+        floatEnergy: 'floatEnergy 4s ease-in-out infinite',
       },
     },
   },
