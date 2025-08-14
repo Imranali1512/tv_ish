@@ -10,6 +10,7 @@ import CategorySlider from "../components/CategorySlider";
 import TopPodcaster from "../components/toppodcaster"; 
 import SnipFront from '../components/snipfront';
 import MusicFront from '../components/musicfront'; 
+import TrendingDJ from '../components/trendingDJ';
 
 
 const Weekly = [
@@ -148,6 +149,39 @@ const Top10DJshows = [
   },
 ];
 
+const trendingmusic = [
+  {
+    title: "Aguas con los Descuentos",
+    image: "/images/f1.png",
+    
+  },
+  {
+    title: "Combos de Coca-Cola",
+    image: "/images/f2.png",
+
+  },
+  {
+    title: "Galletas Marías",
+    image: "/images/f3.png",
+ 
+  },
+  {
+    title: "Energéticos Volt & Vive",
+    image: "/images/f4.png",
+
+  },
+
+   {
+    title: "Galletas Marías",
+    image: "/images/f5.png",
+ 
+  },
+  {
+    title: "Energéticos Volt & Vive",
+    image: "/images/f6.png",
+
+  },
+];
 
 
 
@@ -185,6 +219,16 @@ const Music = () => {
         showProgress={false}
         showViewAllButton={false}
       />
+
+      <MoviesGrid
+        title="Trending Music Videos"
+        movies={trendingmusic}
+        showProgress={false}
+        showViewAllButton={false}
+      />
+
+      <TrendingDJ/>
+
 
     </div>
   );
