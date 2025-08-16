@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   FaSearch,
   FaBell,
@@ -10,6 +10,7 @@ import {
   FaVideo,
 } from "react-icons/fa";
 import { NavLink, Link } from "react-router-dom";
+import ParentsControl from "../components/ParentsControl";
 
 const NavbarPage = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -17,7 +18,13 @@ const NavbarPage = () => {
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [recentSearches, setRecentSearches] = useState([]);
+  const [showParentalControl, setShowParentalControl] = useState(false);
 
+  const shieldRef = useRef(null);
+  const dropdownRef = useRef(null);
+  const [dropdownStyles, setDropdownStyles] = useState({});
+
+  // Detect screen resize
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
@@ -25,16 +32,18 @@ const NavbarPage = () => {
         setMenuOpen(false);
       }
     };
-
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Load recent searches
   useEffect(() => {
-    const storedSearches = JSON.parse(localStorage.getItem("recentSearches")) || [];
+    const storedSearches =
+      JSON.parse(localStorage.getItem("recentSearches")) || [];
     setRecentSearches(storedSearches);
   }, []);
 
+  // Search handler
   const handleSearch = (e) => {
     e.preventDefault();
     if (!searchQuery.trim()) return;
@@ -42,17 +51,62 @@ const NavbarPage = () => {
     const updatedSearches = [
       searchQuery,
       ...recentSearches.filter((item) => item !== searchQuery),
-    ].slice(0, 5); // limit to 5 recent items
+    ].slice(0, 5);
 
     setRecentSearches(updatedSearches);
     localStorage.setItem("recentSearches", JSON.stringify(updatedSearches));
 
-    console.log("Searching for:", searchQuery);
-    // Add your navigation or search result logic here
-
     setSearchQuery("");
     setShowSearch(false);
   };
+
+  // Position Parental Control dropdown
+  useEffect(() => {
+    if (showParentalControl && shieldRef.current) {
+      const rect = shieldRef.current.getBoundingClientRect();
+      const scrollTop = window.scrollY || window.pageYOffset;
+      const scrollLeft = window.scrollX || window.pageXOffset;
+      const viewportWidth = window.innerWidth;
+
+      const dropdownWidth = Math.min(400, viewportWidth * 0.95);
+      let left = rect.left + scrollLeft + rect.width / 2 - dropdownWidth / 2;
+      if (left < 8) left = 8;
+      if (left + dropdownWidth > viewportWidth)
+        left = viewportWidth - dropdownWidth - 8;
+
+      setDropdownStyles({
+        position: "absolute",
+        top: rect.bottom + scrollTop + 10,
+        left,
+        width: dropdownWidth,
+        backgroundColor: "#18181b",
+        borderRadius: "8px",
+        boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
+        padding: "1rem",
+        zIndex: 1000,
+        maxHeight: "90vh",
+        overflowY: "auto",
+        overflowX: "hidden",
+      });
+    }
+  }, [showParentalControl]);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        showParentalControl &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target) &&
+        shieldRef.current &&
+        !shieldRef.current.contains(event.target)
+      ) {
+        setShowParentalControl(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showParentalControl]);
 
   const navItems = [
     { name: "Home", path: "/" },
@@ -76,18 +130,14 @@ const NavbarPage = () => {
   return (
     <>
       <nav className="fixed top-0 w-full z-50 bg-black/30 backdrop-blur-sm px-4 py-3 sm:px-10">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <div className="max-w-7xl mx-auto flex items-center justify-between relative">
           {/* Logo */}
           <div
             className="relative z-50"
             style={{
               width: isMobile ? "110px" : "140px",
               height: isMobile ? "50px" : "60px",
-              filter: `
-                drop-shadow(0 0 10px rgba(200, 200, 200, 0.8)) 
-                drop-shadow(0 0 20px rgba(180, 180, 180, 0.5)) 
-                drop-shadow(0 0 30px rgba(150, 150, 150, 0.3))
-              `,
+              filter: `drop-shadow(0 0 10px rgba(200,200,200,0.8)) drop-shadow(0 0 20px rgba(180,180,180,0.5)) drop-shadow(0 0 30px rgba(150,150,150,0.3))`,
             }}
           >
             <img
@@ -97,7 +147,7 @@ const NavbarPage = () => {
             />
           </div>
 
-          {/* Desktop Menu */}
+          {/* Desktop Navigation */}
           {!isMobile && (
             <div className="bg-zinc-900 rounded-xl px-6 py-2 flex flex-wrap justify-center gap-3 shadow-lg">
               {navItems.map((item, index) => (
@@ -118,33 +168,40 @@ const NavbarPage = () => {
             </div>
           )}
 
-          {/* Right Icons / Hamburger */}
-          <div className="flex items-center space-x-4 text-lg text-white">
+          {/* Icons / Hamburger */}
+          <div className="flex items-center space-x-4 text-lg text-white relative">
             {!isMobile ? (
               <>
                 <FaSearch
-                  className="cursor-pointer hover:text-blue-400 transition duration-200"
+                  className="cursor-pointer hover:text-blue-400"
                   onClick={() => setShowSearch(!showSearch)}
                 />
-                <FaBell className="cursor-pointer hover:text-red-400 transition duration-200" />
+                <FaBell className="cursor-pointer hover:text-red-400" />
                 <Link to="/login">
-                  <FaUser className="cursor-pointer hover:text-green-400 transition duration-200" />
+                  <FaUser className="cursor-pointer hover:text-green-400" />
                 </Link>
-                <FaShieldAlt className="cursor-pointer hover:text-purple-400 transition duration-200" />
+
+                <div
+                  ref={shieldRef}
+                  className={`cursor-pointer p-1 rounded-md transition ${
+                    showParentalControl
+                      ? "text-purple-400 bg-zinc-800 shadow-lg"
+                      : "hover:text-purple-400"
+                  }`}
+                  onClick={() => setShowParentalControl((prev) => !prev)}
+                >
+                  <FaShieldAlt size={22} />
+                </div>
               </>
             ) : (
-              <button
-                onClick={() => setMenuOpen(!menuOpen)}
-                className="p-2 bg-zinc-800 rounded-md text-white"
-                aria-label="Toggle menu"
-              >
+              <button onClick={() => setMenuOpen(!menuOpen)}>
                 {menuOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
               </button>
             )}
           </div>
         </div>
 
-        {/* Desktop Search Bar */}
+        {/* Search Box */}
         {showSearch && !isMobile && (
           <div className="absolute top-full left-0 right-0 bg-zinc-800 px-4 py-3 z-40 shadow-lg">
             <form onSubmit={handleSearch} className="flex items-center space-x-3">
@@ -171,9 +228,7 @@ const NavbarPage = () => {
                     <li
                       key={index}
                       className="text-zinc-200 hover:text-white cursor-pointer"
-                      onClick={() => {
-                        setSearchQuery(item);
-                      }}
+                      onClick={() => setSearchQuery(item)}
                     >
                       {item}
                     </li>
@@ -184,7 +239,7 @@ const NavbarPage = () => {
           </div>
         )}
 
-        {/* Mobile Dropdown Menu */}
+        {/* Mobile Menu */}
         {isMobile && menuOpen && (
           <div className="bg-zinc-900 mt-3 p-4 rounded-lg shadow-lg space-y-2">
             {navItems.map((item, index) => (
@@ -193,7 +248,7 @@ const NavbarPage = () => {
                 to={item.path}
                 onClick={() => setMenuOpen(false)}
                 className={({ isActive }) =>
-                  `block px-4 py-2 rounded-md text-sm font-medium transition ${
+                  `block px-4 py-2 rounded-md text-sm font-medium ${
                     isActive
                       ? "bg-red-500 text-white"
                       : "text-zinc-300 hover:bg-zinc-800"
@@ -207,7 +262,7 @@ const NavbarPage = () => {
         )}
       </nav>
 
-      {/* Bottom Mobile Navigation */}
+      {/* Bottom Nav (Mobile) */}
       {isMobile && (
         <div className="fixed bottom-0 left-0 right-0 z-50 bg-zinc-900 border-t-[3px] border-zinc-700 flex justify-around items-center py-4 md:hidden">
           {bottomNavItems.map((item, index) => (
@@ -215,7 +270,7 @@ const NavbarPage = () => {
               key={index}
               to={item.path}
               className={({ isActive }) =>
-                `flex flex-col items-center text-sm font-semibold transition-all ${
+                `flex flex-col items-center text-sm font-semibold ${
                   isActive ? "text-red-500" : "text-zinc-300 hover:text-white"
                 }`
               }
@@ -224,6 +279,13 @@ const NavbarPage = () => {
               <span className="text-[13px]">{item.name}</span>
             </NavLink>
           ))}
+        </div>
+      )}
+
+      {/* Parental Control Dropdown */}
+      {showParentalControl && (
+        <div ref={dropdownRef} style={dropdownStyles}>
+          <ParentsControl onClose={() => setShowParentalControl(false)} />
         </div>
       )}
     </>
