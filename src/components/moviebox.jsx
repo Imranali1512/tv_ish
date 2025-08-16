@@ -11,7 +11,7 @@ const MovieBox = ({
   movies = [],
   heading = "Top Rated",
   showArrows = true,
-  showTrailerButton = true, // <- NEW PROP
+  showTrailerButton = true,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState("right");
@@ -166,35 +166,39 @@ const MovieBox = ({
             {movies[currentIndex].description}
           </p>
 
-          <div className="flex space-x-3 items-center">
-            {/* Trailer button (white) */}
-            {showTrailerButton && (
-              <button className="bg-white text-black px-4 py-2 rounded flex items-center hover:bg-gray-200 active:scale-95 transition-all duration-300">
-                <svg className="w-4 h-4 mr-2 fill-black" viewBox="0 0 20 20">
+          {/* Responsive Buttons Layout */}
+          <div className="flex flex-col md:flex-row md:items-center md:space-x-3 w-full md:w-auto">
+            {/* Top Buttons: Trailer & Play Now */}
+            <div className="flex justify-center space-x-3 mb-3 md:mb-0">
+              {showTrailerButton && (
+                <button className="bg-white text-black px-4 py-2 rounded flex items-center hover:bg-gray-200 active:scale-95 transition-all duration-300">
+                  <svg className="w-4 h-4 mr-2 fill-black" viewBox="0 0 20 20">
+                    <path d="M4 3h1v14H4V3zm11 7l-6 4V6l6 4z" />
+                  </svg>
+                  Trailer
+                </button>
+              )}
+
+              <button className="bg-red-600 px-4 py-2 rounded flex items-center hover:bg-red-700 active:scale-95 transition-all duration-300">
+                <svg className="w-4 h-4 mr-2 fill-white" viewBox="0 0 20 20">
                   <path d="M4 3h1v14H4V3zm11 7l-6 4V6l6 4z" />
                 </svg>
-                Trailer
+                Play Now
               </button>
-            )}
+            </div>
 
-            {/* Play Now button (red) */}
-            <button className="bg-red-600 px-4 py-2 rounded flex items-center hover:bg-red-700 active:scale-95 transition-all duration-300">
-              <svg className="w-4 h-4 mr-2 fill-white" viewBox="0 0 20 20">
-                <path d="M4 3h1v14H4V3zm11 7l-6 4V6l6 4z" />
-              </svg>
-              Play Now
-            </button>
-
-            {/* Icon buttons */}
-            <button className="bg-gray-700 p-2 rounded hover:bg-gray-600 active:scale-90 transition-all duration-300">
-              <FaPlus />
-            </button>
-            <button className="bg-gray-700 p-2 rounded hover:bg-gray-600 active:scale-90 transition-all duration-300">
-              <FaThumbsUp />
-            </button>
-            <button className="bg-gray-700 p-2 rounded hover:bg-gray-600 active:scale-90 transition-all duration-300">
-              <FaVolumeUp />
-            </button>
+            {/* Bottom Icon Buttons */}
+            <div className="flex justify-center space-x-3">
+              <button className="bg-gray-700 p-2 rounded hover:bg-gray-600 active:scale-90 transition-all duration-300">
+                <FaPlus />
+              </button>
+              <button className="bg-gray-700 p-2 rounded hover:bg-gray-600 active:scale-90 transition-all duration-300">
+                <FaThumbsUp />
+              </button>
+              <button className="bg-gray-700 p-2 rounded hover:bg-gray-600 active:scale-90 transition-all duration-300">
+                <FaVolumeUp />
+              </button>
+            </div>
           </div>
         </div>
       </div>

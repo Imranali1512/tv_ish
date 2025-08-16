@@ -7,8 +7,8 @@ const MoviesGrid = ({
   movies = [],
   showProgress = false,
   showViewAllButton = true,
-  showChannel = false,   // NEW prop: show channel only if true and value present
-  showDuration = false,  // NEW prop: show duration only if true and value present
+  showChannel = false,
+  showDuration = false,
 }) => {
   const scrollRef = useRef(null);
   const [activeDot, setActiveDot] = useState(0);
@@ -117,9 +117,7 @@ const MoviesGrid = ({
       <div className="pl-4">
         <div
           ref={scrollRef}
-          className={`flex space-x-4 overflow-x-auto scrollbar-hide cursor-${
-            isDragging ? "grabbing" : "grab"
-          }`}
+          className={`flex space-x-4 overflow-x-auto scrollbar-hide cursor-${isDragging ? "grabbing" : "grab"}`}
           onScroll={handleScroll}
           onMouseDown={handleDragStart}
           onMouseMove={handleDragMove}
@@ -133,13 +131,30 @@ const MoviesGrid = ({
           {movies.map((movie, index) => (
             <div
               key={index}
-              className="flex-shrink-0 w-44 md:w-48 lg:w-56 bg-[#0f172a] rounded-lg overflow-hidden hover:scale-105 hover:-translate-y-1 transform transition duration-300"
+              className="flex-shrink-0 w-44 md:w-48 lg:w-56 bg-[#0f172a] rounded-lg overflow-hidden cursor-pointer transform-gpu transition duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-lg hover:shadow-red-600/50"
+              style={{ perspective: "1000px" }}
             >
-              <div className="relative animate-fadeInUp">
+              <div
+                className="relative"
+                onMouseMove={(e) => {
+                  const card = e.currentTarget;
+                  const rect = card.getBoundingClientRect();
+                  const x = e.clientX - rect.left - rect.width / 2;
+                  const y = e.clientY - rect.top - rect.height / 2;
+                  const rotateX = (-y / 20).toFixed(2);
+                  const rotateY = (x / 20).toFixed(2);
+                  card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(0)`;
+                }}
+                onMouseLeave={(e) => {
+                  const card = e.currentTarget;
+                  card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0)";
+                }}
+              >
                 <img
                   src={movie.image}
                   alt={movie.title}
-                  className="w-full h-72 object-cover rounded-t-lg"
+                  className="w-full h-72 object-cover rounded-t-lg select-none"
+                  draggable={false}
                 />
 
                 {showProgress && movie.progress !== undefined && (
@@ -155,7 +170,6 @@ const MoviesGrid = ({
               <div className="p-3 space-y-1">
                 <h3 className="text-white text-sm font-semibold truncate">{movie.title}</h3>
 
-                {/* Show channel only if showChannel=true and movie.channel exists */}
                 {showChannel && movie.channel && (
                   <div className="text-xs text-gray-300 truncate">{movie.channel}</div>
                 )}
@@ -166,7 +180,7 @@ const MoviesGrid = ({
                   </div>
                 )}
 
-                {( (showDuration && movie.duration) || movie.rating || movie.views) && (
+                {((showDuration && movie.duration) || movie.rating || movie.views) && (
                   <div className="flex flex-wrap gap-2 text-gray-300 text-sm">
                     {showDuration && movie.duration && (
                       <div className="flex items-center gap-1 bg-[#1E293B] rounded-full px-2 py-1 text-xs">
