@@ -16,6 +16,7 @@ const NavbarPage = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false); // NEW
   const [searchQuery, setSearchQuery] = useState("");
   const [recentSearches, setRecentSearches] = useState([]);
   const [showParentalControl, setShowParentalControl] = useState(false);
@@ -24,7 +25,6 @@ const NavbarPage = () => {
   const dropdownRef = useRef(null);
   const [dropdownStyles, setDropdownStyles] = useState({});
 
-  // Detect screen resize
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
@@ -36,62 +36,55 @@ const NavbarPage = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Load recent searches
   useEffect(() => {
     const storedSearches =
       JSON.parse(localStorage.getItem("recentSearches")) || [];
     setRecentSearches(storedSearches);
   }, []);
 
-  // Search handler
   const handleSearch = (e) => {
     e.preventDefault();
     if (!searchQuery.trim()) return;
-
     const updatedSearches = [
       searchQuery,
       ...recentSearches.filter((item) => item !== searchQuery),
     ].slice(0, 5);
-
     setRecentSearches(updatedSearches);
     localStorage.setItem("recentSearches", JSON.stringify(updatedSearches));
-
     setSearchQuery("");
     setShowSearch(false);
   };
 
-  // Position Parental Control dropdown
   useEffect(() => {
     if (showParentalControl && shieldRef.current) {
       const rect = shieldRef.current.getBoundingClientRect();
       const scrollTop = window.scrollY || window.pageYOffset;
       const scrollLeft = window.scrollX || window.pageXOffset;
       const viewportWidth = window.innerWidth;
+      const dropdownWidth = 600;
 
-      const dropdownWidth = Math.min(400, viewportWidth * 0.95);
-      let left = rect.left + scrollLeft + rect.width / 2 - dropdownWidth / 2;
-      if (left < 8) left = 8;
-      if (left + dropdownWidth > viewportWidth)
-        left = viewportWidth - dropdownWidth - 8;
+      let leftPosition = rect.left + scrollLeft;
+      const maxLeft = scrollLeft + viewportWidth - dropdownWidth - 8;
+      if (leftPosition > maxLeft) {
+        leftPosition = maxLeft;
+      }
 
       setDropdownStyles({
         position: "absolute",
-        top: rect.bottom + scrollTop + 10,
-        left,
+        top: rect.bottom + scrollTop + 8,
+        left: leftPosition,
         width: dropdownWidth,
+        zIndex: 999,
         backgroundColor: "#18181b",
-        borderRadius: "8px",
-        boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
+        borderRadius: "0.5rem",
+        boxShadow: "0 10px 20px rgba(0,0,0,0.4)",
         padding: "1rem",
-        zIndex: 1000,
-        maxHeight: "90vh",
-        overflowY: "auto",
-        overflowX: "hidden",
+        boxSizing: "border-box",
+        overflow: "visible",
       });
     }
   }, [showParentalControl]);
 
-  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -105,7 +98,9 @@ const NavbarPage = () => {
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, [showParentalControl]);
 
   const navItems = [
@@ -137,7 +132,11 @@ const NavbarPage = () => {
             style={{
               width: isMobile ? "110px" : "140px",
               height: isMobile ? "50px" : "60px",
-              filter: `drop-shadow(0 0 10px rgba(200,200,200,0.8)) drop-shadow(0 0 20px rgba(180,180,180,0.5)) drop-shadow(0 0 30px rgba(150,150,150,0.3))`,
+              filter: `
+                drop-shadow(0 0 10px rgba(200, 200, 200, 0.8)) 
+                drop-shadow(0 0 20px rgba(180, 180, 180, 0.5)) 
+                drop-shadow(0 0 30px rgba(150, 150, 150, 0.3))
+              `,
             }}
           >
             <img
@@ -147,7 +146,7 @@ const NavbarPage = () => {
             />
           </div>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Menu */}
           {!isMobile && (
             <div className="bg-zinc-900 rounded-xl px-6 py-2 flex flex-wrap justify-center gap-3 shadow-lg">
               {navItems.map((item, index) => (
@@ -168,40 +167,67 @@ const NavbarPage = () => {
             </div>
           )}
 
-          {/* Icons / Hamburger */}
+          {/* Right Icons / Hamburger */}
           <div className="flex items-center space-x-4 text-lg text-white relative">
             {!isMobile ? (
               <>
-                <FaSearch
-                  className="cursor-pointer hover:text-blue-400"
+                {/* Search Icon */}
+                <div
+                  className={`relative cursor-pointer transition duration-200 p-1 rounded-md ${
+                    showSearch
+                      ? "text-blue-400 bg-zinc-800 shadow-lg"
+                      : "hover:text-blue-400"
+                  }`}
                   onClick={() => setShowSearch(!showSearch)}
-                />
-                <FaBell className="cursor-pointer hover:text-red-400" />
+                  aria-label="Toggle search input"
+                >
+                  <FaSearch size={22} />
+                </div>
+
+                {/* Bell Icon */}
+                <div
+                  className={`relative cursor-pointer transition duration-200 p-1 rounded-md ${
+                    showNotifications
+                      ? "text-red-400 bg-zinc-800 shadow-lg"
+                      : "hover:text-red-400"
+                  }`}
+                  onClick={() => setShowNotifications((prev) => !prev)}
+                  aria-label="Notifications"
+                >
+                  <FaBell size={22} />
+                </div>
+
+                {/* User Icon */}
                 <Link to="/login">
-                  <FaUser className="cursor-pointer hover:text-green-400" />
+                  <FaUser className="cursor-pointer hover:text-green-400 transition duration-200" />
                 </Link>
 
+                {/* Shield Icon */}
                 <div
                   ref={shieldRef}
-                  className={`cursor-pointer p-1 rounded-md transition ${
+                  className={`relative cursor-pointer transition duration-200 p-1 rounded-md ${
                     showParentalControl
                       ? "text-purple-400 bg-zinc-800 shadow-lg"
                       : "hover:text-purple-400"
                   }`}
                   onClick={() => setShowParentalControl((prev) => !prev)}
+                  aria-label="Toggle parental control dropdown"
                 >
                   <FaShieldAlt size={22} />
                 </div>
               </>
             ) : (
-              <button onClick={() => setMenuOpen(!menuOpen)}>
+              <button
+                onClick={() => setMenuOpen(!menuOpen)}
+                aria-label="Toggle menu"
+              >
                 {menuOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
               </button>
             )}
           </div>
         </div>
 
-        {/* Search Box */}
+        {/* Desktop Search Bar */}
         {showSearch && !isMobile && (
           <div className="absolute top-full left-0 right-0 bg-zinc-800 px-4 py-3 z-40 shadow-lg">
             <form onSubmit={handleSearch} className="flex items-center space-x-3">
@@ -239,7 +265,7 @@ const NavbarPage = () => {
           </div>
         )}
 
-        {/* Mobile Menu */}
+        {/* Mobile Dropdown Menu */}
         {isMobile && menuOpen && (
           <div className="bg-zinc-900 mt-3 p-4 rounded-lg shadow-lg space-y-2">
             {navItems.map((item, index) => (
@@ -248,7 +274,7 @@ const NavbarPage = () => {
                 to={item.path}
                 onClick={() => setMenuOpen(false)}
                 className={({ isActive }) =>
-                  `block px-4 py-2 rounded-md text-sm font-medium ${
+                  `block px-4 py-2 rounded-md text-sm font-medium transition ${
                     isActive
                       ? "bg-red-500 text-white"
                       : "text-zinc-300 hover:bg-zinc-800"
@@ -262,7 +288,7 @@ const NavbarPage = () => {
         )}
       </nav>
 
-      {/* Bottom Nav (Mobile) */}
+      {/* Bottom Mobile Navigation */}
       {isMobile && (
         <div className="fixed bottom-0 left-0 right-0 z-50 bg-zinc-900 border-t-[3px] border-zinc-700 flex justify-around items-center py-4 md:hidden">
           {bottomNavItems.map((item, index) => (
@@ -270,7 +296,7 @@ const NavbarPage = () => {
               key={index}
               to={item.path}
               className={({ isActive }) =>
-                `flex flex-col items-center text-sm font-semibold ${
+                `flex flex-col items-center text-sm font-semibold transition-all ${
                   isActive ? "text-red-500" : "text-zinc-300 hover:text-white"
                 }`
               }
