@@ -31,7 +31,6 @@ const NavbarPage = () => {
   const accountRef = useRef(null);
   const accountDropdownRef = useRef(null);
   const [dropdownStyles, setDropdownStyles] = useState({});
-  const [accountDropdownStyles, setAccountDropdownStyles] = useState({});
 
   useEffect(() => {
     const handleResize = () => {
@@ -87,32 +86,6 @@ const NavbarPage = () => {
       setDropdownStyles({});
     }
   }, [showParentalControl, isMobile]);
-
-  // New useEffect for account dropdown positioning
-  useEffect(() => {
-    const updateAccountDropdownPosition = () => {
-      if (showAccountDropdown && accountRef.current && !isMobile) {
-        const rect = accountRef.current.getBoundingClientRect();
-        const width = 250; // Adjust width as needed
-        const viewW = window.innerWidth;
-        let left = rect.left + window.pageXOffset;
-        if (left + width + 8 > viewW) left = viewW - width - 8;
-        setAccountDropdownStyles({
-          position: "fixed",
-          top: rect.bottom + 8,
-          left,
-          width,
-          zIndex: 999,
-        });
-      } else {
-        setAccountDropdownStyles({});
-      }
-    };
-
-    updateAccountDropdownPosition();
-    window.addEventListener("resize", updateAccountDropdownPosition);
-    return () => window.removeEventListener("resize", updateAccountDropdownPosition);
-  }, [showAccountDropdown, isMobile]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -238,7 +211,14 @@ const NavbarPage = () => {
                 {showAccountDropdown && !isMobile && (
                   <div
                     ref={accountDropdownRef}
-                    style={accountDropdownStyles}
+                    style={{
+                      position: "fixed",
+                      top:
+                        accountRef.current?.getBoundingClientRect().bottom + 8 ||
+                        0,
+                      right: 16,
+                      zIndex: 999,
+                    }}
                   >
                     <PersonalSidebar
                       onClose={() => setShowAccountDropdown(false)}
@@ -274,6 +254,7 @@ const NavbarPage = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search..."
+               
                 className="flex-1 bg-zinc-700 text-white px-4 py-2 rounded-lg outline-none"
               />
               <button
@@ -370,7 +351,7 @@ const NavbarPage = () => {
               onClick={() => setShowAccountDropdown(false)}
             >
               <div
-                className="bg-zinc-900 w-1/3 h-full shadow-lg"
+                className="bg-zinc-900 w-1/2 h-full shadow-lg"
                 onClick={(e) => e.stopPropagation()}
               >
                 <PersonalSidebar onClose={() => setShowAccountDropdown(false)} />
