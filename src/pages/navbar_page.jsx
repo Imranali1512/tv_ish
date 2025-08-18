@@ -22,13 +22,16 @@ const NavbarPage = () => {
   const [recentSearches, setRecentSearches] = useState([]);
   const [showParentalControl, setShowParentalControl] = useState(false);
   const [showAccountDropdown, setShowAccountDropdown] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isLoggedIn") === "true");
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    localStorage.getItem("isLoggedIn") === "true"
+  );
 
   const shieldRef = useRef(null);
   const dropdownRef = useRef(null);
   const accountRef = useRef(null);
   const accountDropdownRef = useRef(null);
   const [dropdownStyles, setDropdownStyles] = useState({});
+  const [accountDropdownStyles, setAccountDropdownStyles] = useState({});
 
   useEffect(() => {
     const handleResize = () => {
@@ -40,11 +43,14 @@ const NavbarPage = () => {
   }, []);
 
   useEffect(() => {
-    setRecentSearches(JSON.parse(localStorage.getItem("recentSearches")) || []);
+    setRecentSearches(
+      JSON.parse(localStorage.getItem("recentSearches")) || []
+    );
   }, []);
 
   useEffect(() => {
-    const checkLogin = () => setIsLoggedIn(localStorage.getItem("isLoggedIn") === "true");
+    const checkLogin = () =>
+      setIsLoggedIn(localStorage.getItem("isLoggedIn") === "true");
     checkLogin();
     const interval = setInterval(checkLogin, 1000);
     return () => clearInterval(interval);
@@ -53,7 +59,10 @@ const NavbarPage = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (!searchQuery.trim()) return;
-    const updated = [searchQuery, ...recentSearches.filter((s) => s !== searchQuery)].slice(0, 5);
+    const updated = [
+      searchQuery,
+      ...recentSearches.filter((s) => s !== searchQuery),
+    ].slice(0, 5);
     setRecentSearches(updated);
     localStorage.setItem("recentSearches", JSON.stringify(updated));
     setSearchQuery("");
@@ -78,6 +87,32 @@ const NavbarPage = () => {
       setDropdownStyles({});
     }
   }, [showParentalControl, isMobile]);
+
+  // New useEffect for account dropdown positioning
+  useEffect(() => {
+    const updateAccountDropdownPosition = () => {
+      if (showAccountDropdown && accountRef.current && !isMobile) {
+        const rect = accountRef.current.getBoundingClientRect();
+        const width = 250; // Adjust width as needed
+        const viewW = window.innerWidth;
+        let left = rect.left + window.pageXOffset;
+        if (left + width + 8 > viewW) left = viewW - width - 8;
+        setAccountDropdownStyles({
+          position: "fixed",
+          top: rect.bottom + 8,
+          left,
+          width,
+          zIndex: 999,
+        });
+      } else {
+        setAccountDropdownStyles({});
+      }
+    };
+
+    updateAccountDropdownPosition();
+    window.addEventListener("resize", updateAccountDropdownPosition);
+    return () => window.removeEventListener("resize", updateAccountDropdownPosition);
+  }, [showAccountDropdown, isMobile]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -136,10 +171,14 @@ const NavbarPage = () => {
                 "drop-shadow(0 0 10px rgba(200,200,200,0.8)) drop-shadow(0 0 20px rgba(180,180,180,0.5)) drop-shadow(0 0 30px rgba(150,150,150,0.3))",
             }}
           >
-            <img src="/logo/tv-ish.png" alt="Logo" className="w-full h-full object-contain" />
+            <img
+              src="/logo/tv-ish.png"
+              alt="Logo"
+              className="w-full h-full object-contain"
+            />
           </div>
 
-          {/* Desktop Nav Links */}
+          {/* Desktop nav links */}
           {!isMobile && (
             <div className="bg-zinc-900 rounded-xl px-6 py-2 flex flex-wrap justify-center gap-3 shadow-lg">
               {navItems.map((item, idx) => (
@@ -176,49 +215,48 @@ const NavbarPage = () => {
                 {/* Notifications */}
                 <div
                   className={`cursor-pointer p-1 rounded-md transition ${
-                    showNotifications ? "text-red-400 bg-zinc-800 shadow-lg" : "hover:text-red-400"
+                    showNotifications
+                      ? "text-red-400 bg-zinc-800 shadow-lg"
+                      : "hover:text-red-400"
                   }`}
                   onClick={() => setShowNotifications((prev) => !prev)}
                 >
                   <FaBell size={22} />
                 </div>
-                {/* Account */}
-                {isLoggedIn && (
-                  <div
-                    ref={accountRef}
-                    className={`cursor-pointer p-1 rounded-md transition ${
-                      showAccountDropdown ? "text-green-400 bg-zinc-800 shadow-lg" : "hover:text-green-400"
-                    }`}
-                    onClick={() => setShowAccountDropdown((prev) => !prev)}
-                  >
-                    <FaUser size={22} />
-                  </div>
-                )}
+                {/* Account – always visible */}
+                <div
+                  ref={accountRef}
+                  className={`cursor-pointer p-1 rounded-md transition ${
+                    showAccountDropdown
+                      ? "text-green-400 bg-zinc-800 shadow-lg"
+                      : "hover:text-green-400"
+                  }`}
+                  onClick={() => setShowAccountDropdown((prev) => !prev)}
+                >
+                  <FaUser size={22} />
+                </div>
                 {showAccountDropdown && !isMobile && (
                   <div
                     ref={accountDropdownRef}
-                    style={{
-                      position: "fixed",
-                      top: accountRef.current?.getBoundingClientRect().bottom + 8 || 0,
-                      right: 16,
-                      zIndex: 999,
-                    }}
+                    style={accountDropdownStyles}
                   >
-                    <PersonalSidebar onClose={() => setShowAccountDropdown(false)} />
+                    <PersonalSidebar
+                      onClose={() => setShowAccountDropdown(false)}
+                    />
                   </div>
                 )}
-                {/* Parental Control */}
-                {isLoggedIn && (
-                  <div
-                    ref={shieldRef}
-                    className={`cursor-pointer p-1 rounded-md transition ${
-                      showParentalControl ? "text-purple-400 bg-zinc-800 shadow-lg" : "hover:text-purple-400"
-                    }`}
-                    onClick={() => setShowParentalControl((prev) => !prev)}
-                  >
-                    <FaShieldAlt size={22} />
-                  </div>
-                )}
+                {/* Parental Control – always visible */}
+                <div
+                  ref={shieldRef}
+                  className={`cursor-pointer p-1 rounded-md transition ${
+                    showParentalControl
+                      ? "text-purple-400 bg-zinc-800 shadow-lg"
+                      : "hover:text-purple-400"
+                  }`}
+                  onClick={() => setShowParentalControl((prev) => !prev)}
+                >
+                  <FaShieldAlt size={22} />
+                </div>
               </>
             ) : (
               <button onClick={() => setMenuOpen((prev) => !prev)}>
@@ -228,7 +266,7 @@ const NavbarPage = () => {
           </div>
         </div>
 
-        {/* Search Panel */}
+        {/* Desktop search */}
         {showSearch && !isMobile && (
           <div className="absolute top-full left-0 right-0 bg-zinc-800 px-4 py-3 z-40 shadow-lg">
             <form onSubmit={handleSearch} className="flex items-center space-x-3">
@@ -238,13 +276,18 @@ const NavbarPage = () => {
                 placeholder="Search..."
                 className="flex-1 bg-zinc-700 text-white px-4 py-2 rounded-lg outline-none"
               />
-              <button type="submit" className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">
+              <button
+                type="submit"
+                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
+              >
                 Search
               </button>
             </form>
             {recentSearches.length > 0 && (
               <div className="mt-3">
-                <h4 className="text-zinc-400 text-sm mb-2">Recent Searches:</h4>
+                <h4 className="text-zinc-400 text-sm mb-2">
+                  Recent Searches:
+                </h4>
                 <ul className="space-y-1">
                   {recentSearches.map((item, idx) => (
                     <li
@@ -261,7 +304,7 @@ const NavbarPage = () => {
           </div>
         )}
 
-        {/* Mobile Menu */}
+        {/* Mobile menu links */}
         {isMobile && menuOpen && (
           <div className="bg-zinc-900 mt-3 p-4 rounded-lg shadow-lg space-y-2">
             {navItems.map((item, idx) => (
@@ -271,7 +314,9 @@ const NavbarPage = () => {
                 onClick={() => setMenuOpen(false)}
                 className={({ isActive }) =>
                   `block px-4 py-2 rounded-md text-sm font-medium transition ${
-                    isActive ? "bg-red-500 text-white" : "text-zinc-300 hover:bg-zinc-800"
+                    isActive
+                      ? "bg-red-500 text-white"
+                      : "text-zinc-300 hover:bg-zinc-800"
                   }`
                 }
               >
@@ -282,7 +327,7 @@ const NavbarPage = () => {
         )}
       </nav>
 
-      {/* Mobile Bottom Nav */}
+      {/* Mobile bottom nav */}
       {isMobile && (
         <>
           <div className="fixed bottom-0 left-0 right-0 z-50 bg-zinc-900 border-t-[3px] border-zinc-700 flex justify-around items-center py-4 md:hidden">
@@ -292,7 +337,9 @@ const NavbarPage = () => {
                 to={item.path}
                 className={({ isActive }) =>
                   `flex flex-col items-center text-sm font-semibold transition-all ${
-                    isActive ? "text-red-500" : "text-zinc-300 hover:text-white"
+                    isActive
+                      ? "text-red-500"
+                      : "text-zinc-300 hover:text-white"
                   }`
                 }
               >
@@ -300,30 +347,32 @@ const NavbarPage = () => {
                 <span className="text-[13px]">{item.name}</span>
               </NavLink>
             ))}
-            {isLoggedIn && (
-              <div
-                className={`flex flex-col items-center text-sm font-semibold transition cursor-pointer ${
-                  showAccountDropdown ? "text-green-400" : "text-zinc-300 hover:text-white"
-                }`}
-                onClick={() => setShowAccountDropdown(true)}
-              >
-                <div className="text-lg mb-0.5">
-                  <FaUser />
-                </div>
-                <span className="text-[13px]">Account</span>
+            <div
+              className={`flex flex-col items-center text-sm font-semibold transition cursor-pointer ${
+                showAccountDropdown
+                  ? "text-green-400"
+                  : "text-zinc-300 hover:text-white"
+              }`}
+              onClick={() => setShowAccountDropdown(true)}
+            >
+              <div className="text-lg mb-0.5">
+                <FaUser />
               </div>
-            )}
+              <span className="text-[13px]">Account</span>
+            </div>
           </div>
 
-          {/* Mobile Account Drawer */}
+          {/* Mobile account drawer (50% width) */}
           {showAccountDropdown && (
             <div
               ref={accountDropdownRef}
               className="fixed inset-0 z-50 bg-black/70 flex justify-end"
               onClick={() => setShowAccountDropdown(false)}
             >
-              {/* Reduced width here from w-4/5 (80%) to w-3/4 (75%) for less width */}
-              <div className="bg-zinc-900 w-1/2 h-full shadow-lg" onClick={(e) => e.stopPropagation()}>
+              <div
+                className="bg-zinc-900 w-1/3 h-full shadow-lg"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <PersonalSidebar onClose={() => setShowAccountDropdown(false)} />
               </div>
             </div>
@@ -331,17 +380,23 @@ const NavbarPage = () => {
         </>
       )}
 
-      {/* Desktop Parental Control Dropdown */}
+      {/* Desktop parental control dropdown */}
       {!isMobile && showParentalControl && (
         <div ref={dropdownRef} style={dropdownStyles}>
           <ParentsControl onClose={() => setShowParentalControl(false)} />
         </div>
       )}
 
-      {/* Mobile Parental Control Drawer */}
+      {/* Mobile parental control drawer (can also adjust to 50% if preferred) */}
       {isMobile && showParentalControl && (
-        <div className="fixed inset-0 z-50 bg-black/70 flex justify-end" onClick={() => setShowParentalControl(false)}>
-          <div className="bg-zinc-900 w-4/5 h-full shadow-lg" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="fixed inset-0 z-50 bg-black/70 flex justify-end"
+          onClick={() => setShowParentalControl(false)}
+        >
+          <div
+            className="bg-zinc-900 w-1/2 h-full shadow-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
             <ParentsControl onClose={() => setShowParentalControl(false)} />
           </div>
         </div>
