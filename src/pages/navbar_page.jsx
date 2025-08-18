@@ -9,99 +9,100 @@ import {
   FaHome,
   FaVideo,
 } from "react-icons/fa";
-import { NavLink, Link } from "react-router-dom";
-import ParentsControl from "../components/ParentsControl";
+import { NavLink } from "react-router-dom";
+import ParentsControl from "../components/parentscontrol";
+import PersonalSidebar from "../components/personalsidebar";
 
 const NavbarPage = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false); // NEW
+  const [showNotifications, setShowNotifications] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [recentSearches, setRecentSearches] = useState([]);
   const [showParentalControl, setShowParentalControl] = useState(false);
+  const [showAccountDropdown, setShowAccountDropdown] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isLoggedIn") === "true");
 
   const shieldRef = useRef(null);
   const dropdownRef = useRef(null);
+  const accountRef = useRef(null);
+  const accountDropdownRef = useRef(null);
   const [dropdownStyles, setDropdownStyles] = useState({});
 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
-      if (window.innerWidth >= 768) {
-        setMenuOpen(false);
-      }
+      if (window.innerWidth >= 768) setMenuOpen(false);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
-    const storedSearches =
-      JSON.parse(localStorage.getItem("recentSearches")) || [];
-    setRecentSearches(storedSearches);
+    setRecentSearches(JSON.parse(localStorage.getItem("recentSearches")) || []);
+  }, []);
+
+  useEffect(() => {
+    const checkLogin = () => setIsLoggedIn(localStorage.getItem("isLoggedIn") === "true");
+    checkLogin();
+    const interval = setInterval(checkLogin, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
     if (!searchQuery.trim()) return;
-    const updatedSearches = [
-      searchQuery,
-      ...recentSearches.filter((item) => item !== searchQuery),
-    ].slice(0, 5);
-    setRecentSearches(updatedSearches);
-    localStorage.setItem("recentSearches", JSON.stringify(updatedSearches));
+    const updated = [searchQuery, ...recentSearches.filter((s) => s !== searchQuery)].slice(0, 5);
+    setRecentSearches(updated);
+    localStorage.setItem("recentSearches", JSON.stringify(updated));
     setSearchQuery("");
     setShowSearch(false);
   };
 
   useEffect(() => {
-    if (showParentalControl && shieldRef.current) {
+    if (showParentalControl && shieldRef.current && !isMobile) {
       const rect = shieldRef.current.getBoundingClientRect();
-      const scrollTop = window.scrollY || window.pageYOffset;
-      const scrollLeft = window.scrollX || window.pageXOffset;
-      const viewportWidth = window.innerWidth;
-      const dropdownWidth = 600;
-
-      let leftPosition = rect.left + scrollLeft;
-      const maxLeft = scrollLeft + viewportWidth - dropdownWidth - 8;
-      if (leftPosition > maxLeft) {
-        leftPosition = maxLeft;
-      }
-
+      const width = 600;
+      const viewW = window.innerWidth;
+      let left = rect.left + window.pageXOffset;
+      if (left + width + 8 > viewW) left = viewW - width - 8;
       setDropdownStyles({
-        position: "absolute",
-        top: rect.bottom + scrollTop + 8,
-        left: leftPosition,
-        width: dropdownWidth,
+        position: "fixed",
+        top: rect.bottom + 8,
+        left,
+        width,
         zIndex: 999,
-        backgroundColor: "#18181b",
-        borderRadius: "0.5rem",
-        boxShadow: "0 10px 20px rgba(0,0,0,0.4)",
-        padding: "1rem",
-        boxSizing: "border-box",
-        overflow: "visible",
       });
+    } else {
+      setDropdownStyles({});
     }
-  }, [showParentalControl]);
+  }, [showParentalControl, isMobile]);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (e) => {
       if (
         showParentalControl &&
         dropdownRef.current &&
-        !dropdownRef.current.contains(event.target) &&
+        !dropdownRef.current.contains(e.target) &&
         shieldRef.current &&
-        !shieldRef.current.contains(event.target)
+        !shieldRef.current.contains(e.target)
       ) {
         setShowParentalControl(false);
       }
+      if (
+        showAccountDropdown &&
+        accountDropdownRef.current &&
+        !accountDropdownRef.current.contains(e.target) &&
+        accountRef.current &&
+        !accountRef.current.contains(e.target)
+      ) {
+        setShowAccountDropdown(false);
+      }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showParentalControl]);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showParentalControl, showAccountDropdown]);
 
   const navItems = [
     { name: "Home", path: "/" },
@@ -119,7 +120,6 @@ const NavbarPage = () => {
     { name: "Search", icon: <FaSearch />, path: "/search" },
     { name: "Snips", icon: <FaVideo />, path: "/snips" },
     { name: "Notifications", icon: <FaBell />, path: "/notification" },
-    { name: "Account", icon: <FaUser />, path: "/account" },
   ];
 
   return (
@@ -132,26 +132,19 @@ const NavbarPage = () => {
             style={{
               width: isMobile ? "110px" : "140px",
               height: isMobile ? "50px" : "60px",
-              filter: `
-                drop-shadow(0 0 10px rgba(200, 200, 200, 0.8)) 
-                drop-shadow(0 0 20px rgba(180, 180, 180, 0.5)) 
-                drop-shadow(0 0 30px rgba(150, 150, 150, 0.3))
-              `,
+              filter:
+                "drop-shadow(0 0 10px rgba(200,200,200,0.8)) drop-shadow(0 0 20px rgba(180,180,180,0.5)) drop-shadow(0 0 30px rgba(150,150,150,0.3))",
             }}
           >
-            <img
-              src="/logo/tv-ish.png"
-              alt="TV-ish Logo"
-              className="object-contain w-full h-full"
-            />
+            <img src="/logo/tv-ish.png" alt="Logo" className="w-full h-full object-contain" />
           </div>
 
-          {/* Desktop Menu */}
+          {/* Desktop Nav Links */}
           {!isMobile && (
             <div className="bg-zinc-900 rounded-xl px-6 py-2 flex flex-wrap justify-center gap-3 shadow-lg">
-              {navItems.map((item, index) => (
+              {navItems.map((item, idx) => (
                 <NavLink
-                  key={index}
+                  key={idx}
                   to={item.path}
                   className={({ isActive }) =>
                     `relative px-4 py-1.5 rounded-lg font-medium transition-all duration-300 ${
@@ -167,92 +160,95 @@ const NavbarPage = () => {
             </div>
           )}
 
-          {/* Right Icons / Hamburger */}
+          {/* Icons */}
           <div className="flex items-center space-x-4 text-lg text-white relative">
             {!isMobile ? (
               <>
-                {/* Search Icon */}
+                {/* Search */}
                 <div
-                  className={`relative cursor-pointer transition duration-200 p-1 rounded-md ${
-                    showSearch
-                      ? "text-blue-400 bg-zinc-800 shadow-lg"
-                      : "hover:text-blue-400"
+                  className={`cursor-pointer p-1 rounded-md transition ${
+                    showSearch ? "text-blue-400 bg-zinc-800 shadow-lg" : "hover:text-blue-400"
                   }`}
-                  onClick={() => setShowSearch(!showSearch)}
-                  aria-label="Toggle search input"
+                  onClick={() => setShowSearch((prev) => !prev)}
                 >
                   <FaSearch size={22} />
                 </div>
-
-                {/* Bell Icon */}
+                {/* Notifications */}
                 <div
-                  className={`relative cursor-pointer transition duration-200 p-1 rounded-md ${
-                    showNotifications
-                      ? "text-red-400 bg-zinc-800 shadow-lg"
-                      : "hover:text-red-400"
+                  className={`cursor-pointer p-1 rounded-md transition ${
+                    showNotifications ? "text-red-400 bg-zinc-800 shadow-lg" : "hover:text-red-400"
                   }`}
                   onClick={() => setShowNotifications((prev) => !prev)}
-                  aria-label="Notifications"
                 >
                   <FaBell size={22} />
                 </div>
-
-                {/* User Icon */}
-                <Link to="/login">
-                  <FaUser className="cursor-pointer hover:text-green-400 transition duration-200" />
-                </Link>
-
-                {/* Shield Icon */}
-                <div
-                  ref={shieldRef}
-                  className={`relative cursor-pointer transition duration-200 p-1 rounded-md ${
-                    showParentalControl
-                      ? "text-purple-400 bg-zinc-800 shadow-lg"
-                      : "hover:text-purple-400"
-                  }`}
-                  onClick={() => setShowParentalControl((prev) => !prev)}
-                  aria-label="Toggle parental control dropdown"
-                >
-                  <FaShieldAlt size={22} />
-                </div>
+                {/* Account */}
+                {isLoggedIn && (
+                  <div
+                    ref={accountRef}
+                    className={`cursor-pointer p-1 rounded-md transition ${
+                      showAccountDropdown ? "text-green-400 bg-zinc-800 shadow-lg" : "hover:text-green-400"
+                    }`}
+                    onClick={() => setShowAccountDropdown((prev) => !prev)}
+                  >
+                    <FaUser size={22} />
+                  </div>
+                )}
+                {showAccountDropdown && !isMobile && (
+                  <div
+                    ref={accountDropdownRef}
+                    style={{
+                      position: "fixed",
+                      top: accountRef.current?.getBoundingClientRect().bottom + 8 || 0,
+                      right: 16,
+                      zIndex: 999,
+                    }}
+                  >
+                    <PersonalSidebar onClose={() => setShowAccountDropdown(false)} />
+                  </div>
+                )}
+                {/* Parental Control */}
+                {isLoggedIn && (
+                  <div
+                    ref={shieldRef}
+                    className={`cursor-pointer p-1 rounded-md transition ${
+                      showParentalControl ? "text-purple-400 bg-zinc-800 shadow-lg" : "hover:text-purple-400"
+                    }`}
+                    onClick={() => setShowParentalControl((prev) => !prev)}
+                  >
+                    <FaShieldAlt size={22} />
+                  </div>
+                )}
               </>
             ) : (
-              <button
-                onClick={() => setMenuOpen(!menuOpen)}
-                aria-label="Toggle menu"
-              >
+              <button onClick={() => setMenuOpen((prev) => !prev)}>
                 {menuOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
               </button>
             )}
           </div>
         </div>
 
-        {/* Desktop Search Bar */}
+        {/* Search Panel */}
         {showSearch && !isMobile && (
           <div className="absolute top-full left-0 right-0 bg-zinc-800 px-4 py-3 z-40 shadow-lg">
             <form onSubmit={handleSearch} className="flex items-center space-x-3">
               <input
-                type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search..."
                 className="flex-1 bg-zinc-700 text-white px-4 py-2 rounded-lg outline-none"
               />
-              <button
-                type="submit"
-                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
-              >
+              <button type="submit" className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">
                 Search
               </button>
             </form>
-
             {recentSearches.length > 0 && (
               <div className="mt-3">
                 <h4 className="text-zinc-400 text-sm mb-2">Recent Searches:</h4>
                 <ul className="space-y-1">
-                  {recentSearches.map((item, index) => (
+                  {recentSearches.map((item, idx) => (
                     <li
-                      key={index}
+                      key={idx}
                       className="text-zinc-200 hover:text-white cursor-pointer"
                       onClick={() => setSearchQuery(item)}
                     >
@@ -265,19 +261,17 @@ const NavbarPage = () => {
           </div>
         )}
 
-        {/* Mobile Dropdown Menu */}
+        {/* Mobile Menu */}
         {isMobile && menuOpen && (
           <div className="bg-zinc-900 mt-3 p-4 rounded-lg shadow-lg space-y-2">
-            {navItems.map((item, index) => (
+            {navItems.map((item, idx) => (
               <NavLink
-                key={index}
+                key={idx}
                 to={item.path}
                 onClick={() => setMenuOpen(false)}
                 className={({ isActive }) =>
                   `block px-4 py-2 rounded-md text-sm font-medium transition ${
-                    isActive
-                      ? "bg-red-500 text-white"
-                      : "text-zinc-300 hover:bg-zinc-800"
+                    isActive ? "bg-red-500 text-white" : "text-zinc-300 hover:bg-zinc-800"
                   }`
                 }
               >
@@ -288,30 +282,68 @@ const NavbarPage = () => {
         )}
       </nav>
 
-      {/* Bottom Mobile Navigation */}
+      {/* Mobile Bottom Nav */}
       {isMobile && (
-        <div className="fixed bottom-0 left-0 right-0 z-50 bg-zinc-900 border-t-[3px] border-zinc-700 flex justify-around items-center py-4 md:hidden">
-          {bottomNavItems.map((item, index) => (
-            <NavLink
-              key={index}
-              to={item.path}
-              className={({ isActive }) =>
-                `flex flex-col items-center text-sm font-semibold transition-all ${
-                  isActive ? "text-red-500" : "text-zinc-300 hover:text-white"
-                }`
-              }
+        <>
+          <div className="fixed bottom-0 left-0 right-0 z-50 bg-zinc-900 border-t-[3px] border-zinc-700 flex justify-around items-center py-4 md:hidden">
+            {bottomNavItems.map((item, idx) => (
+              <NavLink
+                key={idx}
+                to={item.path}
+                className={({ isActive }) =>
+                  `flex flex-col items-center text-sm font-semibold transition-all ${
+                    isActive ? "text-red-500" : "text-zinc-300 hover:text-white"
+                  }`
+                }
+              >
+                <div className="text-lg mb-0.5">{item.icon}</div>
+                <span className="text-[13px]">{item.name}</span>
+              </NavLink>
+            ))}
+            {isLoggedIn && (
+              <div
+                className={`flex flex-col items-center text-sm font-semibold transition cursor-pointer ${
+                  showAccountDropdown ? "text-green-400" : "text-zinc-300 hover:text-white"
+                }`}
+                onClick={() => setShowAccountDropdown(true)}
+              >
+                <div className="text-lg mb-0.5">
+                  <FaUser />
+                </div>
+                <span className="text-[13px]">Account</span>
+              </div>
+            )}
+          </div>
+
+          {/* Mobile Account Drawer */}
+          {showAccountDropdown && (
+            <div
+              ref={accountDropdownRef}
+              className="fixed inset-0 z-50 bg-black/70 flex justify-end"
+              onClick={() => setShowAccountDropdown(false)}
             >
-              <div className="text-lg mb-0.5">{item.icon}</div>
-              <span className="text-[13px]">{item.name}</span>
-            </NavLink>
-          ))}
+              {/* Reduced width here from w-4/5 (80%) to w-3/4 (75%) for less width */}
+              <div className="bg-zinc-900 w-1/2 h-full shadow-lg" onClick={(e) => e.stopPropagation()}>
+                <PersonalSidebar onClose={() => setShowAccountDropdown(false)} />
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Desktop Parental Control Dropdown */}
+      {!isMobile && showParentalControl && (
+        <div ref={dropdownRef} style={dropdownStyles}>
+          <ParentsControl onClose={() => setShowParentalControl(false)} />
         </div>
       )}
 
-      {/* Parental Control Dropdown */}
-      {showParentalControl && (
-        <div ref={dropdownRef} style={dropdownStyles}>
-          <ParentsControl onClose={() => setShowParentalControl(false)} />
+      {/* Mobile Parental Control Drawer */}
+      {isMobile && showParentalControl && (
+        <div className="fixed inset-0 z-50 bg-black/70 flex justify-end" onClick={() => setShowParentalControl(false)}>
+          <div className="bg-zinc-900 w-4/5 h-full shadow-lg" onClick={(e) => e.stopPropagation()}>
+            <ParentsControl onClose={() => setShowParentalControl(false)} />
+          </div>
         </div>
       )}
     </>

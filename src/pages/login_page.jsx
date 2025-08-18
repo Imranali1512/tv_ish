@@ -25,30 +25,37 @@ const LoginPage = () => {
   const images = Array.from({ length: 15 }, (_, i) => `/images/login_img${i + 1}.png`);
 
   const handleLogin = () => {
+    const adminEmail = "admin";
+    const adminPassword = "admin";
+
     if (!email || !password) {
       alert("Please enter both email and password.");
       return;
     }
 
-    // Add your authentication logic here if needed
-    navigate("/home_page");
+    if (email === adminEmail && password === adminPassword) {
+      // ✅ Save login state
+      localStorage.setItem("isLoggedIn", "true");
+      // ✅ Redirect to homepage
+      navigate("/HomePage");
+    } else {
+      alert("Invalid email or password. Please try again.");
+    }
   };
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col md:flex-row overflow-hidden relative">
-      
       {/* LEFT SIDE — Posters + Logo */}
       <div className="relative md:w-1/2 p-4 flex flex-col items-start overflow-hidden">
-
         {/* Logo */}
-        <div 
-          className="z-50 mt-10 relative" 
+        <div
+          className="z-50 mt-10 relative"
           style={{
             marginLeft: "-12px",
             transform: "translateY(-10px)",
             width: isMobile ? "150px" : "200px",
-            height: isMobile ? "65px" : "85px", 
-            filter: isMobile 
+            height: isMobile ? "65px" : "85px",
+            filter: isMobile
               ? `drop-shadow(0 0 4px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))`
               : `drop-shadow(0 0 15px rgba(200, 200, 200, 0.9)) drop-shadow(0 0 30px rgba(180, 180, 180, 0.7)) drop-shadow(0 0 45px rgba(150, 150, 150, 0.5))`,
           }}
@@ -60,11 +67,11 @@ const LoginPage = () => {
           />
         </div>
 
-        {/* Top & Bottom Fade overlays */}
+        {/* Gradient Overlays */}
         <div className="absolute top-[100px] left-0 w-full h-32 bg-gradient-to-b from-black/60 to-transparent z-20 pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/60 to-transparent z-20 pointer-events-none" />
 
-        {/* Poster Grid - hidden on mobile */}
+        {/* Poster Grid */}
         {!isMobile && (
           <div className="grid gap-3 relative z-10 overflow-hidden grid-cols-5">
             {images.slice(0, 10).map((img, index) => (
@@ -103,7 +110,7 @@ const LoginPage = () => {
 
           {/* Email Input */}
           <input
-            type="email"
+            type="text"
             placeholder="Your Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -125,11 +132,12 @@ const LoginPage = () => {
               onClick={() => setShowPassword(!showPassword)}
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
-              {showPassword ? <FaEyeSlash className="text-lg" /> : <FaEye className="text-lg" />}
+              {/* ✅ Eye logic fixed: open = visible */}
+              {showPassword ? <FaEye className="text-lg" /> : <FaEyeSlash className="text-lg" />}
             </button>
           </div>
 
-          {/* Remember + Forgot */}
+          {/* Remember & Forgot */}
           <div className="flex justify-between text-sm text-gray-400">
             <label className="flex items-center space-x-1 cursor-pointer">
               <input type="checkbox" className="accent-red-500" />
@@ -171,7 +179,7 @@ const LoginPage = () => {
             <hr className="flex-1 border-gray-600" />
           </div>
 
-          {/* Social Login Icons */}
+          {/* Social Login */}
           <div className="flex justify-center gap-6">
             <motion.div whileHover={{ scale: 1.2, transition: { duration: 0.3 } }}>
               <FaFacebook className="text-3xl cursor-pointer hover:text-blue-500" />
