@@ -1,0 +1,176 @@
+import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import {
+  FaHome, FaThLarge, FaVideo, FaThumbsUp, FaList,
+  FaHeart, FaHistory, FaCog, FaQuestionCircle, FaSignOutAlt,
+  FaBell, FaSearch, FaUpload, FaBars, FaTimes
+} from 'react-icons/fa';
+
+const DashboardSidebar = ({
+  showSearch = true,
+  showUpload = true,
+  showNotifications = true,
+}) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
+  const menuItems = [
+    { label: 'Home', icon: <FaHome />, path: '/' },
+    { label: 'Dashboard', icon: <FaThLarge />, path: '/dashboard' },
+    { label: 'My Videos', icon: <FaVideo />, path: '/my-videos' },
+    { label: 'Liked Videos', icon: <FaThumbsUp />, path: '/liked' },
+    { label: 'Playlist', icon: <FaList />, path: '/playlist' },
+    { label: 'Watch Later', icon: <FaHeart />, path: '/watch-later' },
+    { label: 'History', icon: <FaHistory />, path: '/history' },
+  ];
+
+  const bottomItems = [
+    { label: 'Settings', icon: <FaCog />, path: '/settings' },
+    { label: 'Support', icon: <FaQuestionCircle />, path: '/support' },
+    {
+      label: 'Log out',
+      icon: <FaSignOutAlt />,
+      path: '/login',
+      red: true,
+      onClick: () => {
+        localStorage.removeItem('isLoggedIn');
+        navigate('/login');
+      }
+    },
+  ];
+
+  return (
+    <>
+      {/* Desktop Sidebar */}
+      <aside className="hidden md:flex fixed top-0 left-0 h-full w-64 bg-black text-white flex-col z-40 shadow-xl border-r border-gray-800">
+        <SidebarContent
+          menuItems={menuItems}
+          bottomItems={bottomItems}
+          location={location}
+          navigate={navigate}
+        />
+      </aside>
+
+      {/* Mobile Sidebar Overlay */}
+      {sidebarOpen && <div className="fixed inset-0 bg-black/60 z-50" onClick={toggleSidebar} />}
+      <aside className={`fixed top-0 left-0 h-full w-64 bg-black text-white transform z-50 transition-transform duration-300
+        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:hidden`}>
+        <div className="flex justify-end p-4">
+          <FaTimes className="text-xl cursor-pointer" onClick={toggleSidebar} />
+        </div>
+        <SidebarContent
+          menuItems={menuItems}
+          bottomItems={bottomItems}
+          location={location}
+          navigate={(path) => {
+            navigate(path);
+            setSidebarOpen(false);
+          }}
+        />
+      </aside>
+
+      {/* Topbar - Always visible */}
+      <header className="fixed top-0 left-0 right-0 h-16 bg-black text-white flex items-center justify-between px-4 md:px-6 z-30 border-b border-gray-800 shadow-md">
+        {/* Left side: Hamburger + Search */}
+        <div className="flex flex-1 items-center gap-4 md:gap-6 justify-start lg:justify-center">
+          {/* Mobile Hamburger */}
+          <div className="flex items-center md:hidden">
+            <FaBars className="text-xl cursor-pointer" onClick={toggleSidebar} />
+          </div>
+
+          {/* Search Bar (Conditionally Rendered) */}
+          {showSearch && (
+            <div className="flex items-center bg-gray-800 px-4 py-2 rounded-full border border-gray-700 shadow-inner
+              max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl w-full transition-all duration-300 ease-in-out
+            ">
+              <FaSearch className="text-gray-400 mr-2" />
+              <input
+                type="text"
+                placeholder="Search"
+                className="bg-transparent outline-none text-white w-full placeholder-gray-400 text-sm"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Right side: Upload & Bell */}
+        <div className="flex items-center gap-4 ml-4">
+          {showUpload && (
+            <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded-full flex items-center gap-2 text-sm font-medium shadow-md transition duration-200">
+              <FaUpload />
+              <span className="hidden md:inline">Upload</span>
+            </button>
+          )}
+
+          {showNotifications && (
+            <div className="relative cursor-pointer">
+              <FaBell className="text-xl text-gray-300 hover:text-white transition duration-200" />
+              <span className="absolute -top-1 -right-2 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full shadow">
+                3
+              </span>
+            </div>
+          )}
+        </div>
+      </header>
+    </>
+  );
+};
+
+const SidebarContent = ({ menuItems, bottomItems, location, navigate }) => (
+  <>
+    {/* Profile */}
+    <div className="flex flex-col items-center py-6 border-b border-gray-700">
+      <img
+        src="https://i.pravatar.cc/100?img=3"
+        alt="Profile"
+        className="w-20 h-20 rounded-full mb-2 border-4 border-red-500 shadow-md"
+      />
+      <h2 className="text-lg font-semibold">Brooke Cooper</h2>
+      <p className="text-sm text-gray-400">Web Developer</p>
+    </div>
+
+    {/* Menu Items */}
+    <nav className="flex-grow">
+      {menuItems.map(item => (
+        <SidebarItem
+          key={item.label}
+          icon={item.icon}
+          label={item.label}
+          active={location.pathname === item.path}
+          onClick={() => navigate(item.path)}
+        />
+      ))}
+    </nav>
+
+    {/* Bottom Items */}
+    <div className="mb-6">
+      {bottomItems.map(item => (
+        <SidebarItem
+          key={item.label}
+          icon={item.icon}
+          label={item.label}
+          red={item.red}
+          active={location.pathname === item.path}
+          onClick={item.onClick || (() => navigate(item.path))}
+        />
+      ))}
+    </div>
+  </>
+);
+
+const SidebarItem = ({ icon, label, active, red, onClick }) => (
+  <div
+    onClick={onClick}
+    className={`flex items-center px-6 py-3 cursor-pointer transition select-none
+      ${active ? 'bg-gray-800 border-l-4 border-red-500' : ''}
+      ${red ? 'text-red-500 hover:bg-red-900' : 'hover:bg-gray-800'}`}
+  >
+    <div className="mr-4 text-lg">{icon}</div>
+    <span className="text-sm">{label}</span>
+  </div>
+);
+
+export default DashboardSidebar;

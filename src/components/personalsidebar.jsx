@@ -11,23 +11,26 @@ const PersonalSidebar = () => {
   };
 
   useEffect(() => {
-    // ✅ Check localStorage on mount
     const loggedIn = localStorage.getItem('isLoggedIn');
     setIsLoggedIn(loggedIn === 'true');
   }, []);
 
   const handleLogin = () => {
-    navigate('/login'); // Redirect to login page
+    navigate('/login');
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn'); // Remove login flag
+    localStorage.removeItem('isLoggedIn');
     setIsLoggedIn(false);
-    navigate('/'); // Optional: redirect to home or login page
+    navigate('/');
+  };
+
+  const handleAccountClick = () => {
+    navigate('/dashboard'); // 👈 Navigate to dashboard
   };
 
   return (
-    <div className="bg-zinc-900 text-white w-64 rounded-lg shadow-lg p-4">
+    <div className="bg-zinc-900 text-white w-64 rounded-lg shadow-lg p-4 h-full">
       {isLoggedIn ? (
         <div className="flex flex-col items-center">
           <img
@@ -39,7 +42,10 @@ const PersonalSidebar = () => {
           <p className="text-sm text-gray-400">My Channel</p>
 
           <div className="mt-4 w-full space-y-2">
-            <button className="flex items-center w-full gap-2 hover:bg-zinc-800 px-3 py-2 rounded transition">
+            <button
+              onClick={handleAccountClick}
+              className="flex items-center w-full gap-2 hover:bg-zinc-800 px-3 py-2 rounded transition"
+            >
               <span>👤</span>
               <span>Account</span>
             </button>
@@ -62,11 +68,13 @@ const PersonalSidebar = () => {
           </button>
         </div>
       ) : (
-        <div className="flex flex-col items-center mt-4">
-          <p className="text-zinc-400 mb-4 text-sm">You are not logged in.</p>
+        <div className="flex flex-col justify-center items-center h-full px-4 text-center">
+          <p className="text-zinc-400 mb-4 text-lg font-semibold">
+            You are not logged in.
+          </p>
           <button
             onClick={handleLogin}
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm"
+            className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg text-sm"
           >
             Login
           </button>

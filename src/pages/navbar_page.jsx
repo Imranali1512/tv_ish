@@ -176,7 +176,6 @@ const NavbarPage = () => {
           <div className="flex items-center space-x-4 text-lg text-white relative">
             {!isMobile ? (
               <>
-                {/* Search */}
                 <div
                   className={`cursor-pointer p-1 rounded-md transition ${
                     showSearch ? "text-blue-400 bg-zinc-800 shadow-lg" : "hover:text-blue-400"
@@ -185,7 +184,6 @@ const NavbarPage = () => {
                 >
                   <FaSearch size={22} />
                 </div>
-                {/* Notifications */}
                 <div
                   className={`cursor-pointer p-1 rounded-md transition ${
                     showNotifications
@@ -196,7 +194,6 @@ const NavbarPage = () => {
                 >
                   <FaBell size={22} />
                 </div>
-                {/* Account – always visible */}
                 <div
                   ref={accountRef}
                   className={`cursor-pointer p-1 rounded-md transition ${
@@ -213,19 +210,14 @@ const NavbarPage = () => {
                     ref={accountDropdownRef}
                     style={{
                       position: "fixed",
-                      top:
-                        accountRef.current?.getBoundingClientRect().bottom + 8 ||
-                        0,
+                      top: accountRef.current?.getBoundingClientRect().bottom + 8 || 0,
                       right: 16,
                       zIndex: 999,
                     }}
                   >
-                    <PersonalSidebar
-                      onClose={() => setShowAccountDropdown(false)}
-                    />
+                    <PersonalSidebar onClose={() => setShowAccountDropdown(false)} />
                   </div>
                 )}
-                {/* Parental Control – always visible */}
                 <div
                   ref={shieldRef}
                   className={`cursor-pointer p-1 rounded-md transition ${
@@ -246,7 +238,6 @@ const NavbarPage = () => {
           </div>
         </div>
 
-        {/* Desktop search */}
         {showSearch && !isMobile && (
           <div className="absolute top-full left-0 right-0 bg-zinc-800 px-4 py-3 z-40 shadow-lg">
             <form onSubmit={handleSearch} className="flex items-center space-x-3">
@@ -254,7 +245,6 @@ const NavbarPage = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search..."
-               
                 className="flex-1 bg-zinc-700 text-white px-4 py-2 rounded-lg outline-none"
               />
               <button
@@ -264,28 +254,9 @@ const NavbarPage = () => {
                 Search
               </button>
             </form>
-            {recentSearches.length > 0 && (
-              <div className="mt-3">
-                <h4 className="text-zinc-400 text-sm mb-2">
-                  Recent Searches:
-                </h4>
-                <ul className="space-y-1">
-                  {recentSearches.map((item, idx) => (
-                    <li
-                      key={idx}
-                      className="text-zinc-200 hover:text-white cursor-pointer"
-                      onClick={() => setSearchQuery(item)}
-                    >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
           </div>
         )}
 
-        {/* Mobile menu links */}
         {isMobile && menuOpen && (
           <div className="bg-zinc-900 mt-3 p-4 rounded-lg shadow-lg space-y-2">
             {navItems.map((item, idx) => (
@@ -318,9 +289,7 @@ const NavbarPage = () => {
                 to={item.path}
                 className={({ isActive }) =>
                   `flex flex-col items-center text-sm font-semibold transition-all ${
-                    isActive
-                      ? "text-red-500"
-                      : "text-zinc-300 hover:text-white"
+                    isActive ? "text-red-500" : "text-zinc-300 hover:text-white"
                   }`
                 }
               >
@@ -330,9 +299,7 @@ const NavbarPage = () => {
             ))}
             <div
               className={`flex flex-col items-center text-sm font-semibold transition cursor-pointer ${
-                showAccountDropdown
-                  ? "text-green-400"
-                  : "text-zinc-300 hover:text-white"
+                showAccountDropdown ? "text-green-400" : "text-zinc-300 hover:text-white"
               }`}
               onClick={() => setShowAccountDropdown(true)}
             >
@@ -343,7 +310,7 @@ const NavbarPage = () => {
             </div>
           </div>
 
-          {/* Mobile account drawer (50% width) */}
+          {/* ✅ Fixed responsive width drawer here */}
           {showAccountDropdown && (
             <div
               ref={accountDropdownRef}
@@ -351,7 +318,7 @@ const NavbarPage = () => {
               onClick={() => setShowAccountDropdown(false)}
             >
               <div
-                className="bg-zinc-900 w-1/2 h-full shadow-lg"
+                className="bg-zinc-900 w-[80%] max-w-xs h-full shadow-lg"
                 onClick={(e) => e.stopPropagation()}
               >
                 <PersonalSidebar onClose={() => setShowAccountDropdown(false)} />
@@ -361,21 +328,20 @@ const NavbarPage = () => {
         </>
       )}
 
-      {/* Desktop parental control dropdown */}
+      {/* Parental Control */}
       {!isMobile && showParentalControl && (
         <div ref={dropdownRef} style={dropdownStyles}>
           <ParentsControl onClose={() => setShowParentalControl(false)} />
         </div>
       )}
 
-      {/* Mobile parental control drawer (can also adjust to 50% if preferred) */}
       {isMobile && showParentalControl && (
         <div
           className="fixed inset-0 z-50 bg-black/70 flex justify-end"
           onClick={() => setShowParentalControl(false)}
         >
           <div
-            className="bg-zinc-900 w-1/2 h-full shadow-lg"
+            className="bg-zinc-900 w-[80%] max-w-xs h-full shadow-lg"
             onClick={(e) => e.stopPropagation()}
           >
             <ParentsControl onClose={() => setShowParentalControl(false)} />
