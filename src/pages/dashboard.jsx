@@ -30,37 +30,121 @@ const Dashboard = () => {
   ];
 
   const chartData = {
-    labels: ["8 Mar", "12 Mar", "16 Mar", "20 Mar", "29 Mar"],
-    datasets: [
-      {
-      label: "Views",
-      data: [100, 200, 150, 300],
-      borderColor: "rgb(59,130,246)",
-      backgroundColor: "rgba(59,130,246,0.2)",
-      fill: true,
+    weekly: {
+      labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      datasets: [
+        {
+          label: "Views",
+          data: [100, 120, 130, 110, 160, 170, 180],
+        },
+        {
+          label: "Previous Views",
+          data: [90, 110, 115, 105, 140, 150, 160],
+        },
+        {
+          label: "Watch time",
+          data: [80, 90, 100, 95, 105, 110, 120],
+        },
+        {
+          label: "Previous Watch time",
+          data: [75, 85, 90, 90, 100, 105, 110],
+        },
+        {
+          label: "Subscribers",
+          data: [5, 7, 6, 8, 9, 10, 11],
+        },
+        {
+          label: "Previous Subscribers",
+          data: [4, 6, 5, 7, 8, 9, 10],
+        },
+        {
+          label: "Earnings",
+          data: [20, 22, 23, 25, 27, 29, 30],
+        },
+        {
+          label: "Previous Earnings",
+          data: [18, 20, 21, 23, 25, 26, 28],
+        },
+      ],
     },
-    {
-      label: "Watch time",
-      data: [50, 70, 80, 60],
-      borderColor: "rgb(16,185,129)",
-      backgroundColor: "rgba(16,185,129,0.2)",
-      fill: true,
+
+    monthly: {
+      labels: [
+        "1 Aug", "4 Aug", "8 Aug", "12 Aug", "16 Aug", "20 Aug", "24 Aug", "28 Aug",
+      ],
+      datasets: [
+        {
+          label: "Views",
+          data: [150, 160, 170, 180, 200, 210, 230, 250],
+        },
+        {
+          label: "Previous Views",
+          data: [140, 155, 165, 170, 190, 200, 215, 240],
+        },
+        {
+          label: "Watch time",
+          data: [90, 95, 100, 105, 110, 115, 120, 125],
+        },
+        {
+          label: "Previous Watch time",
+          data: [85, 90, 95, 100, 105, 110, 115, 120],
+        },
+        {
+          label: "Subscribers",
+          data: [10, 12, 13, 14, 16, 18, 20, 22],
+        },
+        {
+          label: "Previous Subscribers",
+          data: [9, 11, 12, 13, 15, 17, 19, 20],
+        },
+        {
+          label: "Earnings",
+          data: [30, 32, 35, 38, 40, 42, 45, 47],
+        },
+        {
+          label: "Previous Earnings",
+          data: [28, 30, 33, 35, 38, 40, 43, 45],
+        },
+      ],
     },
-    {
-      label: "Subscribers",
-      data: [10, 20, 30, 25],
-      borderColor: "rgb(234,179,8)",
-      backgroundColor: "rgba(234,179,8,0.2)",
-      fill: true,
+
+    yearly: {
+      labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug"],
+      datasets: [
+        {
+          label: "Views",
+          data: [1000, 1200, 1300, 1100, 1600, 1700, 1800, 1900],
+        },
+        {
+          label: "Previous Views",
+          data: [900, 1100, 1250, 1050, 1500, 1600, 1700, 1800],
+        },
+        {
+          label: "Watch time",
+          data: [800, 900, 1000, 950, 1050, 1100, 1200, 1250],
+        },
+        {
+          label: "Previous Watch time",
+          data: [750, 850, 950, 900, 1000, 1050, 1100, 1150],
+        },
+        {
+          label: "Subscribers",
+          data: [50, 70, 60, 80, 90, 100, 110, 115],
+        },
+        {
+          label: "Previous Subscribers",
+          data: [45, 65, 55, 75, 85, 95, 105, 110],
+        },
+        {
+          label: "Earnings",
+          data: [200, 220, 230, 250, 270, 290, 300, 320],
+        },
+        {
+          label: "Previous Earnings",
+          data: [190, 210, 220, 240, 260, 280, 290, 310],
+        },
+      ],
     },
-    {
-      label: "Earnings",
-      data: [20, 40, 35, 45],
-      borderColor: "rgb(239,68,68)",
-      backgroundColor: "rgba(239,68,68,0.2)",
-      fill: true,
-    },
-    ],
   };
 
   const subscribers = [
@@ -90,31 +174,25 @@ const Dashboard = () => {
       <main className="flex-1 w-full px-4 md:px-6 pt-20 pb-6 overflow-y-auto">
         <div className="max-w-7xl mx-auto space-y-10">
           {/* Watched Videos */}
-          <div className="w-full">
-            <WatchedVideos videos={videoData} />
-          </div>
+          <WatchedVideos videos={videoData} />
 
           {/* Analytics Graph */}
-          <div className="w-full">
-            <AnalyticsGraph
-              views={150}
-              watchTime={150}
-              subscribers={15}
-              earnings={150}
-              viewsChange={12}
-              watchTimeChange={-12}
-              subscribersChange={13}
-              earningsChange={-12}
-              chartData={chartData}
-            />
-          </div>
+          <AnalyticsGraph
+            views={180}
+            watchTime={120}
+            subscribers={22}
+            earnings={47}
+            viewsChange={18}
+            watchTimeChange={14}
+            subscribersChange={11}
+            earningsChange={7}
+            allChartData={chartData}
+          />
 
           {/* Playlist Section */}
-          <div className="w-full">
-            <PlaylistSection playlists={playlists} />
-          </div>
+          <PlaylistSection playlists={playlists} />
 
-          {/* Sidebar content for mobile/tablet */}
+          {/* Mobile Sidebar */}
           <div className="block lg:hidden border-t border-gray-800 pt-6">
             <Sidebar
               subscribers={subscribers}
@@ -125,7 +203,7 @@ const Dashboard = () => {
         </div>
       </main>
 
-      {/* Sidebar for desktop */}
+      {/* Desktop Sidebar */}
       <aside className="hidden lg:block w-full max-w-sm bg-black border-l border-gray-800 p-4 overflow-y-auto">
         <Sidebar
           subscribers={subscribers}

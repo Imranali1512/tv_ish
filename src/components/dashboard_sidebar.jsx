@@ -44,22 +44,21 @@ const DashboardSidebar = ({
 
   return (
     <>
-      {/* Responsive Desktop Sidebar */}
-      <aside className="hidden md:flex fixed top-0 left-0 h-full w-52 lg:w-64 bg-black text-white flex-col z-40 shadow-xl border-r border-gray-800 transition-all duration-300 ease-in-out">
+      {/* Desktop Sidebar (shown only on lg screens and up) */}
+      <aside className="hidden lg:flex fixed top-0 left-0 h-full w-52 xl:w-64 bg-black text-white flex-col z-40 shadow-xl border-r border-gray-800 transition-all duration-300 ease-in-out">
         <SidebarContent
           menuItems={menuItems}
           bottomItems={bottomItems}
           onItemClick={() => {}}
-          compact={false}  // labels always visible, no compact mode
         />
       </aside>
 
-      {/* Mobile Sidebar (Slide-in) */}
+      {/* Mobile/Tablet Sidebar (slide-in) */}
       {sidebarOpen && (
         <div className="fixed inset-0 bg-black/60 z-40" onClick={toggleSidebar}></div>
       )}
       <aside className={`fixed top-0 left-0 h-full w-64 bg-black text-white transform z-50 transition-transform duration-300
-        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:hidden`}>
+        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:hidden`}>
         <div className="flex justify-end p-4">
           <FaTimes className="text-xl cursor-pointer" onClick={toggleSidebar} />
         </div>
@@ -67,21 +66,20 @@ const DashboardSidebar = ({
           menuItems={menuItems}
           bottomItems={bottomItems}
           onItemClick={() => setSidebarOpen(false)}
-          compact={false}  // always show labels here as well
         />
       </aside>
 
       {/* Topbar */}
-      <header className="fixed top-0 left-0 right-0 h-16 bg-black text-white flex items-center justify-between px-4 md:px-6 z-30 border-b border-gray-800 shadow-md">
+      <header className="fixed top-0 left-0 right-0 h-16 bg-black text-white flex items-center justify-between px-4 lg:pl-64 z-30 border-b border-gray-800 shadow-md">
         {/* Left */}
-        <div className="flex flex-1 items-center gap-4 md:gap-6 justify-start lg:justify-center">
-          <div className="flex items-center md:hidden">
+        <div className="flex flex-1 items-center gap-4 justify-start">
+          <div className="flex items-center lg:hidden">
             <FaBars className="text-xl cursor-pointer" onClick={toggleSidebar} />
           </div>
 
           {showSearch && (
             <div className="flex items-center bg-gray-800 px-4 py-2 rounded-full border border-gray-700 shadow-inner
-              max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl w-full transition-all duration-300 ease-in-out">
+              max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl w-full transition-all duration-300 ease-in-out">
               <FaSearch className="text-gray-400 mr-2" />
               <input
                 type="text"
@@ -97,7 +95,7 @@ const DashboardSidebar = ({
           {showUpload && (
             <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded-full flex items-center gap-2 text-sm font-medium shadow-md transition duration-200">
               <FaUpload />
-              <span className="hidden md:inline">Upload</span>
+              <span className="hidden sm:inline">Upload</span>
             </button>
           )}
 
@@ -115,7 +113,7 @@ const DashboardSidebar = ({
   );
 };
 
-const SidebarContent = ({ menuItems, bottomItems, onItemClick, compact }) => {
+const SidebarContent = ({ menuItems, bottomItems, onItemClick }) => {
   return (
     <>
       {/* Profile */}
@@ -125,12 +123,8 @@ const SidebarContent = ({ menuItems, bottomItems, onItemClick, compact }) => {
           alt="Profile"
           className="w-20 h-20 rounded-full mb-2 border-4 border-red-500 shadow-md"
         />
-        <h2 className="text-lg font-semibold">
-          Brooke Cooper
-        </h2>
-        <p className="text-sm text-gray-400">
-          Web Developer
-        </p>
+        <h2 className="text-lg font-semibold">Brooke Cooper</h2>
+        <p className="text-sm text-gray-400">Web Developer</p>
       </div>
 
       {/* Main Menu */}
@@ -149,9 +143,7 @@ const SidebarContent = ({ menuItems, bottomItems, onItemClick, compact }) => {
             onClick={onItemClick}
           >
             <div className="mr-4 text-lg">{item.icon}</div>
-            <span className="text-sm">
-              {item.label}
-            </span>
+            <span className="text-sm">{item.label}</span>
           </NavLink>
         ))}
       </nav>
@@ -166,9 +158,7 @@ const SidebarContent = ({ menuItems, bottomItems, onItemClick, compact }) => {
               onClick={item.onClick}
             >
               <div className="mr-4 text-lg">{item.icon}</div>
-              <span className="text-sm">
-                {item.label}
-              </span>
+              <span className="text-sm">{item.label}</span>
             </div>
           ) : (
             <NavLink
@@ -184,9 +174,7 @@ const SidebarContent = ({ menuItems, bottomItems, onItemClick, compact }) => {
               onClick={onItemClick}
             >
               <div className="mr-4 text-lg">{item.icon}</div>
-              <span className="text-sm">
-                {item.label}
-              </span>
+              <span className="text-sm">{item.label}</span>
             </NavLink>
           )
         )}
