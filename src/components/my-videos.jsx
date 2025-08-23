@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 
 const videos = [
-  { title: 'The Galactic Odyssey', date: '2 days ago', category: 'Movies', img: 'https://via.placeholder.com/300x200' },
-  { title: 'Culinary Journeys: Flavors of Italy', date: '3 days ago', category: 'Shows', img: 'https://via.placeholder.com/300x200' },
-  { title: 'Rap Anthems 2024', date: '4 days ago', category: 'Music', img: 'https://via.placeholder.com/300x200' },
-  { title: 'Wilderness Chronicles: Amazon Expedition', date: '5 days ago', category: 'Movies', img: 'https://via.placeholder.com/300x200' },
-  { title: 'Investing for Tomorrow', date: '6 days ago', category: 'Podcast', img: 'https://via.placeholder.com/300x200' },
-  { title: 'Echoes of the Past: Roman Empire', date: '7 days ago', category: 'Movies', img: 'https://via.placeholder.com/300x200' },
-  { title: 'Tech Trends Today', date: '8 days ago', category: 'Podcast', img: 'https://via.placeholder.com/300x200' },
-  { title: 'Urban Explorers: Tokyo Nights', date: '9 days ago', category: 'Shows', img: 'https://via.placeholder.com/300x200' },
-  { title: 'Mindful Living: Yoga Retreat', date: '10 days ago', category: 'Podcast', img: 'https://via.placeholder.com/300x200' },
-  { title: 'Digital Marketing Mastery', date: '11 days ago', category: 'Podcast', img: 'https://via.placeholder.com/300x200' },
-  { title: 'Artistic Expressions: Modern Art', date: '12 days ago', category: 'Shows', img: 'https://via.placeholder.com/300x200' },
-  { title: 'Science Simplified: Quantum Physics', date: '13 days ago', category: 'Podcast', img: 'https://via.placeholder.com/300x200' },
+  { title: 'The Galactic Odyssey', date: '2 days ago', category: 'Movies', img: './images/1.png' },
+  { title: 'Culinary Journeys: Flavors of Italy', date: '3 days ago', category: 'Shows', img: './images/2.png' },
+  { title: 'Rap Anthems 2024', date: '4 days ago', category: 'Music', img: './images/3.png' },
+  { title: 'Wilderness Chronicles: Amazon Expedition', date: '5 days ago', category: 'Movies', img: './images/4.png' },
+  { title: 'Investing for Tomorrow', date: '6 days ago', category: 'Podcast', img: './images/5.png' },
+  { title: 'Echoes of the Past: Roman Empire', date: '7 days ago', category: 'Movies', img: './images/6.png' },
+  { title: 'Tech Trends Today', date: '8 days ago', category: 'Podcast', img: './images/7.png' },
+  { title: 'Urban Explorers: Tokyo Nights', date: '9 days ago', category: 'Shows', img: './images/8.png' },
+  { title: 'Mindful Living: Yoga Retreat', date: '10 days ago', category: 'Podcast', img: './images/8.png' },
+  { title: 'Digital Marketing Mastery', date: '11 days ago', category: 'Podcast', img: './images/9.png' },
+  { title: 'Artistic Expressions: Modern Art', date: '12 days ago', category: 'Shows', img: './images/9-2.png' },
+  { title: 'Science Simplified: Quantum Physics', date: '13 days ago', category: 'Podcast', img: './images/9-1.png' },
 ];
 
 const categories = ['All', 'Movies', 'Shows', 'Podcast', 'Music'];
@@ -42,7 +42,7 @@ const MyVideos = () => {
               onClick={() => setSelectedCategory(cat)}
               className={`pb-2 text-sm px-3 transition duration-200 ${
                 selectedCategory === cat
-                  ? 'border-b-2 border-white font-semibold text-white'
+                  ? 'border-b-2 border-white font-semibold text-red-500'
                   : 'text-gray-400 hover:text-white'
               }`}
             >
