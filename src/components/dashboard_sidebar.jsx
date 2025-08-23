@@ -19,7 +19,7 @@ const DashboardSidebar = ({
   const menuItems = [
     { label: 'Home', icon: <FaHome />, path: '/' },
     { label: 'Dashboard', icon: <FaThLarge />, path: '/dashboard' },
-    { label: 'MyVideos', icon: <FaVideo />, path: '/my-videos' },
+    { label: 'My Videos', icon: <FaVideo />, path: '/my-videos' },
     { label: 'Liked Videos', icon: <FaThumbsUp />, path: '/liked' },
     { label: 'Playlist', icon: <FaList />, path: '/playlist' },
     { label: 'Watch Later', icon: <FaHeart />, path: '/watch-later' },

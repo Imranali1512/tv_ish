@@ -27,9 +27,16 @@ import Sports from "./pages/sports";
 // Dashboard Pages
 import Dashboard from "./pages/dashboard";
 import MyVideos from "./components/my-videos";
+import Liked from "./pages/liked";  
+import Playlist from "./pages/playlist";  
+import WatchLater from "./pages/watch-later";
+import History from "./pages/history";
+
+
 
 // Layout Components
 import DashboardSidebar from "./components/dashboard_sidebar";
+
 
 // ✅ Layout Wrapper Component
 const MainLayout = ({ children }) => {
@@ -44,6 +51,10 @@ const MainLayout = ({ children }) => {
     "/forgetpassword_page2",
     "/resetpassword_page",
     "/my-videos",
+    "/liked",
+    "/playlist",
+    "/watch-later",
+    "/history",
   ];
 
   // Hide Navbar/Footer if current path matches hide list
@@ -54,7 +65,11 @@ const MainLayout = ({ children }) => {
   // Show Sidebar on dashboard and dashboard-related pages
   const shouldShowSidebar =
     location.pathname.startsWith("/dashboard") ||
-    location.pathname.startsWith("/my-videos");
+    location.pathname.startsWith("/my-videos") ||
+    location.pathname.startsWith("/liked")||
+    location.pathname.startsWith("/playlist")|| 
+    location.pathname.startsWith("/watch-later")||
+    location.pathname.startsWith("/history");
 
   return (
     <div className="min-h-screen flex flex-col bg-black text-white">
@@ -111,8 +126,11 @@ function App() {
           {/* Dashboard Routes */}
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/my-videos" element={<MyVideos />} />
-          <Route path="/dashboard/profile" element={<div>Profile Page</div>} />
-          <Route path="/dashboard/analytics" element={<div>Analytics Page</div>} />
+          <Route path="/liked" element={<Liked/>} />
+          <Route path="/playlist" element={<Playlist/>} />
+          <Route path="/watch-later" element={<WatchLater/>} />
+          <Route path="/history" element={<History/>} />
+
         </Routes>
       </MainLayout>
     </Router>
