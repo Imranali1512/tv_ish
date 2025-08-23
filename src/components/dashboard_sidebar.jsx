@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import {
   FaHome, FaThLarge, FaVideo, FaThumbsUp, FaList,
   FaHeart, FaHistory, FaCog, FaQuestionCircle, FaSignOutAlt,
@@ -12,7 +12,6 @@ const DashboardSidebar = ({
   showNotifications = true,
 }) => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
@@ -20,7 +19,7 @@ const DashboardSidebar = ({
   const menuItems = [
     { label: 'Home', icon: <FaHome />, path: '/' },
     { label: 'Dashboard', icon: <FaThLarge />, path: '/dashboard' },
-    { label: 'My Videos', icon: <FaVideo />, path: '/my-videos' },
+    { label: 'MyVideos', icon: <FaVideo />, path: '/my-videos' },
     { label: 'Liked Videos', icon: <FaThumbsUp />, path: '/liked' },
     { label: 'Playlist', icon: <FaList />, path: '/playlist' },
     { label: 'Watch Later', icon: <FaHeart />, path: '/watch-later' },
@@ -38,24 +37,27 @@ const DashboardSidebar = ({
       onClick: () => {
         localStorage.removeItem('isLoggedIn');
         navigate('/login');
+        setSidebarOpen(false);
       }
     },
   ];
 
   return (
     <>
-      {/* Desktop Sidebar */}
-      <aside className="hidden md:flex fixed top-0 left-0 h-full w-64 bg-black text-white flex-col z-40 shadow-xl border-r border-gray-800">
+      {/* Responsive Desktop Sidebar */}
+      <aside className="hidden md:flex fixed top-0 left-0 h-full w-52 lg:w-64 bg-black text-white flex-col z-40 shadow-xl border-r border-gray-800 transition-all duration-300 ease-in-out">
         <SidebarContent
           menuItems={menuItems}
           bottomItems={bottomItems}
-          location={location}
-          navigate={navigate}
+          onItemClick={() => {}}
+          compact={false}  // labels always visible, no compact mode
         />
       </aside>
 
-      {/* Mobile Sidebar Overlay */}
-      {sidebarOpen && <div className="fixed inset-0 bg-black/60 z-50" onClick={toggleSidebar} />}
+      {/* Mobile Sidebar (Slide-in) */}
+      {sidebarOpen && (
+        <div className="fixed inset-0 bg-black/60 z-40" onClick={toggleSidebar}></div>
+      )}
       <aside className={`fixed top-0 left-0 h-full w-64 bg-black text-white transform z-50 transition-transform duration-300
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:hidden`}>
         <div className="flex justify-end p-4">
@@ -64,28 +66,22 @@ const DashboardSidebar = ({
         <SidebarContent
           menuItems={menuItems}
           bottomItems={bottomItems}
-          location={location}
-          navigate={(path) => {
-            navigate(path);
-            setSidebarOpen(false);
-          }}
+          onItemClick={() => setSidebarOpen(false)}
+          compact={false}  // always show labels here as well
         />
       </aside>
 
-      {/* Topbar - Always visible */}
+      {/* Topbar */}
       <header className="fixed top-0 left-0 right-0 h-16 bg-black text-white flex items-center justify-between px-4 md:px-6 z-30 border-b border-gray-800 shadow-md">
-        {/* Left side: Hamburger + Search */}
+        {/* Left */}
         <div className="flex flex-1 items-center gap-4 md:gap-6 justify-start lg:justify-center">
-          {/* Mobile Hamburger */}
           <div className="flex items-center md:hidden">
             <FaBars className="text-xl cursor-pointer" onClick={toggleSidebar} />
           </div>
 
-          {/* Search Bar (Conditionally Rendered) */}
           {showSearch && (
             <div className="flex items-center bg-gray-800 px-4 py-2 rounded-full border border-gray-700 shadow-inner
-              max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl w-full transition-all duration-300 ease-in-out
-            ">
+              max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl w-full transition-all duration-300 ease-in-out">
               <FaSearch className="text-gray-400 mr-2" />
               <input
                 type="text"
@@ -96,7 +92,7 @@ const DashboardSidebar = ({
           )}
         </div>
 
-        {/* Right side: Upload & Bell */}
+        {/* Right */}
         <div className="flex items-center gap-4 ml-4">
           {showUpload && (
             <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded-full flex items-center gap-2 text-sm font-medium shadow-md transition duration-200">
@@ -119,58 +115,84 @@ const DashboardSidebar = ({
   );
 };
 
-const SidebarContent = ({ menuItems, bottomItems, location, navigate }) => (
-  <>
-    {/* Profile */}
-    <div className="flex flex-col items-center py-6 border-b border-gray-700">
-      <img
-        src="https://i.pravatar.cc/100?img=3"
-        alt="Profile"
-        className="w-20 h-20 rounded-full mb-2 border-4 border-red-500 shadow-md"
-      />
-      <h2 className="text-lg font-semibold">Brooke Cooper</h2>
-      <p className="text-sm text-gray-400">Web Developer</p>
-    </div>
-
-    {/* Menu Items */}
-    <nav className="flex-grow">
-      {menuItems.map(item => (
-        <SidebarItem
-          key={item.label}
-          icon={item.icon}
-          label={item.label}
-          active={location.pathname === item.path}
-          onClick={() => navigate(item.path)}
+const SidebarContent = ({ menuItems, bottomItems, onItemClick, compact }) => {
+  return (
+    <>
+      {/* Profile */}
+      <div className="flex flex-col items-center py-6 border-b border-gray-700">
+        <img
+          src="https://i.pravatar.cc/100?img=3"
+          alt="Profile"
+          className="w-20 h-20 rounded-full mb-2 border-4 border-red-500 shadow-md"
         />
-      ))}
-    </nav>
+        <h2 className="text-lg font-semibold">
+          Brooke Cooper
+        </h2>
+        <p className="text-sm text-gray-400">
+          Web Developer
+        </p>
+      </div>
 
-    {/* Bottom Items */}
-    <div className="mb-6">
-      {bottomItems.map(item => (
-        <SidebarItem
-          key={item.label}
-          icon={item.icon}
-          label={item.label}
-          red={item.red}
-          active={location.pathname === item.path}
-          onClick={item.onClick || (() => navigate(item.path))}
-        />
-      ))}
-    </div>
-  </>
-);
+      {/* Main Menu */}
+      <nav className="flex-grow mt-4">
+        {menuItems.map((item) => (
+          <NavLink
+            key={item.label}
+            to={item.path}
+            className={({ isActive }) =>
+              `flex items-center px-6 py-3 transition select-none ${
+                isActive
+                  ? 'bg-red-600 text-white'
+                  : 'text-white hover:bg-gray-800'
+              }`
+            }
+            onClick={onItemClick}
+          >
+            <div className="mr-4 text-lg">{item.icon}</div>
+            <span className="text-sm">
+              {item.label}
+            </span>
+          </NavLink>
+        ))}
+      </nav>
 
-const SidebarItem = ({ icon, label, active, red, onClick }) => (
-  <div
-    onClick={onClick}
-    className={`flex items-center px-6 py-3 cursor-pointer transition select-none
-      ${active ? 'bg-gray-800 border-l-4 border-red-500' : ''}
-      ${red ? 'text-red-500 hover:bg-red-900' : 'hover:bg-gray-800'}`}
-  >
-    <div className="mr-4 text-lg">{icon}</div>
-    <span className="text-sm">{label}</span>
-  </div>
-);
+      {/* Bottom Menu */}
+      <div className="mb-6">
+        {bottomItems.map((item) =>
+          item.label === 'Log out' ? (
+            <div
+              key={item.label}
+              className="flex items-center px-6 py-3 cursor-pointer text-red-500 hover:bg-red-900 transition"
+              onClick={item.onClick}
+            >
+              <div className="mr-4 text-lg">{item.icon}</div>
+              <span className="text-sm">
+                {item.label}
+              </span>
+            </div>
+          ) : (
+            <NavLink
+              key={item.label}
+              to={item.path}
+              className={({ isActive }) =>
+                `flex items-center px-6 py-3 transition select-none ${
+                  isActive
+                    ? 'bg-red-600 text-white'
+                    : 'text-white hover:bg-gray-800'
+                }`
+              }
+              onClick={onItemClick}
+            >
+              <div className="mr-4 text-lg">{item.icon}</div>
+              <span className="text-sm">
+                {item.label}
+              </span>
+            </NavLink>
+          )
+        )}
+      </div>
+    </>
+  );
+};
 
 export default DashboardSidebar;

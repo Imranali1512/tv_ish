@@ -3,7 +3,7 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  useLocation
+  useLocation,
 } from "react-router-dom";
 
 // Page Components
@@ -24,17 +24,18 @@ import Music from "./pages/music";
 import Education from "./pages/education";
 import Sports from "./pages/sports";
 
-// ✅ Dashboard Pages
+// Dashboard Pages
 import Dashboard from "./pages/dashboard";
+import MyVideos from "./components/my-videos";
 
-// ✅ Layouts
+// Layout Components
 import DashboardSidebar from "./components/dashboard_sidebar";
 
-// ✅ General Layout Wrapper
+// ✅ Layout Wrapper Component
 const MainLayout = ({ children }) => {
   const location = useLocation();
 
-  // Hide navbar/footer on auth-related routes + dashboard route
+  // Routes where Navbar and Footer should be hidden
   const hideLayoutPaths = [
     "/login",
     "/signup_page",
@@ -42,30 +43,44 @@ const MainLayout = ({ children }) => {
     "/forgetpassword_page",
     "/forgetpassword_page2",
     "/resetpassword_page",
-    "/dashboard"   // Dashboard route added here
+    "/my-videos",
   ];
 
-  const shouldHideLayout = hideLayoutPaths.includes(location.pathname);
+  // Hide Navbar/Footer if current path matches hide list
+  const shouldHideLayout =
+    hideLayoutPaths.includes(location.pathname) ||
+    location.pathname.startsWith("/dashboard");
+
+  // Show Sidebar on dashboard and dashboard-related pages
+  const shouldShowSidebar =
+    location.pathname.startsWith("/dashboard") ||
+    location.pathname.startsWith("/my-videos");
 
   return (
     <div className="min-h-screen flex flex-col bg-black text-white">
+      {/* Conditional Navbar */}
       {!shouldHideLayout && <NavbarPage />}
-      <main className="flex-grow">{children}</main>
+
+      {/* Main Content with Sidebar */}
+      <div className="flex flex-1 flex-col lg:flex-row overflow-hidden">
+        {/* Sidebar - Always visible on dashboard-related pages */}
+        {shouldShowSidebar && (
+          <div className="w-full lg:w-64 flex-shrink-0 bg-gray-900 border-r border-gray-700 overflow-y-auto">
+            <DashboardSidebar />
+          </div>
+        )}
+
+        {/* Main Content */}
+        <main className="flex-grow w-full overflow-auto p-4 sm:p-6">{children}</main>
+      </div>
+
+      {/* Conditional Footer */}
       {!shouldHideLayout && <Footer />}
     </div>
   );
 };
 
-// ✅ Dashboard Layout with Sidebar
-const DashboardLayout = ({ children }) => {
-  return (
-    <div className="flex min-h-screen bg-gray-100 text-black">
-      <DashboardSidebar />
-      <div className="flex-1 p-4">{children}</div>
-    </div>
-  );
-};
-
+// ✅ App Component
 function App() {
   return (
     <Router>
@@ -82,7 +97,7 @@ function App() {
           <Route path="/education" element={<Education />} />
           <Route path="/sports" element={<Sports />} />
 
-          {/* Auth Routes (no navbar/footer) */}
+          {/* Auth Routes */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup_page" element={<SignupPage />} />
           <Route path="/signup_page2" element={<SignupPage2 />} />
@@ -90,18 +105,14 @@ function App() {
           <Route path="/forgetpassword_page2" element={<ForgotPasswordPage2 />} />
           <Route path="/resetpassword_page" element={<ForgotPasswordPage3 />} />
 
-          {/* Dashboard Routes (with sidebar) */}
-          <Route
-            path="/dashboard"
-            element={
-              <DashboardLayout>
-                <Dashboard />
-              </DashboardLayout>
-            }
-          />
-
-          {/* Standalone Navbar (optional) */}
+          {/* Navbar test route */}
           <Route path="/navbar" element={<NavbarPage />} />
+
+          {/* Dashboard Routes */}
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/my-videos" element={<MyVideos />} />
+          <Route path="/dashboard/profile" element={<div>Profile Page</div>} />
+          <Route path="/dashboard/analytics" element={<div>Analytics Page</div>} />
         </Routes>
       </MainLayout>
     </Router>

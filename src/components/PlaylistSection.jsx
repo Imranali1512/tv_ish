@@ -4,34 +4,60 @@ import { MdPlaylistPlay } from "react-icons/md";
 
 const PlaylistSection = ({ playlists }) => {
   return (
-    <div className="bg-[#1a1a1a] text-white p-6 rounded-md space-y-6">
-      <h2 className="text-sm font-semibold text-gray-300 uppercase mb-4">
-        My Playlist
-      </h2>
+    <div className="bg-gray-900 text-white p-4 sm:p-6 rounded-md space-y-6">
+      {/* Header with "View All" button */}
+      <div className="flex items-center justify-between mb-4 px-2 sm:px-0">
+        <h2 className="text-sm font-semibold text-gray-300 uppercase">
+          My Playlist
+        </h2>
+        <button className="text-sm text-blue-400 hover:underline">View All</button>
+      </div>
 
-      <div className="flex space-x-6 overflow-x-auto">
+      {/* Scrollable Playlists List */}
+      <div
+        className="flex space-x-4 overflow-x-auto pb-2 scroll-smooth px-2 sm:px-0"
+        style={{
+          scrollbarWidth: "none", // Firefox
+          msOverflowStyle: "none", // IE 10+
+        }}
+      >
+        <style>
+          {`
+            /* Hide scrollbar for Chrome, Safari and Opera */
+            div::-webkit-scrollbar {
+              display: none;
+            }
+          `}
+        </style>
+
         {playlists.map((playlist, index) => (
           <div
             key={index}
-            className="bg-[#121212] rounded-md overflow-hidden w-60 flex-shrink-0"
+            className="min-w-[160px] sm:min-w-[180px] md:min-w-[200px] bg-gray-900 rounded-md overflow-hidden flex flex-col border border-gray-800 flex-shrink-0"
           >
-            <div className="relative h-36 w-full">
+            {/* Thumbnail Area (no background color or overlay) */}
+            <div className="relative w-full aspect-[16/9]">
               <img
                 src={playlist.thumbnail}
-                alt={playlist.name}
-                className="h-full w-full object-cover"
+                alt={playlist.title}
+                className="absolute inset-0 w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-black bg-opacity-30" />
               <div className="absolute top-2 right-2 bg-black bg-opacity-50 px-2 py-1 text-xs rounded text-white">
                 {playlist.videoCount}
               </div>
               <div className="absolute bottom-2 right-2 text-white">
-                <MdPlaylistPlay size={24} />
+                <MdPlaylistPlay size={20} />
               </div>
             </div>
-            <div className="p-3 space-y-1">
-              <h3 className="text-sm font-semibold">{playlist.name}</h3>
-              <p className="text-xs text-gray-400">{playlist.description}</p>
+
+            {/* Playlist Info */}
+            <div className="p-3 space-y-1 flex-1 bg-gray-900">
+              <h3 className="text-sm font-semibold line-clamp-1">
+                {playlist.title}
+              </h3>
+              <p className="text-xs text-gray-400 line-clamp-2">
+                {playlist.description || "No description available"}
+              </p>
               <div className="flex items-center text-xs mt-2 space-x-1 text-gray-300">
                 {playlist.privacy === "public" ? (
                   <>

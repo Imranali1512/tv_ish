@@ -33,151 +33,100 @@ const Dashboard = () => {
     labels: ["8 Mar", "12 Mar", "16 Mar", "20 Mar", "29 Mar"],
     datasets: [
       {
-        label: "Views",
-        data: [120, 180, 189, 170, 160],
-        borderColor: "#10B981",
-        backgroundColor: "rgba(16,185,129,0.3)",
-        tension: 0.3,
-        fill: true,
-      },
-      {
-        label: "Watch Time",
-        data: [100, 140, 150, 130, 125],
-        borderColor: "#6B7280",
-        backgroundColor: "rgba(107,114,128,0.3)",
-        tension: 0.3,
-        fill: true,
-      },
+      label: "Views",
+      data: [100, 200, 150, 300],
+      borderColor: "rgb(59,130,246)",
+      backgroundColor: "rgba(59,130,246,0.2)",
+      fill: true,
+    },
+    {
+      label: "Watch time",
+      data: [50, 70, 80, 60],
+      borderColor: "rgb(16,185,129)",
+      backgroundColor: "rgba(16,185,129,0.2)",
+      fill: true,
+    },
+    {
+      label: "Subscribers",
+      data: [10, 20, 30, 25],
+      borderColor: "rgb(234,179,8)",
+      backgroundColor: "rgba(234,179,8,0.2)",
+      fill: true,
+    },
+    {
+      label: "Earnings",
+      data: [20, 40, 35, 45],
+      borderColor: "rgb(239,68,68)",
+      backgroundColor: "rgba(239,68,68,0.2)",
+      fill: true,
+    },
     ],
   };
 
   const subscribers = [
-    {
-      avatar: "https://placehold.co/40x40",
-      name: "Alice",
-      subCount: 123,
-      time: "1h ago",
-    },
-    {
-      avatar: "https://placehold.co/40x40",
-      name: "Bob",
-      subCount: 95,
-      time: "2h ago",
-    },
+    { avatar: "https://placehold.co/40x40", name: "Alice", subCount: 123, time: "1h ago" },
+    { avatar: "https://placehold.co/40x40", name: "Bob", subCount: 95, time: "2h ago" },
   ];
 
   const comments = [
-    {
-      avatar: "https://placehold.co/40x40",
-      text: "Awesome video!",
-      nickname: "John",
-      time: "30m ago",
-    },
-    {
-      avatar: "https://placehold.co/40x40",
-      text: "Thanks for sharing!",
-      nickname: "Jane",
-      time: "1h ago",
-    },
+    { avatar: "https://placehold.co/40x40", text: "Awesome video!", nickname: "John", time: "30m ago" },
+    { avatar: "https://placehold.co/40x40", text: "Thanks for sharing!", nickname: "Jane", time: "1h ago" },
   ];
 
   const earnings = [
-    {
-      avatar: "https://placehold.co/40x40",
-      amount: 89.0,
-      change: -12.5,
-      time: "2h ago",
-    },
-    {
-      avatar: "https://placehold.co/40x40",
-      amount: 120.0,
-      change: 25.6,
-      time: "4h ago",
-    },
+    { avatar: "https://placehold.co/40x40", amount: 89.0, change: -12.5, time: "2h ago" },
+    { avatar: "https://placehold.co/40x40", amount: 120.0, change: 25.6, time: "4h ago" },
   ];
 
   const playlists = [
-    {
-      thumbnail: "https://placehold.co/300x180?text=Playlist+1",
-      title: "Frontend Projects",
-      videoCount: 12,
-    },
-    {
-      thumbnail: "https://placehold.co/300x180?text=Playlist+2",
-      title: "React Tutorials",
-      videoCount: 8,
-    },
-    {
-      thumbnail: "https://placehold.co/300x180?text=Playlist+3",
-      title: "UI/UX Design",
-      videoCount: 5,
-    },
+    { thumbnail: "https://placehold.co/300x180?text=Playlist+1", title: "Frontend Projects", videoCount: 12 },
+    { thumbnail: "https://placehold.co/300x180?text=Playlist+2", title: "React Tutorials", videoCount: 8 },
+    { thumbnail: "https://placehold.co/300x180?text=Playlist+3", title: "UI/UX Design", videoCount: 5 },
   ];
 
   return (
-    <div className="flex min-h-screen bg-black text-white overflow-x-hidden">
-      {/* Left Sidebar */}
-      <aside className="hidden md:block w-64 bg-black p-4 flex-shrink-0">
-        <div className="flex flex-col items-center mb-6">
-          <img
-            src="https://placehold.co/80x80"
-            alt="Profile"
-            className="rounded-full border-2 border-red-500 mb-2"
-          />
-          <h2 className="text-lg font-semibold">Brooke Cooper</h2>
-          <p className="text-sm text-gray-400">Web Developer</p>
-        </div>
-        <nav className="space-y-3">
-          {[
-            "Home",
-            "Dashboard",
-            "My Videos",
-            "Liked Videos",
-            "Playlist",
-            "Watch Later",
-            "History",
-            "Settings",
-            "Support",
-            "Log out",
-          ].map((item, idx) => (
-            <div
-              key={idx}
-              className={`flex items-center space-x-2 p-2 rounded hover:bg-gray-800 ${
-                item === "Dashboard" ? "bg-gray-800" : ""
-              }`}
-            >
-              <span className="text-sm">{item}</span>
-            </div>
-          ))}
-        </nav>
-      </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col overflow-hidden">
-        <div className="flex-1 overflow-y-auto pt-12 px-6 pb-6 space-y-8 bg-black">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-black text-white">
+      {/* Main content */}
+      <main className="flex-1 w-full px-4 md:px-6 pt-20 pb-6 overflow-y-auto">
+        <div className="max-w-7xl mx-auto space-y-10">
           {/* Watched Videos */}
-          <WatchedVideos videos={videoData} />
+          <div className="w-full">
+            <WatchedVideos videos={videoData} />
+          </div>
 
-          {/* Analytics + Graph */}
-          <AnalyticsGraph
-            views={150}
-            watchTime={150}
-            subscribers={15}
-            earnings={150}
-            viewsChange={12}
-            watchTimeChange={-12}
-            subscribersChange={13}
-            earningsChange={-12}
-            chartData={chartData}
-          />
+          {/* Analytics Graph */}
+          <div className="w-full">
+            <AnalyticsGraph
+              views={150}
+              watchTime={150}
+              subscribers={15}
+              earnings={150}
+              viewsChange={12}
+              watchTimeChange={-12}
+              subscribersChange={13}
+              earningsChange={-12}
+              chartData={chartData}
+            />
+          </div>
 
           {/* Playlist Section */}
-          <PlaylistSection playlists={playlists} />
+          <div className="w-full">
+            <PlaylistSection playlists={playlists} />
+          </div>
+
+          {/* Sidebar content for mobile/tablet */}
+          <div className="block lg:hidden border-t border-gray-800 pt-6">
+            <Sidebar
+              subscribers={subscribers}
+              comments={comments}
+              earnings={earnings}
+            />
+          </div>
         </div>
       </main>
 
-      {/* Right Sidebar */}
-      <aside className="block w-80 bg-black p-4 overflow-y-auto border-l border-gray-800 flex-shrink-0">
+      {/* Sidebar for desktop */}
+      <aside className="hidden lg:block w-full max-w-sm bg-black border-l border-gray-800 p-4 overflow-y-auto">
         <Sidebar
           subscribers={subscribers}
           comments={comments}
