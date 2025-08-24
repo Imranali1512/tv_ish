@@ -31,11 +31,25 @@ import Liked from "./pages/liked";
 import Playlist from "./pages/playlist";  
 import WatchLater from "./pages/watch-later";
 import History from "./pages/history";
+import Settings from "./pages/settings";
 
 
 
 // Layout Components
 import DashboardSidebar from "./components/dashboard_sidebar";
+import ProfileInfo from "./components/ProfileInfo";
+import EmailAddress from "./components/EmailAddress";
+import PhoneNumber from "./components/PhoneNumber";
+import NotificationPreferences from "./components/NotificationPreferences";
+import ChangePassword from "./components/ChangePassword";
+import TwoFactorAuthentication from "./components/TwoFactorAuth";
+import LanguagePreferences from "./components/LanguagePreferences";
+import ThemePreferences from "./components/ThemePreferences";
+import BlockedUsers from "./components/BlockedUsers";
+import PrivacyControls from "./components/PrivacyControls";
+import NameEdit from "./components/nameedit";
+import AccountOwnership from "./components/accountownership";
+
 
 
 // ✅ Layout Wrapper Component
@@ -55,6 +69,21 @@ const MainLayout = ({ children }) => {
     "/playlist",
     "/watch-later",
     "/history",
+    "/settings",
+    "/dashboard",
+    "/ProfileInfo",
+    "/EmailAddress",
+    "/PhoneNumber",
+    "/NotificationPreferences",
+    "/PrivacyControls",
+    "/ChangePassword",
+    "/TwoFactorAuth", 
+    "/LanguagePreferences",
+    "/ThemePreferences",
+    "/BlockedUsers",
+    "/nameedit",
+    "/accountownership"
+    
   ];
 
   // Hide Navbar/Footer if current path matches hide list
@@ -69,7 +98,20 @@ const MainLayout = ({ children }) => {
     location.pathname.startsWith("/liked")||
     location.pathname.startsWith("/playlist")|| 
     location.pathname.startsWith("/watch-later")||
-    location.pathname.startsWith("/history");
+    location.pathname.startsWith("/history")||
+    location.pathname.startsWith("/settings")||
+    location.pathname.startsWith("/ProfileInfo")||
+    location.pathname.startsWith("/EmailAddress")||
+    location.pathname.startsWith("/PhoneNumber")||
+    location.pathname.startsWith("/NotificationPreferences")||
+    location.pathname.startsWith("/PrivacyControls")||
+    location.pathname.startsWith("/ChangePassword")||
+    location.pathname.startsWith("/TwoFactorAuth")||
+    location.pathname.startsWith("/LanguagePreferences")||
+    location.pathname.startsWith("/ThemePreferences")||
+    location.pathname.startsWith("/BlockedUsers")||
+    location.pathname.startsWith("/nameedit")||
+    location.pathname.startsWith("/accountownership");
 
   return (
     <div className="min-h-screen flex flex-col bg-black text-white">
@@ -130,6 +172,20 @@ function App() {
           <Route path="/playlist" element={<Playlist/>} />
           <Route path="/watch-later" element={<WatchLater/>} />
           <Route path="/history" element={<History/>} />
+          <Route path="/settings" element={<Settings/>} />
+          <Route path="/ProfileInfo" element={<ProfileInfo/>} />
+          <Route path="/EmailAddress" element={<EmailAddress/>} />
+          <Route path="/PhoneNumber" element={<PhoneNumber/>} />
+          <Route path="/NotificationPreferences" element={<NotificationPreferences/>} />
+          <Route path="/PrivacyControls" element={<PrivacyControls/>} />
+          <Route path="/ChangePassword" element={<ChangePassword/>} />
+          <Route path="/TwoFactorAuth" element={<TwoFactorAuthentication/>} />
+          <Route path="/LanguagePreferences" element={<LanguagePreferences/>} />
+          <Route path="/ThemePreferences" element={<ThemePreferences/>} />
+          <Route path="/BlockedUsers" element={<BlockedUsers/>} />
+          <Route path="/nameedit" element={<NameEdit/>} />
+          <Route path="/AccountOwnership" element={<AccountOwnership/>} />
+
 
         </Routes>
       </MainLayout>
