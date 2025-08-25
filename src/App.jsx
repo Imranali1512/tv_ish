@@ -39,7 +39,6 @@ import Settings from "./pages/settings";
 import DashboardSidebar from "./components/dashboard_sidebar";
 import ProfileInfo from "./components/ProfileInfo";
 import EmailAddress from "./components/EmailAddress";
-import PhoneNumber from "./components/PhoneNumber";
 import NotificationPreferences from "./components/NotificationPreferences";
 import ChangePassword from "./components/ChangePassword";
 import TwoFactorAuthentication from "./components/TwoFactorAuth";
@@ -73,7 +72,6 @@ const MainLayout = ({ children }) => {
     "/dashboard",
     "/ProfileInfo",
     "/EmailAddress",
-    "/PhoneNumber",
     "/NotificationPreferences",
     "/PrivacyControls",
     "/ChangePassword",
@@ -102,7 +100,6 @@ const MainLayout = ({ children }) => {
     location.pathname.startsWith("/settings")||
     location.pathname.startsWith("/ProfileInfo")||
     location.pathname.startsWith("/EmailAddress")||
-    location.pathname.startsWith("/PhoneNumber")||
     location.pathname.startsWith("/NotificationPreferences")||
     location.pathname.startsWith("/PrivacyControls")||
     location.pathname.startsWith("/ChangePassword")||
@@ -175,7 +172,6 @@ function App() {
           <Route path="/settings" element={<Settings/>} />
           <Route path="/ProfileInfo" element={<ProfileInfo/>} />
           <Route path="/EmailAddress" element={<EmailAddress/>} />
-          <Route path="/PhoneNumber" element={<PhoneNumber/>} />
           <Route path="/NotificationPreferences" element={<NotificationPreferences/>} />
           <Route path="/PrivacyControls" element={<PrivacyControls/>} />
           <Route path="/ChangePassword" element={<ChangePassword/>} />

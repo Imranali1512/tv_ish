@@ -145,7 +145,7 @@ const NavbarPage = () => {
             }}
           >
             <img
-              src="/logo/tv-ish.png"
+              src="/logo/tv-ish-1.png"
               alt="Logo"
               className="w-full h-full object-contain"
             />
