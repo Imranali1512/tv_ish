@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FiChevronRight } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 const NotificationPreferences = () => {
   const [pauseAll, setPauseAll] = useState(false);
@@ -8,25 +9,12 @@ const NotificationPreferences = () => {
   const togglePauseAll = () => setPauseAll(!pauseAll);
   const toggleSleepMode = () => setSleepMode(!sleepMode);
 
-  const sections = [
-    "Posts, stories and comments",
-    "Following and followers",
-    "Messages",
-    "Calls",
-    "Live and reels",
-    "Fundraisers",
-    "From Instagram",
-    "Birthdays",
-  ];
-
-  const otherTypes = ["Email notifications", "Shopping"];
-
-  // Condition to check if notifications are disabled
-  const isNotificationsDisabled = pauseAll || sleepMode;
+  // ✅ Only pauseAll disables interaction
+  const isNotificationsDisabled = pauseAll;
 
   return (
     <div className="w-full min-h-screen bg-black text-white px-4 pt-16 pb-24">
-      {/* Heading stays in original position */}
+      {/* Heading */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-red-500">Notification Preferences</h1>
         <p className="text-gray-400 text-sm mt-1">
@@ -34,7 +22,6 @@ const NotificationPreferences = () => {
         </p>
       </div>
 
-      {/* All content shifted right */}
       <div className="ml-6 space-y-8">
         {/* Pause All */}
         <div className="space-y-2">
@@ -87,63 +74,23 @@ const NotificationPreferences = () => {
         {/* Divider */}
         <div className="border-t border-gray-700"></div>
 
-        {/* Categories */}
+        {/* Other Notification Types */}
         <div>
-          <p className="font-semibold mb-3">Activity notifications</p>
+          <p className="font-semibold mb-3 pt-8">Other notification types</p>
           <div className="space-y-2">
-            {sections.map((item, index) => (
-              <div
-                key={index}
-                className={`flex justify-between items-center py-3 px-3 rounded-lg cursor-pointer transition ${
-                  isNotificationsDisabled
-                    ? "bg-[#1a1a1a] opacity-50 cursor-not-allowed"
-                    : "hover:bg-[#1c1f24]"
-                }`}
-              >
-                <p>{item}</p>
-                <FiChevronRight className="text-gray-400 text-xl" />
-              </div>
-            ))}
+            <Link
+              to="/emailnotification"
+              className={`flex justify-between items-center py-3 px-3 rounded-lg transition ${
+                isNotificationsDisabled
+                  ? "bg-[#1a1a1a] opacity-50 cursor-not-allowed pointer-events-none"
+                  : "hover:bg-[#1c1f24] cursor-pointer"
+              }`}
+            >
+              <p>Email notifications</p>
+              <FiChevronRight className="text-gray-400 text-xl" />
+            </Link>
           </div>
         </div>
-
-        {/* Divider */}
-        <div className="border-t border-gray-700"></div>
-
-        {/* Other Types */}
-        <div>
-          <p className="font-semibold mb-3">Other notification types</p>
-          <div className="space-y-2">
-            {otherTypes.map((item, index) => (
-              <div
-                key={index}
-                className={`flex justify-between items-center py-3 px-3 rounded-lg cursor-pointer transition ${
-                  isNotificationsDisabled
-                    ? "bg-[#1a1a1a] opacity-50 cursor-not-allowed"
-                    : "hover:bg-[#1c1f24]"
-                }`}
-              >
-                <p>{item}</p>
-                <FiChevronRight className="text-gray-400 text-xl" />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Bottom Navbar */}
-      <div className="fixed bottom-0 left-0 w-full bg-black border-t border-gray-800 flex justify-around items-center py-3">
-        <button className="text-white text-2xl hover:scale-110 transition">🏠</button>
-        <button className="text-white text-2xl hover:scale-110 transition">🔍</button>
-        <button className="text-white text-2xl hover:scale-110 transition">➕</button>
-        <button className="text-white text-2xl hover:scale-110 transition">🎥</button>
-        <button className="w-7 h-7 rounded-full overflow-hidden ring-2 ring-white ring-opacity-20">
-          <img
-            src="https://via.placeholder.com/150"
-            alt="Profile"
-            className="w-full h-full object-cover"
-          />
-        </button>
       </div>
     </div>
   );

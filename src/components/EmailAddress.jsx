@@ -9,7 +9,7 @@ const EmailAddress = () => {
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [emailError, setEmailError] = useState('');
 
-  const [phone, setPhone] = useState('03001234567');
+  const [phone, setPhone] = useState('+1-555-123-4567');
   const [isEditingPhone, setIsEditingPhone] = useState(false);
   const [tempPhone, setTempPhone] = useState(phone);
   const [phoneVerificationSent, setPhoneVerificationSent] = useState(false);

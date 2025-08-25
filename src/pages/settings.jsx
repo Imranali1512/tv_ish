@@ -29,25 +29,12 @@ const settingsData = [
       {
         title: "Email Notifications",
         description: "Manage your email notification settings.",
-        route: "/EmailNotifications",
+        route: "/emailnotification",
       },
     ],
   },
-  {
-    section: "Privacy Settings",
-    items: [
-      {
-        title: "Privacy Controls",
-        description: "Control who can see your posts and profile information.",
-        route: "/PrivacyControls",
-      },
-      {
-        title: "Blocked Users",
-        description: "Manage blocked users.",
-        route: "/BlockedUsers",
-      },
-    ],
-  },
+  
+
   {
     section: "Security Settings",
     items: [
@@ -71,11 +58,7 @@ const settingsData = [
         description: "Choose your preferred language for the app interface.",
         route: "/LanguagePreferences",
       },
-      {
-        title: "Theme Preferences",
-        description: "Adjust the app’s appearance with light or dark mode.",
-        route: "/ThemePreferences",
-      },
+      
     ],
   },
 ];

@@ -43,11 +43,9 @@ import NotificationPreferences from "./components/NotificationPreferences";
 import ChangePassword from "./components/ChangePassword";
 import TwoFactorAuthentication from "./components/TwoFactorAuth";
 import LanguagePreferences from "./components/LanguagePreferences";
-import ThemePreferences from "./components/ThemePreferences";
-import BlockedUsers from "./components/BlockedUsers";
-import PrivacyControls from "./components/PrivacyControls";
 import NameEdit from "./components/nameedit";
 import AccountOwnership from "./components/accountownership";
+import EmailNotification from "./components/emailnotification";
 
 
 
@@ -80,7 +78,9 @@ const MainLayout = ({ children }) => {
     "/ThemePreferences",
     "/BlockedUsers",
     "/nameedit",
-    "/accountownership"
+    "/accountownership",
+    "/emailnotification",
+
     
   ];
 
@@ -101,14 +101,12 @@ const MainLayout = ({ children }) => {
     location.pathname.startsWith("/ProfileInfo")||
     location.pathname.startsWith("/EmailAddress")||
     location.pathname.startsWith("/NotificationPreferences")||
-    location.pathname.startsWith("/PrivacyControls")||
     location.pathname.startsWith("/ChangePassword")||
     location.pathname.startsWith("/TwoFactorAuth")||
     location.pathname.startsWith("/LanguagePreferences")||
-    location.pathname.startsWith("/ThemePreferences")||
-    location.pathname.startsWith("/BlockedUsers")||
     location.pathname.startsWith("/nameedit")||
-    location.pathname.startsWith("/accountownership");
+    location.pathname.startsWith("/accountownership") ||
+    location.pathname.startsWith("/emailnotification");
 
   return (
     <div className="min-h-screen flex flex-col bg-black text-white">
@@ -173,14 +171,12 @@ function App() {
           <Route path="/ProfileInfo" element={<ProfileInfo/>} />
           <Route path="/EmailAddress" element={<EmailAddress/>} />
           <Route path="/NotificationPreferences" element={<NotificationPreferences/>} />
-          <Route path="/PrivacyControls" element={<PrivacyControls/>} />
           <Route path="/ChangePassword" element={<ChangePassword/>} />
           <Route path="/TwoFactorAuth" element={<TwoFactorAuthentication/>} />
           <Route path="/LanguagePreferences" element={<LanguagePreferences/>} />
-          <Route path="/ThemePreferences" element={<ThemePreferences/>} />
-          <Route path="/BlockedUsers" element={<BlockedUsers/>} />
           <Route path="/nameedit" element={<NameEdit/>} />
           <Route path="/AccountOwnership" element={<AccountOwnership/>} />
+          <Route path="/emailnotification" element={<EmailNotification/>} />
 
 
         </Routes>
