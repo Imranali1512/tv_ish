@@ -15,6 +15,7 @@ const settingsData = [
       {
         title: "Email Address",
         description: "Change your email address associated with your account.",
+        route: "/EmailAddress", // Navigation route
       },
       {
         title: "Phone Number",
