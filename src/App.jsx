@@ -23,6 +23,8 @@ import Snip from "./pages/snips";
 import Music from "./pages/music";
 import Education from "./pages/education";
 import Sports from "./pages/sports";
+import Support from "./pages/support";
+
 
 // Dashboard Pages
 import Dashboard from "./pages/dashboard";
@@ -46,6 +48,8 @@ import LanguagePreferences from "./components/LanguagePreferences";
 import NameEdit from "./components/nameedit";
 import AccountOwnership from "./components/accountownership";
 import EmailNotification from "./components/emailnotification";
+import UploadVideos from "./components/uploadvideos";
+
 
 
 
@@ -80,6 +84,7 @@ const MainLayout = ({ children }) => {
     "/nameedit",
     "/accountownership",
     "/emailnotification",
+    "/uploadvideos",
 
     
   ];
@@ -106,7 +111,8 @@ const MainLayout = ({ children }) => {
     location.pathname.startsWith("/LanguagePreferences")||
     location.pathname.startsWith("/nameedit")||
     location.pathname.startsWith("/accountownership") ||
-    location.pathname.startsWith("/emailnotification");
+    location.pathname.startsWith("/emailnotification") || 
+    location.pathname.startsWith("/uploadvideos");
 
   return (
     <div className="min-h-screen flex flex-col bg-black text-white">
@@ -148,6 +154,8 @@ function App() {
           <Route path="/music" element={<Music />} />
           <Route path="/education" element={<Education />} />
           <Route path="/sports" element={<Sports />} />
+          <Route path="/support" element={<Support />} />
+          
 
           {/* Auth Routes */}
           <Route path="/login" element={<LoginPage />} />
@@ -177,6 +185,8 @@ function App() {
           <Route path="/nameedit" element={<NameEdit/>} />
           <Route path="/AccountOwnership" element={<AccountOwnership/>} />
           <Route path="/emailnotification" element={<EmailNotification/>} />
+          <Route path="/uploadvideos" element={<UploadVideos/>} />
+    
 
 
         </Routes>

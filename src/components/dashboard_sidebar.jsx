@@ -44,7 +44,7 @@ const DashboardSidebar = ({
 
   return (
     <>
-      {/* Desktop Sidebar (shown only on lg screens and up) */}
+      {/* Desktop Sidebar */}
       <aside className="hidden lg:flex fixed top-0 left-0 h-full w-52 xl:w-64 bg-black text-white flex-col z-40 shadow-xl border-r border-gray-800 transition-all duration-300 ease-in-out">
         <SidebarContent
           menuItems={menuItems}
@@ -53,7 +53,7 @@ const DashboardSidebar = ({
         />
       </aside>
 
-      {/* Mobile/Tablet Sidebar (slide-in) */}
+      {/* Mobile/Tablet Sidebar */}
       {sidebarOpen && (
         <div className="fixed inset-0 bg-black/60 z-40" onClick={toggleSidebar}></div>
       )}
@@ -93,7 +93,10 @@ const DashboardSidebar = ({
         {/* Right */}
         <div className="flex items-center gap-4 ml-4">
           {showUpload && (
-            <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded-full flex items-center gap-2 text-sm font-medium shadow-md transition duration-200">
+            <button
+              onClick={() => navigate('/uploadvideos')}
+              className="bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded-full flex items-center gap-2 text-sm font-medium shadow-md transition duration-200"
+            >
               <FaUpload />
               <span className="hidden sm:inline">Upload</span>
             </button>

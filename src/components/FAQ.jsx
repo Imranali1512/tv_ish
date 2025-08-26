@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ Import useNavigate
 
 const faqs = [
   {
@@ -53,18 +54,27 @@ const faqs = [
 
 const FAQ = () => {
   const [openId, setOpenId] = useState(1);
+  const navigate = useNavigate();
 
   const toggleFAQ = (id) => {
     setOpenId((prevId) => (prevId === id ? null : id));
   };
 
+  const handleNavigateToSupport = () => {
+    navigate("/support");
+    window.scrollTo(0, 0); // ✅ Scroll to top when navigating
+  };
+
   return (
     <div className="min-h-screen bg-black text-white select-none px-6 py-10 max-w-full">
       <div className="max-w-7xl mx-auto">
-        {/* Heading and button container */}
+        {/* Heading and Ask a Question button */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-2 gap-4">
           <h2 className="text-3xl font-bold">Frequently Asked Questions</h2>
-          <button className="bg-red-600 hover:bg-red-700 text-white font-semibold px-5 py-2 rounded whitespace-nowrap">
+          <button
+            onClick={handleNavigateToSupport}
+            className="bg-red-600 hover:bg-red-700 text-white font-semibold px-5 py-2 rounded whitespace-nowrap"
+          >
             Ask a Question
           </button>
         </div>

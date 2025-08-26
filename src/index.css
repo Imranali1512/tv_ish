@@ -11,12 +11,8 @@ body {
   height: 100%;
   overflow-x: hidden;
   background-color: #000; /* ✅ Fullscreen black background */
-  color: white;  
-  background-color: #000; /* pure black */
-  height: 100%;
-  margin: 0;
-}         /* Optional default text color */
-
+  color: white;
+}
 
 /* ✅ Hide scrollbars while keeping scroll functionality */
 .scrollbar-hide {
@@ -27,8 +23,26 @@ body {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;                  /* Chrome, Safari, Opera */
 }
-*{
+
+/* ✅ Remove default borders/outlines from all elements */
+* {
   border: none !important;
   outline: none !important;
   box-shadow: none !important;
+}
+
+/* ✅ Tailwind animation: scroll images upward infinitely */
+@layer utilities {
+  @keyframes scrollUp {
+    0% {
+      transform: translateY(0%);
+    }
+    100% {
+      transform: translateY(-50%);
+    }
+  }
+
+  .animate-scroll-up {
+    animation: scrollUp 30s linear infinite;
+  }
 }
