@@ -24,6 +24,7 @@ import Music from "./pages/music";
 import Education from "./pages/education";
 import Sports from "./pages/sports";
 import Support from "./pages/support";
+import Notification from "./components/notification";
 
 
 // Dashboard Pages
@@ -85,6 +86,7 @@ const MainLayout = ({ children }) => {
     "/accountownership",
     "/emailnotification",
     "/uploadvideos",
+    "/notification" ,
 
     
   ];
@@ -186,6 +188,7 @@ function App() {
           <Route path="/AccountOwnership" element={<AccountOwnership/>} />
           <Route path="/emailnotification" element={<EmailNotification/>} />
           <Route path="/uploadvideos" element={<UploadVideos/>} />
+          <Route path="/notification" element={<Notification/>} />
     
 
 

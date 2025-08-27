@@ -12,10 +12,13 @@ import {
 import { NavLink } from "react-router-dom";
 import ParentsControl from "../components/parentscontrol";
 import PersonalSidebar from "../components/personalsidebar";
-import Notification from "../components/notification"; // Assuming you have this component
+import Notification from "../components/notification";
 
 const NavbarPage = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isTablet, setIsTablet] = useState(
+    window.innerWidth >= 768 && window.innerWidth < 1024
+  );
   const [menuOpen, setMenuOpen] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -37,6 +40,7 @@ const NavbarPage = () => {
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
+      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
       if (window.innerWidth >= 768) setMenuOpen(false);
     };
     window.addEventListener("resize", handleResize);
@@ -71,7 +75,7 @@ const NavbarPage = () => {
   };
 
   useEffect(() => {
-    if (showParentalControl && shieldRef.current && !isMobile) {
+    if (showParentalControl && shieldRef.current && !(isMobile || isTablet)) {
       const rect = shieldRef.current.getBoundingClientRect();
       const width = 600;
       const viewW = window.innerWidth;
@@ -87,7 +91,7 @@ const NavbarPage = () => {
     } else {
       setDropdownStyles({});
     }
-  }, [showParentalControl, isMobile]);
+  }, [showParentalControl, isMobile, isTablet]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -147,8 +151,8 @@ const NavbarPage = () => {
           <div
             className="relative z-50"
             style={{
-              width: isMobile ? "110px" : "140px",
-              height: isMobile ? "50px" : "60px",
+              width: isMobile || isTablet ? "110px" : "140px",
+              height: isMobile || isTablet ? "50px" : "60px",
               filter:
                 "drop-shadow(0 0 10px rgba(200,200,200,0.8)) drop-shadow(0 0 20px rgba(180,180,180,0.5)) drop-shadow(0 0 30px rgba(150,150,150,0.3))",
             }}
@@ -160,8 +164,8 @@ const NavbarPage = () => {
             />
           </div>
 
-          {/* Desktop nav links */}
-          {!isMobile && (
+          {/* Desktop Nav */}
+          {!(isMobile || isTablet) && (
             <div className="bg-zinc-900 rounded-xl px-6 py-2 flex flex-wrap justify-center gap-3 shadow-lg">
               {navItems.map((item, idx) => (
                 <NavLink
@@ -181,20 +185,21 @@ const NavbarPage = () => {
             </div>
           )}
 
-          {/* Icons */}
+          {/* Icons or Hamburger */}
           <div className="flex items-center space-x-4 text-lg text-white relative">
-            {!isMobile ? (
+            {!(isMobile || isTablet) ? (
               <>
                 <div
                   className={`cursor-pointer p-1 rounded-md transition ${
-                    showSearch ? "text-blue-400 bg-zinc-800 shadow-lg" : "hover:text-blue-400"
+                    showSearch
+                      ? "text-blue-400 bg-zinc-800 shadow-lg"
+                      : "hover:text-blue-400"
                   }`}
                   onClick={() => setShowSearch((prev) => !prev)}
                 >
                   <FaSearch size={22} />
                 </div>
 
-                {/* Bell icon with dropdown */}
                 <div
                   ref={notifRef}
                   className={`relative cursor-pointer p-1 rounded-md transition ${
@@ -221,19 +226,25 @@ const NavbarPage = () => {
                 >
                   <FaUser size={22} />
                 </div>
-                {showAccountDropdown && !isMobile && (
+
+                {showAccountDropdown && (
                   <div
                     ref={accountDropdownRef}
                     style={{
                       position: "fixed",
-                      top: accountRef.current?.getBoundingClientRect().bottom + 8 || 0,
+                      top:
+                        accountRef.current?.getBoundingClientRect().bottom + 8 ||
+                        0,
                       right: 16,
                       zIndex: 999,
                     }}
                   >
-                    <PersonalSidebar onClose={() => setShowAccountDropdown(false)} />
+                    <PersonalSidebar
+                      onClose={() => setShowAccountDropdown(false)}
+                    />
                   </div>
                 )}
+
                 <div
                   ref={shieldRef}
                   className={`cursor-pointer p-1 rounded-md transition ${
@@ -254,7 +265,7 @@ const NavbarPage = () => {
           </div>
         </div>
 
-        {showSearch && !isMobile && (
+        {showSearch && !(isMobile || isTablet) && (
           <div className="absolute top-full left-0 right-0 bg-zinc-800 px-4 py-3 z-40 shadow-lg">
             <form onSubmit={handleSearch} className="flex items-center space-x-3">
               <input
@@ -273,7 +284,7 @@ const NavbarPage = () => {
           </div>
         )}
 
-        {isMobile && menuOpen && (
+        {(isMobile || isTablet) && menuOpen && (
           <div className="bg-zinc-900 mt-3 p-4 rounded-lg shadow-lg space-y-2">
             {navItems.map((item, idx) => (
               <NavLink
@@ -295,14 +306,11 @@ const NavbarPage = () => {
         )}
       </nav>
 
-      {/* Notification dropdown */}
+      {/* Notifications */}
       {showNotifications && (
-        <div
-          className="fixed inset-0 z-50 bg-black/70 flex justify-center items-start pt-[70px]" // 70px approx nav height + gap
-          onClick={() => setShowNotifications(false)}
-        >
+        <div className="absolute top-[70px] left-0 right-0 z-50 flex justify-center pointer-events-none">
           <div
-            className="relative bg-zinc-900 rounded-lg w-[360px] max-h-[70vh] overflow-y-auto shadow-lg"
+            className="relative bg-zinc-900 rounded-lg w-[360px] max-h-[70vh] overflow-y-auto shadow-lg pointer-events-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -317,10 +325,10 @@ const NavbarPage = () => {
         </div>
       )}
 
-      {/* Mobile bottom nav */}
-      {isMobile && (
+      {/* Bottom Nav (Mobile + Tablet) */}
+      {(isMobile || isTablet) && (
         <>
-          <div className="fixed bottom-0 left-0 right-0 z-50 bg-zinc-900 border-t-[3px] border-zinc-700 flex justify-around items-center py-4 md:hidden">
+          <div className="fixed bottom-0 left-0 right-0 z-50 bg-zinc-900 border-t-[3px] border-zinc-700 flex justify-around items-center py-4">
             {bottomNavItems.map((item, idx) => (
               <NavLink
                 key={idx}
@@ -337,7 +345,9 @@ const NavbarPage = () => {
             ))}
             <div
               className={`flex flex-col items-center text-sm font-semibold transition cursor-pointer ${
-                showAccountDropdown ? "text-green-400" : "text-zinc-300 hover:text-white"
+                showAccountDropdown
+                  ? "text-green-400"
+                  : "text-zinc-300 hover:text-white"
               }`}
               onClick={() => setShowAccountDropdown(true)}
             >
@@ -348,7 +358,7 @@ const NavbarPage = () => {
             </div>
           </div>
 
-          {/* ✅ Fixed responsive width drawer here */}
+          {/* Drawer Sidebar */}
           {showAccountDropdown && (
             <div
               ref={accountDropdownRef}
@@ -359,7 +369,9 @@ const NavbarPage = () => {
                 className="bg-zinc-900 w-[80%] max-w-xs h-full shadow-lg"
                 onClick={(e) => e.stopPropagation()}
               >
-                <PersonalSidebar onClose={() => setShowAccountDropdown(false)} />
+                <PersonalSidebar
+                  onClose={() => setShowAccountDropdown(false)}
+                />
               </div>
             </div>
           )}
@@ -367,13 +379,13 @@ const NavbarPage = () => {
       )}
 
       {/* Parental Control */}
-      {!isMobile && showParentalControl && (
+      {!(isMobile || isTablet) && showParentalControl && (
         <div ref={dropdownRef} style={dropdownStyles}>
           <ParentsControl onClose={() => setShowParentalControl(false)} />
         </div>
       )}
 
-      {isMobile && showParentalControl && (
+      {(isMobile || isTablet) && showParentalControl && (
         <div
           className="fixed inset-0 z-50 bg-black/70 flex justify-end"
           onClick={() => setShowParentalControl(false)}
