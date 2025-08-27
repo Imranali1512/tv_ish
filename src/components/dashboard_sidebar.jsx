@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   FaHome, FaThLarge, FaVideo, FaThumbsUp, FaList,
   FaHeart, FaHistory, FaCog, FaQuestionCircle, FaSignOutAlt,
   FaBell, FaSearch, FaUpload, FaBars, FaTimes
 } from 'react-icons/fa';
+
+import Notification from './notification'; // Import your Notification component
 
 const DashboardSidebar = ({
   showSearch = true,
@@ -13,8 +15,27 @@ const DashboardSidebar = ({
 }) => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+
+  const notifRef = useRef(null);
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+  const toggleNotif = () => setNotifOpen(!notifOpen);
+
+  // Close notification dropdown if clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (notifRef.current && !notifRef.current.contains(event.target)) {
+        setNotifOpen(false);
+      }
+    }
+    if (notifOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [notifOpen]);
 
   const menuItems = [
     { label: 'Home', icon: <FaHome />, path: '/' },
@@ -78,8 +99,10 @@ const DashboardSidebar = ({
           </div>
 
           {showSearch && (
-            <div className="flex items-center bg-gray-800 px-4 py-2 rounded-full border border-gray-700 shadow-inner
-              max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl w-full transition-all duration-300 ease-in-out">
+            <div
+              className="flex items-center bg-gray-800 px-4 py-2 rounded-full border border-gray-700 shadow-inner
+              max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl w-full transition-all duration-300 ease-in-out"
+            >
               <FaSearch className="text-gray-400 mr-2" />
               <input
                 type="text"
@@ -91,7 +114,7 @@ const DashboardSidebar = ({
         </div>
 
         {/* Right */}
-        <div className="flex items-center gap-4 ml-4">
+        <div className="flex items-center gap-4 ml-4 relative" ref={notifRef}>
           {showUpload && (
             <button
               onClick={() => navigate('/uploadvideos')}
@@ -103,11 +126,27 @@ const DashboardSidebar = ({
           )}
 
           {showNotifications && (
-            <div className="relative cursor-pointer">
+            <div
+              className="relative cursor-pointer"
+              onClick={toggleNotif}
+              aria-haspopup="true"
+              aria-expanded={notifOpen}
+              title="Notifications"
+            >
               <FaBell className="text-xl text-gray-300 hover:text-white transition duration-200" />
+              {/* Badge example: you can remove or enhance */}
               <span className="absolute -top-1 -right-2 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full shadow">
+                {/* You can count unread notifications here */}
+                {/* For demo, fixed 3 */}
                 3
               </span>
+
+              {/* Notification Dropdown */}
+              {notifOpen && (
+                <div className="absolute right-0 mt-3 w-[360px] max-h-[calc(100vh-80px)] overflow-y-auto z-50">
+                  <Notification onClose={() => setNotifOpen(false)} />
+                </div>
+              )}
             </div>
           )}
         </div>

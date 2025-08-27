@@ -12,6 +12,7 @@ import {
 import { NavLink } from "react-router-dom";
 import ParentsControl from "../components/parentscontrol";
 import PersonalSidebar from "../components/personalsidebar";
+import Notification from "../components/notification"; // Assuming you have this component
 
 const NavbarPage = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -30,6 +31,7 @@ const NavbarPage = () => {
   const dropdownRef = useRef(null);
   const accountRef = useRef(null);
   const accountDropdownRef = useRef(null);
+  const notifRef = useRef(null);
   const [dropdownStyles, setDropdownStyles] = useState({});
 
   useEffect(() => {
@@ -107,10 +109,17 @@ const NavbarPage = () => {
       ) {
         setShowAccountDropdown(false);
       }
+      if (
+        showNotifications &&
+        notifRef.current &&
+        !notifRef.current.contains(e.target)
+      ) {
+        setShowNotifications(false);
+      }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [showParentalControl, showAccountDropdown]);
+  }, [showParentalControl, showAccountDropdown, showNotifications]);
 
   const navItems = [
     { name: "Home", path: "/" },
@@ -184,8 +193,11 @@ const NavbarPage = () => {
                 >
                   <FaSearch size={22} />
                 </div>
+
+                {/* Bell icon with dropdown */}
                 <div
-                  className={`cursor-pointer p-1 rounded-md transition ${
+                  ref={notifRef}
+                  className={`relative cursor-pointer p-1 rounded-md transition ${
                     showNotifications
                       ? "text-red-400 bg-zinc-800 shadow-lg"
                       : "hover:text-red-400"
@@ -193,7 +205,11 @@ const NavbarPage = () => {
                   onClick={() => setShowNotifications((prev) => !prev)}
                 >
                   <FaBell size={22} />
+                  <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full shadow">
+                    3
+                  </span>
                 </div>
+
                 <div
                   ref={accountRef}
                   className={`cursor-pointer p-1 rounded-md transition ${
@@ -278,6 +294,28 @@ const NavbarPage = () => {
           </div>
         )}
       </nav>
+
+      {/* Notification dropdown */}
+      {showNotifications && (
+        <div
+          className="fixed inset-0 z-50 bg-black/70 flex justify-center items-start pt-[70px]" // 70px approx nav height + gap
+          onClick={() => setShowNotifications(false)}
+        >
+          <div
+            className="relative bg-zinc-900 rounded-lg w-[360px] max-h-[70vh] overflow-y-auto shadow-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowNotifications(false)}
+              className="absolute top-2 right-2 text-white hover:text-red-500 p-2"
+              aria-label="Close notifications"
+            >
+              <FaTimes size={20} />
+            </button>
+            <Notification onClose={() => setShowNotifications(false)} />
+          </div>
+        </div>
+      )}
 
       {/* Mobile bottom nav */}
       {isMobile && (
