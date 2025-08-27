@@ -1,7 +1,7 @@
 {
   "name": "tv-ish",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -25,6 +25,7 @@
     "react-parallax-tilt": "^1.7.304",
     "react-phone-input-2": "^2.15.1",
     "react-router-dom": "^7.7.1",
+    "react-select": "^5.10.2",
     "react-touch-drag-slider": "^2.3.1",
     "recharts": "^3.1.2",
     "tailwind-scrollbar-hide": "^4.0.0",
