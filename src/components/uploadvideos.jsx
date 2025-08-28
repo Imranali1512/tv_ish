@@ -19,7 +19,8 @@ const UploadVideos = () => {
     if (!file) return;
 
     if (type === 'video') {
-      setVideoFile(file);// autofill title without extension
+      setVideoFile(file);
+      setTitle(file.name.replace(/\.[^/.]+$/, '')); // autofill title without extension
     } else if (type === 'thumbnail') {
       setThumbnailFile(file);
     } else if (type === 'trailer') {
