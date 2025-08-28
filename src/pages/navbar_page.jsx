@@ -134,6 +134,7 @@ const NavbarPage = () => {
     { name: "Music", path: "/music" },
     { name: "Education", path: "/education" },
     { name: "Sports", path: "/sports" },
+    { name: "AI", path: "/AI" },
   ];
 
   const bottomNavItems = [

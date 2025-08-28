@@ -50,6 +50,7 @@ import NameEdit from "./components/nameedit";
 import AccountOwnership from "./components/accountownership";
 import EmailNotification from "./components/emailnotification";
 import UploadVideos from "./components/uploadvideos";
+import AI from "./pages/AI";
 
 
 
@@ -189,6 +190,7 @@ function App() {
           <Route path="/emailnotification" element={<EmailNotification/>} />
           <Route path="/uploadvideos" element={<UploadVideos/>} />
           <Route path="/notification" element={<Notification/>} />
+          <Route path="AI" element={<AI/>} />
     
 
 
