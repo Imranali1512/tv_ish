@@ -29,35 +29,35 @@ const SignupPage = () => {
 
   return (
     <div className="min-h-screen md:h-[150vh] bg-black text-white flex flex-col md:flex-row overflow-hidden">
-      
+
       {/* Left Side — Logo and Posters (Posters only on Desktop) */}
       <div className="relative md:w-1/2 p-4 flex flex-col items-start overflow-hidden">
-        
-        {/* Logo Always Visible */}
+
+        {/* ✅ Clickable Logo */}
         <div 
-          className="z-50 mt-10 relative" 
+          className="z-50 mt-10 relative cursor-pointer"
+          onClick={() => navigate("/")}
           style={{
             marginLeft: "-12px",  
             transform: "translateY(-10px)",
             width: isMobile ? "150px" : "200px",
             height: isMobile ? "65px" : "85px", 
             filter: isMobile 
-            
-            ? `
-            drop-shadow(0 0 4px rgba(255, 255, 255, 0.5)) 
-            drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))
-            `
-            : `
-            drop-shadow(0 0 15px rgba(200, 200, 200, 0.9)) 
-            drop-shadow(0 0 30px rgba(180, 180, 180, 0.7)) 
-            drop-shadow(0 0 45px rgba(150, 150, 150, 0.5))
-            `,
+              ? `
+                drop-shadow(0 0 4px rgba(255, 255, 255, 0.5)) 
+                drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))
+              `
+              : `
+                drop-shadow(0 0 15px rgba(200, 200, 200, 0.9)) 
+                drop-shadow(0 0 30px rgba(180, 180, 180, 0.7)) 
+                drop-shadow(0 0 45px rgba(150, 150, 150, 0.5))
+              `,
           }}
         >
           <img
-          src="/logo/tv-ish.png"
-          alt="TV Ish Logo"
-          className="object-contain w-full h-full"
+            src="/logo/tv-ish-1.png"
+            alt="TV Ish Logo"
+            className="object-contain w-full h-full"
           />
         </div>
 
@@ -150,23 +150,20 @@ const SignupPage = () => {
 
           {/* Password Field */}
           <div className="relative"> 
-                      <input
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Your Password"
-                      className="w-full p-3 pr-12 rounded-md bg-gray-800 border border-gray-700 text-white"
-                      />
-                      <button
-                        type="button"
-                        className="absolute inset-y-0 right-3 flex items-center text-white"
-                        onClick={() => setShowPassword(!showPassword)}
-                        aria-label={showPassword ? "Hide password" : "Show password"}
-                      >
-                        
-                        {showPassword ? <FaEyeSlash className="text-lg" /> : <FaEye className="text-lg" />}
-                        
-                      </button>
-                    
-                    </div>
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Your Password"
+              className="w-full p-3 pr-12 rounded-md bg-gray-800 border border-gray-700 text-white"
+            />
+            <button
+              type="button"
+              className="absolute inset-y-0 right-3 flex items-center text-white"
+              onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? <FaEyeSlash className="text-lg" /> : <FaEye className="text-lg" />}
+            </button>
+          </div>
 
           {/* Terms */}
           <p className="text-xs text-gray-400">

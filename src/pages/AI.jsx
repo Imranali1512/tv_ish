@@ -39,6 +39,7 @@ const Weekly = [
   },
 ];
 
+
 const AICREATED = [
   {
     title: "Aguas con los Descuentos",

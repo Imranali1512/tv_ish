@@ -77,34 +77,34 @@ const ForgotPasswordPage2 = () => {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col md:flex-row overflow-hidden">
       
-      {/* ✅ Left: Glowing Logo + Posters (desktop only) */}
+      {/* ✅ Left: Glowing Clickable Logo + Posters (desktop only) */}
       <div className="relative md:w-1/2 p-4 flex flex-col items-start overflow-hidden">
-        
-        {/* ✅ Glowing Logo */}
-        <div 
-          className="z-50 mt-10 relative" 
+
+        {/* ✅ Clickable Logo */}
+        <div
+          className="z-50 mt-10 relative cursor-pointer"
+          onClick={() => navigate("/")}
           style={{
-            marginLeft: "-12px",  
+            marginLeft: "-12px",
             transform: "translateY(-10px)",
             width: isMobile ? "150px" : "200px",
-            height: isMobile ? "65px" : "85px", 
-            filter: isMobile 
-            
-            ? `
-            drop-shadow(0 0 4px rgba(255, 255, 255, 0.5)) 
-            drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))
-            `
-            : `
-            drop-shadow(0 0 15px rgba(200, 200, 200, 0.9)) 
-            drop-shadow(0 0 30px rgba(180, 180, 180, 0.7)) 
-            drop-shadow(0 0 45px rgba(150, 150, 150, 0.5))
-            `,
+            height: isMobile ? "65px" : "85px",
+            filter: isMobile
+              ? `
+              drop-shadow(0 0 4px rgba(255, 255, 255, 0.5)) 
+              drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))
+              `
+              : `
+              drop-shadow(0 0 15px rgba(200, 200, 200, 0.9)) 
+              drop-shadow(0 0 30px rgba(180, 180, 180, 0.7)) 
+              drop-shadow(0 0 45px rgba(150, 150, 150, 0.5))
+              `,
           }}
         >
           <img
-          src="/logo/tv-ish.png"
-          alt="TV Ish Logo"
-          className="object-contain w-full h-full"
+            src="/logo/tv-ish-1.png"
+            alt="TV Ish Logo"
+            className="object-contain w-full h-full"
           />
         </div>
 
@@ -135,7 +135,7 @@ const ForgotPasswordPage2 = () => {
         )}
       </div>
 
-      {/* Right: OTP Form */}
+      {/* ✅ Right: OTP Form */}
       <motion.div
         className="flex-1 flex items-center justify-center p-6"
         initial={{ opacity: 0, x: 50 }}
@@ -143,6 +143,7 @@ const ForgotPasswordPage2 = () => {
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
         <div className="w-full max-w-md space-y-6 text-center">
+          
           {/* Top Nav */}
           <div className="flex justify-between items-start text-sm text-gray-300">
             <button
@@ -160,8 +161,8 @@ const ForgotPasswordPage2 = () => {
           {/* Header */}
           <h2 className="text-red-500 text-2xl font-bold">Check your Mail</h2>
           <p className="text-sm text-gray-300">
-            We&apos;ve sent a 6-digit confirmation code to{" "}
-            <span className="text-blue-400">{email}</span>. Make sure you enter correct code.
+            We've sent a 6-digit confirmation code to{" "}
+            <span className="text-blue-400">{email}</span>. Make sure you enter the correct code.
           </p>
 
           {/* OTP Inputs */}
@@ -189,7 +190,7 @@ const ForgotPasswordPage2 = () => {
             Next
           </button>
 
-          {/* Resend or Try Different Email */}
+          {/* Resend / Try Different Email */}
           <p className="text-xs text-gray-400 mt-4">
             Didn’t receive any email? Check in spam or <br />
             <button

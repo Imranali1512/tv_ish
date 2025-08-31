@@ -15,6 +15,7 @@ const ForgotPasswordPage3 = () => {
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
+  // 🔁 Check email state and listen for screen resize
   useEffect(() => {
     if (!email) {
       navigate("/forgetpassword_page2");
@@ -25,9 +26,11 @@ const ForgotPasswordPage3 = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, [email, navigate]);
 
+  // 🎞️ Posters array
   const images = Array.from({ length: 15 }, (_, i) => `/images/login_img${i + 1}.png`);
   const imagesToShow = isMobile ? images.slice(0, 9) : images.slice(0, 10);
 
+  // ✅ Password validation rules
   const validatePassword = (password) => {
     return {
       length: password.length >= 8 && password.length <= 32,
@@ -40,6 +43,7 @@ const ForgotPasswordPage3 = () => {
   const validations = validatePassword(newPassword);
   const allValid = Object.values(validations).every(Boolean) && newPassword === confirmPassword;
 
+  // 🔐 Reset Password Handler
   const handleReset = () => {
     if (!allValid) {
       alert("Please meet all password requirements and ensure passwords match.");
@@ -62,44 +66,46 @@ const ForgotPasswordPage3 = () => {
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col md:flex-row overflow-hidden">
-      {/* Left Side – Logo & Posters Grid */}
+
+      {/* ✅ Left Side – Glowing Clickable Logo + Posters */}
       <div className="relative md:w-1/2 p-4 flex flex-col items-start overflow-hidden">
-        {/* Logo */}
-        <div 
-          className="z-50 mt-10 relative" 
+
+        {/* 🌟 Clickable Glowing Logo */}
+        <div
+          onClick={() => navigate("/")}
+          className="z-50 mt-10 relative cursor-pointer"
           style={{
-            marginLeft: "-12px",  
+            marginLeft: "-12px",
             transform: "translateY(-10px)",
             width: isMobile ? "150px" : "200px",
-            height: isMobile ? "65px" : "85px", 
-            filter: isMobile 
-            
-            ? `
-            drop-shadow(0 0 4px rgba(255, 255, 255, 0.5)) 
-            drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))
-            `
-            : `
-            drop-shadow(0 0 15px rgba(200, 200, 200, 0.9)) 
-            drop-shadow(0 0 30px rgba(180, 180, 180, 0.7)) 
-            drop-shadow(0 0 45px rgba(150, 150, 150, 0.5))
-            `,
+            height: isMobile ? "65px" : "85px",
+            filter: isMobile
+              ? `
+                drop-shadow(0 0 4px rgba(255, 255, 255, 0.5)) 
+                drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))
+              `
+              : `
+                drop-shadow(0 0 15px rgba(200, 200, 200, 0.9)) 
+                drop-shadow(0 0 30px rgba(180, 180, 180, 0.7)) 
+                drop-shadow(0 0 45px rgba(150, 150, 150, 0.5))
+              `,
           }}
         >
           <img
-          src="/logo/tv-ish.png"
-          alt="TV Ish Logo"
-          className="object-contain w-full h-full"
+            src="/logo/tv-ish-1.png"
+            alt="TV Ish Logo"
+            className="object-contain w-full h-full"
           />
         </div>
 
-        {/* Fades */}
+        {/* 🎨 Top & Bottom Fades */}
         <div className="absolute top-[100px] left-0 w-full h-32 bg-gradient-to-b from-black/60 to-transparent z-20 pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/60 to-transparent z-20 pointer-events-none" />
 
-        {/* Posters Grid - only show on non-mobile */}
+        {/* 🎞️ Posters Grid (desktop only) */}
         {!isMobile && (
           <motion.div
-            className="grid gap-3 relative z-0 overflow-hidden grid-cols-5"
+            className="grid grid-cols-5 gap-3 relative z-0 overflow-hidden"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -118,7 +124,7 @@ const ForgotPasswordPage3 = () => {
         )}
       </div>
 
-      {/* Right Side – Form */}
+      {/* ✅ Right Side – Reset Password Form */}
       <motion.div
         className="flex-1 flex items-center justify-center p-6 overflow-auto"
         initial={{ opacity: 0, x: 50 }}
@@ -126,7 +132,8 @@ const ForgotPasswordPage3 = () => {
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
         <div className="w-full max-w-md space-y-6">
-          {/* Top Nav */}
+          
+          {/* 🔙 Top Nav */}
           <div className="flex justify-between items-start text-sm text-gray-300">
             <button
               onClick={() => navigate(-1)}
@@ -140,72 +147,69 @@ const ForgotPasswordPage3 = () => {
             </div>
           </div>
 
-          {/* Header */}
+          {/* 🔐 Header */}
           <h2 className="text-red-500 text-2xl font-bold">Create New Password</h2>
           <p className="text-sm text-gray-300">Enter the new password for your account.</p>
 
-          {/* New Password */}
+          {/* 🔑 New Password */}
           <div>
             <label className="block text-sm text-gray-400 mb-1">New Password</label>
             <div className="relative">
-                <input
+              <input
                 type={showNew ? "text" : "password"}
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 className="w-full p-3 pl-10 pr-12 rounded-md bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="************"
-                />
-                <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                <span
+              />
+              <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <span
                 onClick={() => setShowNew(!showNew)}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xl text-gray-500 cursor-pointer select-none"
-                >
-                    {showNew ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-                </span>
+              >
+                {showNew ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+              </span>
             </div>
-        </div>
+          </div>
 
-
-          {/* Confirm Password */}
+          {/* 🔑 Confirm Password */}
           <div>
             <label className="block text-sm text-gray-400 mb-1">Confirm Password</label>
             <div className="relative">
-                <input
+              <input
                 type={showConfirm ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full p-3 pl-10 pr-12 rounded-md bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="************"
-                />
-                
-                <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                <span
+              />
+              <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <span
                 onClick={() => setShowConfirm(!showConfirm)}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xl text-gray-500 cursor-pointer select-none"
-                >
-                    {showConfirm ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-                </span>
+              >
+                {showConfirm ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+              </span>
             </div>
-        </div>
+          </div>
 
-
-          {/* Password Rules */}
+          {/* ✅ Password Validation Rules */}
           <ul className="text-sm text-gray-300 space-y-1 mt-2">
-            <li className={`${validations.length ? "text-blue-400" : "text-gray-500"}`}>
+            <li className={validations.length ? "text-blue-400" : "text-gray-500"}>
               ✓ Password must be between 8 to 32 characters.
             </li>
-            <li className={`${validations.uppercase ? "text-blue-400" : "text-gray-500"}`}>
+            <li className={validations.uppercase ? "text-blue-400" : "text-gray-500"}>
               ✓ Must contain an uppercase character.
             </li>
-            <li className={`${validations.number ? "text-blue-400" : "text-gray-500"}`}>
+            <li className={validations.number ? "text-blue-400" : "text-gray-500"}>
               ✓ Must contain a number.
             </li>
-            <li className={`${validations.special ? "text-blue-400" : "text-gray-500"}`}>
+            <li className={validations.special ? "text-blue-400" : "text-gray-500"}>
               ✓ Must contain one special character.
             </li>
           </ul>
 
-          {/* Submit */}
+          {/* 🔘 Submit Button */}
           <button
             onClick={handleReset}
             className="w-full bg-blue-600 hover:bg-blue-700 transition p-3 rounded-md font-semibold"

@@ -34,9 +34,7 @@ const LoginPage = () => {
     }
 
     if (email === adminEmail && password === adminPassword) {
-      // ✅ Save login state
       localStorage.setItem("isLoggedIn", "true");
-      // ✅ Redirect to homepage
       navigate("/HomePage");
     } else {
       alert("Invalid email or password. Please try again.");
@@ -47,9 +45,11 @@ const LoginPage = () => {
     <div className="min-h-screen bg-black text-white flex flex-col md:flex-row overflow-hidden relative">
       {/* LEFT SIDE — Posters + Logo */}
       <div className="relative md:w-1/2 p-4 flex flex-col items-start overflow-hidden">
-        {/* Logo */}
+        
+        {/* ✅ Clickable Logo */}
         <div
-          className="z-50 mt-10 relative"
+          className="z-50 mt-10 relative cursor-pointer"
+          onClick={() => navigate("/")}
           style={{
             marginLeft: "-12px",
             transform: "translateY(-10px)",
@@ -61,7 +61,7 @@ const LoginPage = () => {
           }}
         >
           <img
-            src="/logo/tv-ish.png"
+            src="/logo/tv-ish-1.png"
             alt="TV Ish Logo"
             className="object-contain w-full h-full"
           />
@@ -132,7 +132,6 @@ const LoginPage = () => {
               onClick={() => setShowPassword(!showPassword)}
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
-              {/* ✅ Eye logic fixed: open = visible */}
               {showPassword ? <FaEye className="text-lg" /> : <FaEyeSlash className="text-lg" />}
             </button>
           </div>
