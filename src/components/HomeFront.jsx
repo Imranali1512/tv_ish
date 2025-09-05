@@ -1,15 +1,99 @@
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 
-const backgroundImages = [
-  "homepic1.png", "homepic2.png", "homepic3.png", "homepic4.png", "homepic5.png",
-  "homepic6.png", "homepic7.png", "homepic8.png", "homepic9.png", "homepic10.png",
-  "homepic11.png", "homepic12.png", "homepic13.png", "homepic14.png", "homepic15.png",
-  "homepic16.png", "homepic17.png", "homepic18.png", "homepic19.png", "homepic20.png",
-  "homepic21.png", "homepic22.png", "homepic23.png", "homepic24.png", "homepic25.png",
-  "homepic26.png", "homepic27.png", "homepic28.png", "homepic29.png", "homepic30.png",
-  "homepic31.png", "homepic32.png", "homepic33.png", "homepic34.png", "homepic35.png",
-];
+// Image list
+const backgroundImages = Array.from({ length: 35 }, (_, i) => `homepic${i + 1}.png`);
+
+const Blob = ({ top, left, size, color }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none z-0"
+    style={{ top, left, width: size, height: size, background: color }}
+    animate={{
+      x: [0, 35, -35, 0],
+      y: [0, -25, 25, 0],
+      rotate: [0, 15, -15, 0],
+      scale: [1, 1.08, 1],
+    }}
+    transition={{ duration: 50, repeat: Infinity, ease: "easeInOut" }}
+  />
+);
+
+// Premium image card
+const PremiumImage = ({ src, idx, isMobile }) => {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const smoothX = useSpring(x, { damping: 20, stiffness: 200 });
+  const smoothY = useSpring(y, { damping: 20, stiffness: 200 });
+
+  const rotateX = useTransform(smoothY, [-150, 150], [20, -20]);
+  const rotateY = useTransform(smoothX, [-150, 150], [-20, 20]);
+  const glow = useTransform(smoothX, [-150, 150], [0.2, 0.6]);
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    x.set(e.clientX - rect.left - rect.width / 2);
+    y.set(e.clientY - rect.top - rect.height / 2);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <div style={{ perspective: "1200px" }}>
+      <motion.div
+        className="relative overflow-hidden rounded-xl bg-[#0a0a0a] cursor-pointer group transform-style-preserve-3d"
+        style={{
+          rotateX,
+          rotateY,
+          boxShadow: glow.onChange
+            ? glow.onChange(
+                (g) =>
+                  `0 25px 45px rgba(255, 0, 20, ${g}), 0 0 20px rgba(255, 0, 20, ${g / 2})`
+              )
+            : undefined,
+        }}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        animate={{
+          scale: isMobile ? 1 : [1, 1.05, 1],
+          y: isMobile ? 0 : [0, -10, 0],
+        }}
+        transition={{
+          duration: 8 + idx * 0.2,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        whileHover={{
+          scale: isMobile ? 1.05 : 1.15,
+          transition: { type: "spring", stiffness: 400 },
+        }}
+      >
+        <img
+          src={`/images/${src}`}
+          alt={`Image ${idx}`}
+          draggable={false}
+          className="w-full h-full object-cover rounded-xl group-hover:scale-110 transition-transform duration-500 ease-in-out"
+          onError={(e) => (e.target.style.display = "none")}
+        />
+
+        {/* Overlay */}
+        <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/90 to-transparent z-10 pointer-events-none" />
+
+        {/* Shine */}
+        <motion.div
+          className="absolute w-1/2 h-full bg-white/10 rotate-12 -translate-x-full rounded-xl pointer-events-none z-20"
+          animate={{ x: ["-100%", "130%"] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
+        />
+
+        {/* Red glow */}
+        <div className="absolute inset-0 rounded-xl bg-red-600 opacity-10 blur-2xl z-0 scale-110" />
+      </motion.div>
+    </div>
+  );
+};
 
 const HomeFront = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -27,96 +111,68 @@ const HomeFront = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const displayedImages = isMobile || isTablet
-    ? backgroundImages.slice(0, 12)
-    : backgroundImages;
+  const displayedImages =
+    isMobile || isTablet ? backgroundImages.slice(0, 9) : backgroundImages;
 
   return (
-    <div className="relative w-full h-[800px] overflow-hidden bg-black">
-      {/* Image Grid Background */}
-      <motion.div
-        className={`absolute inset-0 grid gap-[2px] px-1 pt-2 z-0 ${
+    <div className="relative w-full h-[800px] overflow-hidden bg-black text-white">
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-black via-[#1a0000] to-[#0f0f0f] z-[-2]" />
+
+      {/* Blobs */}
+      <Blob top="10%" left="10%" size="320px" color="rgba(255, 0, 20, 0.25)" />
+      <Blob top="60%" left="70%" size="360px" color="rgba(180, 20, 20, 0.25)" />
+      <Blob top="40%" left="50%" size="250px" color="rgba(255, 50, 50, 0.2)" />
+
+      {/* Image Grid */}
+      <div
+        className={`absolute inset-0 z-0 grid ${
           isMobile
-            ? "grid-cols-4 grid-rows-3"
-            : "grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7"
+            ? "grid-cols-3 grid-rows-4 gap-1 px-2 pt-3"
+            : isTablet
+            ? "grid-cols-4 gap-3 px-4 pt-4"
+            : "grid-cols-7 gap-4 px-6 pt-6"
         }`}
-        initial="hidden"
-        animate="visible"
-        variants={{
-          visible: {
-            transition: {
-              staggerChildren: 0.05,
-            },
-          },
-        }}
       >
         {displayedImages.map((img, idx) => (
-          <motion.div
-            key={idx}
-            className="overflow-hidden rounded-md"
-            variants={{
-              hidden: { opacity: 0, scale: 0.95, filter: "blur(6px)" },
-              visible: {
-                opacity: 0.25,
-                scale: 1,
-                filter: "blur(0px)",
-                transition: {
-                  duration: 0.8,
-                  ease: "easeOut",
-                },
-              },
-            }}
-          >
-            <img
-              src={`/images/${img}`}
-              alt={`Background ${idx + 1}`}
-              className="w-full h-full object-cover rounded-md transition-all duration-1000"
-              onError={(e) => (e.target.style.display = "none")}
-            />
-          </motion.div>
+          <PremiumImage key={idx} src={img} idx={idx} isMobile={isMobile} />
         ))}
-      </motion.div>
+      </div>
 
-      {/* Text Overlay */}
+      {/* Hero Text */}
       <motion.div
-        className="absolute bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-black/90 to-transparent px-6 pt-28 pb-12 text-center"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.2, ease: "easeOut" }}
+        className="absolute bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-black/90 to-transparent px-4 pt-20 pb-12 text-center"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 1 }}
       >
         <motion.h1
-          className="text-4xl md:text-5xl font-bold mb-4 text-white drop-shadow-lg"
-          initial={{ y: 40, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.4, duration: 1.1, ease: "easeOut", type: "spring" }}
+          className="text-3xl md:text-5xl font-extrabold mb-5 text-white tracking-wide drop-shadow-[0_4px_20px_rgba(255,0,0,0.7)]"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 1 }}
         >
           The Ultimate Entertainment Hub
         </motion.h1>
 
         <motion.p
-          className="text-sm sm:text-base md:text-lg text-gray-300 mb-8 max-w-2xl mx-auto"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.8, duration: 1, ease: "easeOut" }}
+          className="text-sm md:text-lg text-red-300 mb-8 max-w-2xl mx-auto leading-relaxed"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 1 }}
         >
-          Enjoy a seamless streaming experience with movies, episodes, exclusive podcasts, music,
-          and original content from your favorite creators – all on demand, anytime, anywhere.
+          Dive into premium movies, trending series, exclusive podcasts, and non-stop entertainment.
         </motion.p>
 
         <motion.button
-          className="bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-3 rounded-full text-sm md:text-base shadow-md transition-all duration-300"
-          initial={{ opacity: 0, scale: 0.8 }}
+          className="bg-gradient-to-br from-red-700 to-red-600 hover:from-red-800 hover:to-red-700 text-white font-semibold px-6 py-2 md:px-8 md:py-3 rounded-full shadow-lg shadow-red-800/50 transition-transform"
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{
-            delay: 1.3,
-            type: "spring",
-            stiffness: 120,
-            damping: 10,
-          }}
-          whileHover={{ scale: 1.06 }}
-          whileTap={{ scale: 0.95 }}
+          transition={{ delay: 1, duration: 0.6 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.96 }}
         >
-          ▶ Start Watching Now
+          Start Watching Now
         </motion.button>
       </motion.div>
     </div>

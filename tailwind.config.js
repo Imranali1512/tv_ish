@@ -61,13 +61,59 @@ export default {
           '50%': { transform: 'translateY(-6px)' },
         },
         energyGrow: {
-          '0%': { transform: 'scale(0.95)', boxShadow: '0 0 0px rgba(255, 255, 255, 0.1)' },
-          '50%': { transform: 'scale(1.1)', boxShadow: '0 0 25px rgba(255, 255, 255, 0.5)' },
-          '100%': { transform: 'scale(1)', boxShadow: '0 0 8px rgba(255, 255, 255, 0.2)' },
+          '0%': {
+            transform: 'scale(0.95)',
+            boxShadow: '0 0 0px rgba(255, 255, 255, 0.1)',
+          },
+          '50%': {
+            transform: 'scale(1.1)',
+            boxShadow: '0 0 25px rgba(255, 255, 255, 0.5)',
+          },
+          '100%': {
+            transform: 'scale(1)',
+            boxShadow: '0 0 8px rgba(255, 255, 255, 0.2)',
+          },
         },
         floatEnergy: {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-8px)' },
+        },
+
+        // ✅ ADDED for glow & background animations
+        glowPulse: {
+          '0%': {
+            boxShadow: '0 0 0px rgba(255,255,255,0.05)',
+          },
+          '50%': {
+            boxShadow: '0 0 25px rgba(255,255,255,0.15)',
+          },
+          '100%': {
+            boxShadow: '0 0 0px rgba(255,255,255,0.05)',
+          },
+        },
+        shineMove: {
+          '0%': {
+            transform: 'translateX(-100%) rotate(25deg)',
+            opacity: '0',
+          },
+          '50%': {
+            opacity: '0.5',
+          },
+          '100%': {
+            transform: 'translateX(200%) rotate(25deg)',
+            opacity: '0',
+          },
+        },
+        gradientMove: {
+          '0%': {
+            backgroundPosition: '0% 50%',
+          },
+          '50%': {
+            backgroundPosition: '100% 50%',
+          },
+          '100%': {
+            backgroundPosition: '0% 50%',
+          },
         },
       },
       animation: {
@@ -82,6 +128,11 @@ export default {
         float: 'float 4s ease-in-out infinite',
         energyGrow: 'energyGrow 2.5s ease-in-out forwards',
         floatEnergy: 'floatEnergy 4s ease-in-out infinite',
+
+        // ✅ ADDED
+        glowPulse: 'glowPulse 6s ease-in-out infinite',
+        shineMove: 'shineMove 2s ease-in-out infinite',
+        gradientMove: 'gradientMove 60s ease infinite',
       },
     },
   },
