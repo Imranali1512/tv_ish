@@ -113,37 +113,64 @@ const AnimatedCard = ({ bgColor, imgSrc, altText, height = "h-52", delay = 0 }) 
 // Main Component with all cards and layout
 const EducationFront = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-r from-black to-gray-900 flex items-center justify-center px-6">
-      <div className="flex flex-col-reverse md:flex-row items-center justify-between w-full max-w-7xl">
-        {/* Heading */}
-        <div className="text-white w-full md:w-auto mb-10 md:mb-0 text-center md:text-left">
-          <h1 className="text-4xl md:text-6xl font-extrabold leading-tight bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent animate-fadeZoomSlow drop-shadow-lg max-w-xl mx-auto md:mx-0">
-            Your Modern <br className="hidden md:block" /> Online School
-          </h1>
-        </div>
+    <>
+      <style>
+        {`
+          /* Scrollbar hide but scrolling allowed */
+          ::-webkit-scrollbar {
+            display: none;
+          }
 
-        {/* Grid of Cards */}
-        <div className="relative grid grid-cols-3 gap-6">
-          {/* Column 1 */}
-          <div className="flex flex-col gap-6 pt-14">
-            <AnimatedCard bgColor="bg-purple-600" imgSrc="/images/std1.png" altText="Student 1" delay={200} />
-            <AnimatedCard bgColor="bg-neutral-200" imgSrc="/images/std4.png" altText="Student 4" delay={500} />
+          html, body {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;     /* Firefox */
+          }
+
+          /* Mobile only: Remove horizontal scrollbar but keep vertical scroll */
+          @media (max-width: 768px) {
+            html, body, #root {
+              overflow-x: hidden !important;
+            }
+            body > div, #root > div {
+              max-width: 100vw !important;
+              overflow-x: hidden !important;
+            }
+          }
+        `}
+      </style>
+
+      <div className="h-auto md:h-[65vh] pt-12 bg-gradient-to-r from-black to-gray-900 flex items-center justify-center px-6">
+        <div className="flex flex-col-reverse md:flex-row items-center justify-between w-full max-w-7xl">
+          {/* Heading */}
+          <div className="text-white w-full md:w-auto mb-10 md:mb-0 text-center md:text-left">
+            <h1 className="text-4xl md:text-6xl font-extrabold leading-tight bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent animate-fadeZoomSlow drop-shadow-lg max-w-xl mx-auto md:mx-0">
+              Your Modern <br className="hidden md:block" /> Online School
+            </h1>
           </div>
 
-          {/* Column 2 */}
-          <div className="flex flex-col gap-6 items-center">
-            <AnimatedCard bgColor="bg-orange-500" imgSrc="/images/std2.png" altText="Student 2" height="h-60" delay={800} />
-            <AnimatedCard bgColor="bg-pink-600" imgSrc="/images/std5.png" altText="Student 5" height="h-44" delay={1100} />
-          </div>
+          {/* Grid of Cards */}
+          <div className="relative grid grid-cols-3 gap-6 md:gap-4 mt-0 md:mt-16">
+            {/* Column 1 */}
+            <div className="flex flex-col gap-6 md:gap-4 pt-14 md:pt-10">
+              <AnimatedCard bgColor="bg-purple-600" imgSrc="/images/std1.png" altText="Student 1" delay={200} />
+              <AnimatedCard bgColor="bg-neutral-200" imgSrc="/images/std4.png" altText="Student 4" delay={500} />
+            </div>
 
-          {/* Column 3 */}
-          <div className="flex flex-col gap-6 pt-14">
-            <AnimatedCard bgColor="bg-yellow-400" imgSrc="/images/std3.png" altText="Student 3" delay={1400} />
-            <AnimatedCard bgColor="bg-green-400" imgSrc="/images/std6.png" altText="Student 6" delay={1700} />
+            {/* Column 2 */}
+            <div className="flex flex-col gap-6 md:gap-4 items-center">
+              <AnimatedCard bgColor="bg-orange-500" imgSrc="/images/std2.png" altText="Student 2" height="h-60" delay={800} />
+              <AnimatedCard bgColor="bg-pink-600" imgSrc="/images/std5.png" altText="Student 5" height="h-44" delay={1100} />
+            </div>
+
+            {/* Column 3 */}
+            <div className="flex flex-col gap-6 md:gap-4 pt-14 md:pt-10">
+              <AnimatedCard bgColor="bg-yellow-400" imgSrc="/images/std3.png" altText="Student 3" delay={1400} />
+              <AnimatedCard bgColor="bg-green-400" imgSrc="/images/std6.png" altText="Student 6" delay={1700} />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

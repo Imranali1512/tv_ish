@@ -39,7 +39,7 @@ const FrontPodcast = () => {
   const [isMobileOrTablet, setIsMobileOrTablet] = useState(false);
 
   useEffect(() => {
-    const checkScreen = () => setIsMobileOrTablet(window.innerWidth < 1024); // Tablet & below
+    const checkScreen = () => setIsMobileOrTablet(window.innerWidth < 1024);
     checkScreen();
     window.addEventListener("resize", checkScreen);
     return () => window.removeEventListener("resize", checkScreen);
@@ -48,18 +48,18 @@ const FrontPodcast = () => {
   const displayedPodcasters = isMobileOrTablet ? podcasters.slice(0, 3) : podcasters;
 
   return (
-    <div className="relative bg-black text-white py-20 px-4 font-sans min-h-screen flex flex-col items-center overflow-visible">
+    <div className="relative bg-black text-white pt-20 pb-10 px-4 font-sans min-h-screen flex flex-col items-center overflow-visible -mt-6">
 
-      {/* Glow Lines - hide on tablet and mobile */}
+      {/* Glow Lines */}
       {!isMobileOrTablet &&
         podcasters.map((p, i) => (
           <div
             key={i}
-            className={`absolute top-0 h-full w-[2px] bg-green-400/10 blur-sm ${p.glowPosition}`}
+            className={`absolute top-0 h-full w-[2px] bg-green-400/10 blur-sm ${p.glowPosition} animate-slow-pulse`}
           />
         ))}
 
-      {/* Radial Background */}
+      {/* Radial BG */}
       <div className="absolute inset-0 bg-gradient-radial from-green-900/10 via-black/90 to-black z-0 pointer-events-none" />
 
       {/* Heading */}
@@ -67,16 +67,14 @@ const FrontPodcast = () => {
         Best podcast’s publishing <br /> place for everyone
       </h1>
 
-      {/* Podcaster Cards */}
+      {/* Cards */}
       <div
-        className={`relative z-10 flex items-end ${
-          isMobileOrTablet
-            ? "flex-nowrap overflow-x-auto px-2 hide-scrollbar"
-            : "flex-wrap justify-center"
-        } max-w-full`}
+        className={`relative z-10 flex items-end ${isMobileOrTablet ? "flex-nowrap overflow-x-auto px-2 hide-scrollbar" : "flex-wrap justify-center"} max-w-full`}
         style={{
           perspective: "1000px",
           gap: isMobileOrTablet ? "0" : "0",
+          transform: isMobileOrTablet ? "scale(0.85)" : "scale(1)",
+          transformOrigin: "top center",
         }}
       >
         {displayedPodcasters.map((pc, idx) => (
@@ -87,17 +85,21 @@ const FrontPodcast = () => {
               marginLeft: idx === 0 ? "0" : isMobileOrTablet ? "-50px" : "-30px",
             }}
           >
-            <div className="w-full h-full transform-gpu transition-transform duration-500 group-hover:rotate-x-[4deg] group-hover:rotate-y-[6deg] group-hover:scale-[1.05]">
+            {/* Added animation wrapper */}
+            <div
+              className="relative w-full h-full rounded-xl overflow-hidden
+                         animate-float
+                         transition-transform duration-700 ease-in-out
+                         group-hover:scale-[1.05] group-hover:shadow-glow group-hover:brightness-110"
+            >
               <img
                 src={pc.image}
                 alt={pc.name}
-                className="w-full h-full object-cover brightness-110 contrast-110 saturate-150"
+                className="w-full h-full object-cover rounded-xl"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent z-10" />
-              <div
-                className={`absolute bottom-0 left-0 w-full h-[4px] ${pc.bottomColor} z-20 shadow-md`}
-              />
-              <div className="absolute bottom-4 left-3 z-30 text-left">
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent z-10 pointer-events-none" />
+              <div className={`absolute bottom-0 left-0 w-full h-[4px] ${pc.bottomColor} z-20 shadow-md`} />
+              <div className="absolute bottom-4 left-3 z-30 text-left pointer-events-none">
                 <h3 className="text-[7px] sm:text-[8px] md:text-[9px] font-semibold tracking-wider text-white drop-shadow-lg whitespace-nowrap">
                   {pc.name}
                 </h3>
@@ -105,15 +107,20 @@ const FrontPodcast = () => {
                   {pc.tag}
                 </p>
               </div>
+
+              {/* Shine effect */}
+              <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                <div className="shine-effect" />
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* TOP PODCASTER heading - placed below images */}
+      {/* Shimmer Text */}
       <div className="mt-12 w-full max-w-[1200px] text-center z-10 pointer-events-none overflow-visible">
         <h2
-          className="text-[36px] sm:text-[60px] md:text-[72px] lg:text-[90px] font-extrabold uppercase tracking-wider text-transparent select-none mx-auto"
+          className="text-[36px] sm:text-[60px] md:text-[72px] lg:text-[90px] font-extrabold uppercase tracking-wider text-transparent select-none mx-auto shimmer-text"
           style={{
             WebkitTextStroke: "2px rgba(0,255,150,0.25)",
             textShadow: "0 12px 24px rgba(0,255,150,0.2)",
@@ -125,7 +132,7 @@ const FrontPodcast = () => {
         </h2>
       </div>
 
-      {/* Scrollbar Hider CSS */}
+      {/* Animations CSS */}
       <style>{`
         .hide-scrollbar::-webkit-scrollbar {
           display: none;
@@ -133,6 +140,73 @@ const FrontPodcast = () => {
         .hide-scrollbar {
           -ms-overflow-style: none;
           scrollbar-width: none;
+        }
+
+        @keyframes slow-pulse {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 1; }
+        }
+        .animate-slow-pulse {
+          animation: slow-pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+          0% { background-position: -500px 0; }
+          100% { background-position: 500px 0; }
+        }
+        .shimmer-text {
+          background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(0,255,150,0.3) 50%, rgba(255,255,255,0) 100%);
+          background-size: 1000px 100%;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: shimmer 4s infinite linear;
+        }
+
+        /* Floating animation */
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-8px); }
+        }
+        .animate-float {
+          animation: float 6s ease-in-out infinite;
+        }
+
+        /* Glow shadow on hover */
+        .shadow-glow {
+          box-shadow:
+            0 0 15px 4px rgba(0, 255, 150, 0.4),
+            0 10px 20px -5px rgba(0, 255, 150, 0.3);
+          transition: box-shadow 0.3s ease;
+        }
+
+        /* Shine effect */
+        @keyframes shine {
+          0% {
+            transform: translateX(-100%) rotate(25deg);
+            opacity: 0;
+          }
+          50% {
+            opacity: 0.4;
+          }
+          100% {
+            transform: translateX(200%) rotate(25deg);
+            opacity: 0;
+          }
+        }
+        .shine-effect {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 50%;
+          height: 100%;
+          background: linear-gradient(
+            120deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.3) 50%,
+            rgba(255, 255, 255, 0) 100%
+          );
+          transform: translateX(-100%) rotate(25deg);
+          animation: shine 5s ease-in-out infinite;
         }
       `}</style>
     </div>

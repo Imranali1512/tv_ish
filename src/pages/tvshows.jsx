@@ -174,7 +174,7 @@ const hororzone = [
 const TVSHOWSPAGE = () => {
   return (
     <div className="bg-black min-h-screen text-white">
-      <section className="px-4 md:px-10">
+      <section className="w-full overflow-hidden">
         <MovieBox
           movies={Movies}
           heading=""

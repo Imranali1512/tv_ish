@@ -77,7 +77,7 @@ const MovieBox = ({
   }, []);
 
   return (
-    <div className="bg-black text-white p-6 md:p-10 select-none overflow-hidden">
+    <div className="w-full bg-black text-white select-none overflow-hidden py-6 md:py-10 px-0">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold">{heading}</h2>

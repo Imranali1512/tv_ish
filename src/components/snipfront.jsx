@@ -17,7 +17,6 @@ const SnipFront = () => {
     { name: 'Bambang Sanex', msg: 'Akay betul itu bud.', avatar: 'https://i.pravatar.cc/40?img=6' },
   ];
 
-  // On-click emoji
   const sendEmoji = (emoji) => {
     const id = Date.now();
     setEmojis((prev) => [...prev, { id, symbol: emoji }]);
@@ -26,7 +25,6 @@ const SnipFront = () => {
     }, 5000);
   };
 
-  // Auto floating ❤️😍
   useEffect(() => {
     const interval = setInterval(() => {
       const id = Date.now();
@@ -44,7 +42,6 @@ const SnipFront = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Auto-scrolling chat loop
   useEffect(() => {
     let index = 0;
     const maxMessages = allChats.length * 3;
@@ -70,7 +67,7 @@ const SnipFront = () => {
   }, [displayedChats]);
 
   return (
-    <div className="relative w-full min-h-screen bg-black text-white overflow-hidden flex flex-col items-center justify-center">
+    <div className="relative w-full h-[60vh] pt-16 bg-black text-white overflow-hidden flex flex-col items-center justify-start">
       {/* Background */}
       <img
         src="/images/concert-bg.jpg"
@@ -114,19 +111,21 @@ const SnipFront = () => {
         ))}
       </div>
 
-      {/* Tablet Frame */}
-      <div
-        className="relative z-10 w-[68vw] max-w-[680px] rounded-2xl overflow-hidden shadow-2xl bg-black animate-pulse-slow"
-        style={{ aspectRatio: '3 / 2' }}
-      >
-        <img
-          src="/images/concert-frame.jpg"
-          alt="Live Concert Frame"
-          className="w-full h-full object-cover"
-        />
+      {/* Tablet Frame - Smaller & spaced */}
+      <div className="mt-2 mb-4">
+        <div
+          className="relative z-10 w-[50vw] max-w-[500px] rounded-2xl overflow-hidden shadow-2xl bg-black animate-pulse-slow"
+          style={{ aspectRatio: '3 / 2' }}
+        >
+          <img
+            src="/images/concert-frame.jpg"
+            alt="Live Concert Frame"
+            className="w-full h-full object-cover"
+          />
+        </div>
       </div>
 
-      {/* Emoji Reaction Bar - Left side with only first 4 emojis */}
+      {/* Emoji Reaction Bar */}
       <div className="absolute bottom-20 left-4 z-40 bg-black/70 px-3 py-2 rounded-md flex items-center gap-3 shadow-md backdrop-blur-sm">
         {emojiList.slice(0, 4).map((emoji, index) => (
           <div
@@ -140,7 +139,7 @@ const SnipFront = () => {
         ))}
       </div>
 
-      {/* Chat Box - Smaller Width & Height */}
+      {/* Chat Box */}
       <div
         ref={chatContainerRef}
         className="scroll-container absolute bottom-8 right-4 sm:right-8 z-40 w-[40vw] max-w-[300px] flex flex-col gap-2 max-h-[200px] overflow-y-auto"

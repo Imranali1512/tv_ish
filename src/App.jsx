@@ -132,7 +132,7 @@ const MainLayout = ({ children }) => {
         )}
 
         {/* Main Content */}
-        <main className="flex-grow w-full overflow-auto p-4 sm:p-6">{children}</main>
+        <main className="flex-grow w-full overflow-auto p-0">{children}</main>
       </div>
 
       {/* Conditional Footer */}

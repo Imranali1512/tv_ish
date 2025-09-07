@@ -37,7 +37,7 @@
       { title: "Narcos", image: "/images/homepic5.png" },
     ];
 
-    const getInOnTheAction = [...popularShows];
+    const education = [...popularShows];
 
     const popularPodcasts = [
       { title: "The Daily Boost", image: "/images/pod1.png" },
@@ -106,6 +106,26 @@
       { title: "Science Vs", image: "/images/snip6.png" },
     ];
 
+        const sports = [
+      { title: "The Daily Boost", image: "/images/snip1.png" },
+      { title: "TED Talks Daily", image: "/images/snip3.png" },
+      { title: "Joe Rogan Experience", image: "/images/snip4.png" },
+      { title: "Crime Junkie", image: "/images/snip5.png" },
+      { title: "Stuff You Should Know", image: "/images/snip7.png" },
+      { title: "SmartLess", image: "/images/snip2.png" },
+      { title: "Science Vs", image: "/images/snip6.png" },
+    ];
+
+    const AI = [
+      { title: "The Daily Boost", image: "/images/16.jpg" },
+      { title: "TED Talks Daily", image: "/images/17.jpg" },
+      { title: "Joe Rogan Experience", image: "/images/18.jpg" },
+      { title: "Crime Junkie", image: "/images/19.jpg" },
+      { title: "Stuff You Should Know", image: "/images/20.jpg" },
+      { title: "SmartLess", image: "/images/21.jpg" },
+      { title: "Science Vs", image: "/images/snip6.png" },
+    ];
+
     const featuredMovies = [
       {
         title: "Avengers : Endgame",
@@ -142,18 +162,14 @@
         </div>
         <MoviesGrid title="Continue Watching" movies={continueWatchingList} showProgress />
         <MoviesGrid title="Popular Shows" movies={popularShows} />
-        <MoviesGrid title="Get In on the Action" movies={getInOnTheAction} />
+        
         <MoviesGrid
           title="Popular Podcasts"
           movies={popularPodcasts.map((p) => ({ ...p, customClass: "rounded-[15px]" }))}
         />
-        <div className="mt-15 px-4 md:px-5 max-w-15xl mx-auto">
-          <CategorySlider categories={categoriesData} />
-        </div>
-        <MoviesGrid
-          title="We Think You'll Love These"
-          movies={LoveThese.map((m) => ({ ...m, customClass: "rounded-[15px]" }))}
-        />
+        
+
+        
         <MoviesGrid
           title="Popular Snips"
           movies={Snips.map((m) => ({ ...m, customClass: "rounded-[15px]" }))}
@@ -162,6 +178,20 @@
           title="Popular Music"
           movies={music.map((m) => ({ ...m, customClass: "rounded-[15px]" }))}
         />
+
+        <MoviesGrid title="Popular Education" movies={education} />
+
+        <MoviesGrid title="Popular Sports" movies={sports} />
+        <MoviesGrid title="Popular AI" movies={AI} />
+        
+        <div className="mt-15 px-4 md:px-5 max-w-15xl mx-auto">
+          <CategorySlider categories={categoriesData} />
+        </div>
+        <MoviesGrid
+          title="We Think You'll Love These"
+          movies={LoveThese.map((m) => ({ ...m, customClass: "rounded-[15px]" }))}
+        />
+
         <div className="mt-10 px-4 md:px-10 max-w-10xl mx-auto">
           <FAQ />
         </div>

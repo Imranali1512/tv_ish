@@ -18,7 +18,6 @@ const Blob = ({ top, left, size, color }) => (
   />
 );
 
-// Premium image card
 const PremiumImage = ({ src, idx, isMobile }) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -50,7 +49,9 @@ const PremiumImage = ({ src, idx, isMobile }) => {
           boxShadow: glow.onChange
             ? glow.onChange(
                 (g) =>
-                  `0 25px 45px rgba(255, 0, 20, ${g}), 0 0 20px rgba(255, 0, 20, ${g / 2})`
+                  `0 25px 45px rgba(255, 0, 20, ${g}), 0 0 20px rgba(255, 0, 20, ${
+                    g / 2
+                  })`
               )
             : undefined,
         }}
@@ -78,17 +79,14 @@ const PremiumImage = ({ src, idx, isMobile }) => {
           onError={(e) => (e.target.style.display = "none")}
         />
 
-        {/* Overlay */}
         <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/90 to-transparent z-10 pointer-events-none" />
 
-        {/* Shine */}
         <motion.div
           className="absolute w-1/2 h-full bg-white/10 rotate-12 -translate-x-full rounded-xl pointer-events-none z-20"
           animate={{ x: ["-100%", "130%"] }}
           transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
         />
 
-        {/* Red glow */}
         <div className="absolute inset-0 rounded-xl bg-red-600 opacity-10 blur-2xl z-0 scale-110" />
       </motion.div>
     </div>
@@ -111,26 +109,26 @@ const HomeFront = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const displayedImages =
-    isMobile || isTablet ? backgroundImages.slice(0, 9) : backgroundImages;
+  const displayedImages = isMobile
+    ? backgroundImages.slice(0, 9)
+    : isTablet
+    ? backgroundImages.slice(0, 8)
+    : backgroundImages;
 
   return (
     <div className="relative w-full h-[800px] overflow-hidden bg-black text-white">
-      {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-tr from-black via-[#1a0000] to-[#0f0f0f] z-[-2]" />
 
-      {/* Blobs */}
       <Blob top="10%" left="10%" size="320px" color="rgba(255, 0, 20, 0.25)" />
       <Blob top="60%" left="70%" size="360px" color="rgba(180, 20, 20, 0.25)" />
       <Blob top="40%" left="50%" size="250px" color="rgba(255, 50, 50, 0.2)" />
 
-      {/* Image Grid */}
       <div
         className={`absolute inset-0 z-0 grid ${
           isMobile
-            ? "grid-cols-3 grid-rows-4 gap-1 px-2 pt-3"
+            ? "grid-cols-3 grid-rows-5 gap-0.5 px-1 pt-0 pb-0"
             : isTablet
-            ? "grid-cols-4 gap-3 px-4 pt-4"
+            ? "grid-cols-4 grid-rows-5 gap-1.5 px-2 pt-2"
             : "grid-cols-7 gap-4 px-6 pt-6"
         }`}
       >
@@ -139,7 +137,6 @@ const HomeFront = () => {
         ))}
       </div>
 
-      {/* Hero Text */}
       <motion.div
         className="absolute bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-black/90 to-transparent px-4 pt-20 pb-12 text-center"
         initial={{ opacity: 0, y: 50 }}
