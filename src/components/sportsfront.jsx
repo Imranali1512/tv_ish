@@ -12,20 +12,27 @@ const SportsFront = () => {
   return (
     <div
       onMouseMove={handleMouseMove}
-      className="w-full h-screen bg-black flex items-center justify-center overflow-hidden relative"
+      className="w-full bg-black flex items-center justify-center overflow-hidden relative"
+      style={{ height: '65vh', paddingBottom: 0 }} // height 65% viewport height, no bottom padding
     >
       {/* Overlay for text visibility */}
       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-70 z-10"></div>
 
-      <div className="relative w-full h-full mt-4 cursor-pointer group overflow-hidden">
+      <div
+        className="relative w-full h-full cursor-pointer group overflow-hidden"
+        style={{ paddingTop: '20px' }} // Padding from the top to adjust image position
+      >
         {/* Dynamic Background Image with parallax effect */}
         <img
           src="/images/sports1.png"
           alt="Skier"
-          className="w-full h-full object-cover transition-transform duration-300 ease-out"
+          className="transition-transform duration-300 ease-out"
           style={{
+            width: '100%',        // Full width
+            height: 'auto',       // Maintain aspect ratio
             transform: `scale(1.05) translate(${offset.x}px, ${offset.y}px) skewX(${offset.x * 0.05}deg)`,
             filter: 'brightness(0.85) contrast(1.1)',
+            display: 'block',     // Removes any extra space below the image
           }}
         />
 
@@ -34,7 +41,8 @@ const SportsFront = () => {
 
         {/* Text content */}
         <div className="absolute top-1/2 left-10 transform -translate-y-1/2 text-white z-30 max-w-lg">
-          <h1 className="text-4xl md:text-5xl font-extrabold leading-snug opacity-0 animate-fadeInUp delay-200
+          <h1
+            className="text-4xl md:text-5xl font-extrabold leading-snug opacity-0 animate-fadeInUp delay-200
             group-hover:tracking-widest group-hover:text-red-400
             transition-all duration-700 ease-in-out drop-shadow-lg"
           >

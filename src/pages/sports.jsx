@@ -47,7 +47,7 @@ const Sports = () => {
   return (
     <div className="min-h-screen bg-black text-white w-full">
       {/* ✅ Hero Section */}
-      <div style={{ height: 'calc(100vh - 64px)' }}>
+      <div style={{ height: 'calc(70vh - 100px)' }}>
         <SportsFront />
       </div>
 

@@ -26,7 +26,6 @@ import Sports from "./pages/sports";
 import Support from "./pages/support";
 import Notification from "./components/notification";
 
-
 // Dashboard Pages
 import Dashboard from "./pages/dashboard";
 import MyVideos from "./components/my-videos";
@@ -35,8 +34,6 @@ import Playlist from "./pages/playlist";
 import WatchLater from "./pages/watch-later";
 import History from "./pages/history";
 import Settings from "./pages/settings";
-
-
 
 // Layout Components
 import DashboardSidebar from "./components/dashboard_sidebar";
@@ -51,9 +48,11 @@ import AccountOwnership from "./components/accountownership";
 import EmailNotification from "./components/emailnotification";
 import UploadVideos from "./components/uploadvideos";
 import AI from "./pages/AI";
+import SnipsOpen from "./pages/snips_open";
+import VideoFeed from "./components/VideoFeed";
 
-
-
+// Import the new ReelScroller component
+import ReelScroller from "./components/ReelScroller";
 
 // ✅ Layout Wrapper Component
 const MainLayout = ({ children }) => {
@@ -87,9 +86,9 @@ const MainLayout = ({ children }) => {
     "/accountownership",
     "/emailnotification",
     "/uploadvideos",
-    "/notification" ,
-
-    
+    "/notification",
+    "/snips_open",
+     // hide layout on reels as well? Remove if you want navbar/footer there
   ];
 
   // Hide Navbar/Footer if current path matches hide list
@@ -144,7 +143,9 @@ const MainLayout = ({ children }) => {
 // ✅ App Component
 function App() {
   return (
+    
     <Router>
+
       <MainLayout>
         <Routes>
           {/* Public Routes */}
@@ -158,7 +159,9 @@ function App() {
           <Route path="/education" element={<Education />} />
           <Route path="/sports" element={<Sports />} />
           <Route path="/support" element={<Support />} />
-          
+          <Route path="/snips_open" element={<SnipsOpen />} />
+
+          {/* New route for reels scrolling */}
 
           {/* Auth Routes */}
           <Route path="/login" element={<LoginPage />} />
@@ -190,10 +193,7 @@ function App() {
           <Route path="/emailnotification" element={<EmailNotification/>} />
           <Route path="/uploadvideos" element={<UploadVideos/>} />
           <Route path="/notification" element={<Notification/>} />
-          <Route path="AI" element={<AI/>} />
-    
-
-
+          <Route path="/AI" element={<AI/>} />
         </Routes>
       </MainLayout>
     </Router>

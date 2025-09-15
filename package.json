@@ -26,6 +26,7 @@
     "react-phone-input-2": "^2.15.1",
     "react-router-dom": "^7.7.1",
     "react-select": "^5.10.2",
+    "react-swipeable": "^7.0.2",
     "react-touch-drag-slider": "^2.3.1",
     "recharts": "^3.1.2",
     "tailwind-scrollbar-hide": "^4.0.0",
