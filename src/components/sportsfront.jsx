@@ -13,7 +13,7 @@ const SportsFront = () => {
     <div
       onMouseMove={handleMouseMove}
       className="w-full bg-black flex items-center justify-center overflow-hidden relative"
-      style={{ height: '65vh', paddingBottom: 0 }} // height 65% viewport height, no bottom padding
+      style={{ height: '70vh', paddingBottom: 0 }} // height 65% viewport height, no bottom padding
     >
       {/* Overlay for text visibility */}
       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-70 z-10"></div>

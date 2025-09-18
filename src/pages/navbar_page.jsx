@@ -9,16 +9,23 @@ import {
   FaHome,
   FaVideo,
 } from "react-icons/fa";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import ParentsControl from "../components/parentscontrol";
 import PersonalSidebar from "../components/personalsidebar";
 import Notification from "../components/notification";
 
 const NavbarPage = () => {
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const [isTablet, setIsTablet] = useState(
-    window.innerWidth >= 768 && window.innerWidth < 1024
-  );
+  // Safe initialization for window-dependent states (works with SSR)
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== "undefined") return window.innerWidth < 768;
+    return false;
+  });
+  const [isTablet, setIsTablet] = useState(() => {
+    if (typeof window !== "undefined")
+      return window.innerWidth >= 768 && window.innerWidth < 1024;
+    return false;
+  });
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -26,9 +33,7 @@ const NavbarPage = () => {
   const [recentSearches, setRecentSearches] = useState([]);
   const [showParentalControl, setShowParentalControl] = useState(false);
   const [showAccountDropdown, setShowAccountDropdown] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    localStorage.getItem("isLoggedIn") === "true"
-  );
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const shieldRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -37,25 +42,60 @@ const NavbarPage = () => {
   const notifRef = useRef(null);
   const [dropdownStyles, setDropdownStyles] = useState({});
 
+  const location = useLocation();
+
+  // ** REMOVE THIS EFFECT **
+  // Scroll to top on route change -- now handled by ScrollToTop component
+  /*
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      setMenuOpen(false); // Close mobile menu on navigation
+      setShowSearch(false);
+      setShowNotifications(false);
+      setShowAccountDropdown(false);
+      setShowParentalControl(false);
+    }
+  }, [location.pathname]);
+  */
+
+  // Close menus on route change
+  useEffect(() => {
+    setMenuOpen(false);
+    setShowSearch(false);
+    setShowNotifications(false);
+    setShowAccountDropdown(false);
+    setShowParentalControl(false);
+  }, [location.pathname]);
+
+  // Resize handler
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
-      if (window.innerWidth >= 768) setMenuOpen(false);
+      if (typeof window !== "undefined") {
+        setIsMobile(window.innerWidth < 768);
+        setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
+        if (window.innerWidth >= 768) setMenuOpen(false);
+      }
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Load recent searches from localStorage safely
   useEffect(() => {
-    setRecentSearches(
-      JSON.parse(localStorage.getItem("recentSearches")) || []
-    );
+    if (typeof window !== "undefined") {
+      const storedSearches = localStorage.getItem("recentSearches");
+      setRecentSearches(storedSearches ? JSON.parse(storedSearches) : []);
+    }
   }, []);
 
+  // Monitor login status from localStorage safely
   useEffect(() => {
-    const checkLogin = () =>
-      setIsLoggedIn(localStorage.getItem("isLoggedIn") === "true");
+    const checkLogin = () => {
+      if (typeof window !== "undefined") {
+        setIsLoggedIn(localStorage.getItem("isLoggedIn") === "true");
+      }
+    };
     checkLogin();
     const interval = setInterval(checkLogin, 1000);
     return () => clearInterval(interval);
@@ -69,11 +109,14 @@ const NavbarPage = () => {
       ...recentSearches.filter((s) => s !== searchQuery),
     ].slice(0, 5);
     setRecentSearches(updated);
-    localStorage.setItem("recentSearches", JSON.stringify(updated));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("recentSearches", JSON.stringify(updated));
+    }
     setSearchQuery("");
     setShowSearch(false);
   };
 
+  // Position parental control dropdown on desktop
   useEffect(() => {
     if (showParentalControl && shieldRef.current && !(isMobile || isTablet)) {
       const rect = shieldRef.current.getBoundingClientRect();
@@ -93,6 +136,7 @@ const NavbarPage = () => {
     }
   }, [showParentalControl, isMobile, isTablet]);
 
+  // Click outside to close dropdowns
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
@@ -148,8 +192,9 @@ const NavbarPage = () => {
     <>
       <nav className="fixed top-0 w-full z-50 bg-black/30 backdrop-blur-sm px-4 py-3 sm:px-10">
         <div className="max-w-7xl mx-auto flex items-center justify-between relative">
-          {/* Logo */}
-          <div
+          {/* Logo wrapped in NavLink to go home on click */}
+          <NavLink
+            to="/"
             className="relative z-50"
             style={{
               width: isMobile || isTablet ? "110px" : "140px",
@@ -163,7 +208,7 @@ const NavbarPage = () => {
               alt="Logo"
               className="w-full h-full object-contain"
             />
-          </div>
+          </NavLink>
 
           {/* Desktop Nav */}
           {!(isMobile || isTablet) && (
@@ -296,7 +341,7 @@ const NavbarPage = () => {
                   `block px-4 py-2 rounded-md text-sm font-medium transition ${
                     isActive
                       ? "bg-red-500 text-white"
-                      : "text-zinc-300 hover:bg-zinc-800"
+                      : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
                   }`
                 }
               >
@@ -305,100 +350,49 @@ const NavbarPage = () => {
             ))}
           </div>
         )}
-      </nav>
 
-      {/* Notifications */}
-      {showNotifications && (
-        <div className="absolute top-[70px] left-0 right-0 z-50 flex justify-center pointer-events-none">
+        {/* Parental Control Dropdown */}
+        {showParentalControl && (
           <div
-            className="relative bg-zinc-900 rounded-lg w-[360px] max-h-[70vh] overflow-y-auto shadow-lg pointer-events-auto"
-            onClick={(e) => e.stopPropagation()}
+            ref={dropdownRef}
+            className="bg-zinc-900 rounded-xl p-4 shadow-lg"
+            style={dropdownStyles}
           >
-            <button
-              onClick={() => setShowNotifications(false)}
-              className="absolute top-2 right-2 text-white hover:text-red-500 p-2"
-              aria-label="Close notifications"
-            >
-              <FaTimes size={20} />
-            </button>
-            <Notification onClose={() => setShowNotifications(false)} />
+            <ParentsControl onClose={() => setShowParentalControl(false)} />
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Bottom Nav (Mobile + Tablet) */}
-      {(isMobile || isTablet) && (
-        <>
-          <div className="fixed bottom-0 left-0 right-0 z-50 bg-zinc-900 border-t-[3px] border-zinc-700 flex justify-around items-center py-4">
+        {/* Notifications */}
+        {showNotifications && (
+          <div
+            className="fixed top-14 right-6 w-80 max-w-full bg-zinc-900 rounded-lg shadow-lg z-50"
+            ref={notifRef}
+          >
+            <Notification />
+          </div>
+        )}
+
+        {/* Bottom navigation for mobile/tablet */}
+        {(isMobile || isTablet) && (
+          <div className="fixed bottom-0 left-0 right-0 bg-zinc-900 border-t border-zinc-700 flex justify-around items-center py-2 px-1 z-50">
             {bottomNavItems.map((item, idx) => (
               <NavLink
                 key={idx}
                 to={item.path}
                 className={({ isActive }) =>
-                  `flex flex-col items-center text-sm font-semibold transition-all ${
-                    isActive ? "text-red-500" : "text-zinc-300 hover:text-white"
+                  `flex flex-col items-center text-sm text-zinc-400 hover:text-white transition ${
+                    isActive ? "text-red-500" : ""
                   }`
                 }
+                onClick={() => setMenuOpen(false)}
               >
-                <div className="text-lg mb-0.5">{item.icon}</div>
-                <span className="text-[13px]">{item.name}</span>
+                {item.icon}
+                <span>{item.name}</span>
               </NavLink>
             ))}
-            <div
-              className={`flex flex-col items-center text-sm font-semibold transition cursor-pointer ${
-                showAccountDropdown
-                  ? "text-green-400"
-                  : "text-zinc-300 hover:text-white"
-              }`}
-              onClick={() => setShowAccountDropdown(true)}
-            >
-              <div className="text-lg mb-0.5">
-                <FaUser />
-              </div>
-              <span className="text-[13px]">Account</span>
-            </div>
           </div>
-
-          {/* Drawer Sidebar */}
-          {showAccountDropdown && (
-            <div
-              ref={accountDropdownRef}
-              className="fixed inset-0 z-50 bg-black/70 flex justify-end"
-              onClick={() => setShowAccountDropdown(false)}
-            >
-              <div
-                className="bg-zinc-900 w-[80%] max-w-xs h-full shadow-lg"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <PersonalSidebar
-                  onClose={() => setShowAccountDropdown(false)}
-                />
-              </div>
-            </div>
-          )}
-        </>
-      )}
-
-      {/* Parental Control */}
-      {!(isMobile || isTablet) && showParentalControl && (
-        <div ref={dropdownRef} style={dropdownStyles}>
-          <ParentsControl onClose={() => setShowParentalControl(false)} />
-        </div>
-      )}
-
-      {(isMobile || isTablet) && showParentalControl && (
-        <div
-          className="fixed inset-0 z-50 bg-black/70 flex justify-end"
-          onClick={() => setShowParentalControl(false)}
-        >
-          <div
-            className="bg-zinc-900 w-[80%] max-w-xs h-full shadow-lg"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <ParentsControl onClose={() => setShowParentalControl(false)} />
-          </div>
-        </div>
-      )}
+        )}
+      </nav>
     </>
   );
 };

@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 
 // Page Components
+import ScrollToTop from "./components/ScrollToTop";
 import Footer from "./pages/footer";
 import NavbarPage from "./pages/navbar_page";
 import LoginPage from "./pages/login_page";
@@ -146,8 +147,11 @@ function App() {
     
     <Router>
 
+      <ScrollToTop />
+
       <MainLayout>
         <Routes>
+          
           {/* Public Routes */}
           <Route path="/" element={<HomePage />} />
           <Route path="/HomePage" element={<HomePage />} />

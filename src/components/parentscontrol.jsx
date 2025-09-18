@@ -12,11 +12,13 @@ const ParentalControls = () => {
 
   const [isOpen, setIsOpen] = useState(true);
   const [showSavedMessage, setShowSavedMessage] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Add a loading state
 
   // Load saved settings on mount
   useEffect(() => {
     const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (saved) setSettings(JSON.parse(saved));
+    setIsLoading(false); // Once settings are loaded, stop loading state
   }, []);
 
   const toggle = (key) => {
@@ -32,7 +34,7 @@ const ParentalControls = () => {
     setTimeout(() => setShowSavedMessage(false), 2000);
   };
 
-  if (!isOpen) return null;
+  if (isLoading || !isOpen) return null; // Don't render until settings are loaded
 
   return (
     <div className="bg-[#0d0d0d] text-white w-[600px] p-8 rounded-lg relative font-sans">
