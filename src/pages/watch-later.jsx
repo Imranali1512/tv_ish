@@ -88,8 +88,8 @@ const watchLaterItems = [
 
 const WatchLater = () => {
   return (
-    <div className="bg-black text-white min-h-screen p-6 md:p-10">
-      <h1 className="text-2xl font-bold mb-8">Watch Later</h1>
+    <div className="bg-black text-white min-h-screen pt-14 p-6 md:p-10">
+      <h1 className="text-2xl font-bold pt-14 mb-8">Watch Later</h1>
 
       {watchLaterItems.map(({ category, items }) => (
         <div key={category} className="mb-12">

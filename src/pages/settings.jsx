@@ -73,7 +73,7 @@ const Settings = () => {
   };
 
   return (
-    <div className="bg-black min-h-screen text-white w-full pt-12 pr-6 pl-6">
+    <div className="bg-black min-h-screen text-white w-full pt-14 pr-6 pl-6">
       {/* Heading remains at left */}
       <h1 className="text-red-500 font-bold text-xl mb-8">Settings</h1>
 

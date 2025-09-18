@@ -56,7 +56,7 @@ const likedVideos = [
 
 const Liked = () => {
   return (
-    <div className="bg-black text-white pt-12 px-6 pb-10 min-h-screen">
+    <div className="bg-black text-white pt-14 px-6 pb-10 min-h-screen">
       <h2 className="text-2xl font-semibold mb-8">Liked videos</h2>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">

@@ -79,7 +79,7 @@ const historyData = {
 
 const History = () => {
   return (
-    <div className="bg-black min-h-screen text-white max-w-4xl ml-0 pt-12">
+    <div className="bg-black min-h-screen text-white max-w-4xl ml-0 pt-14 pl-4">
       <h1 className="text-red-600 font-bold text-lg mb-4">History</h1>
       <p className="text-gray-400 mb-6">Videos you’ve watched</p>
 
