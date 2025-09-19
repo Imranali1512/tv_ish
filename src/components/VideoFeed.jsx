@@ -50,8 +50,6 @@ const videosData = [
     description: 'Sintel Trailer',
     username: 'moviebuff',
   },
-
-  
 ];
 
 const VideoFeed = () => {
@@ -93,8 +91,11 @@ const VideoFeed = () => {
   return (
     <div
       ref={containerRef}
-      className="w-full h-screen overflow-y-scroll snap-y snap-mandatory"
-      style={{ scrollSnapType: 'y mandatory' }}
+      className="w-full h-screen overflow-y-scroll snap-y snap-mandatory hide-scrollbar"
+      style={{
+        scrollSnapType: 'y mandatory',
+        WebkitOverflowScrolling: 'touch',
+      }}
     >
       {videosData.map((video, index) => (
         <div
@@ -109,7 +110,7 @@ const VideoFeed = () => {
             comments={video.comments}
             description={video.description}
             username={video.username}
-            isActive={index === currentIndex} // only active video plays
+            isActive={index === currentIndex}
             onSubscribeClick={(subscribed) =>
               console.log(`${video.username} subscribed: ${subscribed}`)
             }

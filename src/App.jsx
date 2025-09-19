@@ -89,6 +89,7 @@ const MainLayout = ({ children }) => {
     "/uploadvideos",
     "/notification",
     "/snips_open",
+    "/VideoFeed"
      // hide layout on reels as well? Remove if you want navbar/footer there
   ];
 
@@ -198,6 +199,7 @@ function App() {
           <Route path="/uploadvideos" element={<UploadVideos/>} />
           <Route path="/notification" element={<Notification/>} />
           <Route path="/AI" element={<AI/>} />
+          <Route path="/VideoFeed" element={<VideoFeed/>} />
         </Routes>
       </MainLayout>
     </Router>
