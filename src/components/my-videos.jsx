@@ -1,94 +1,94 @@
-import React, { useState } from 'react';
+  import React, { useState } from 'react';
 
-const initialVideos = [
-  {
-    title: 'The Galactic Odyssey',
-    description: 'A thrilling space exploration journey.',
-    date: '2021-03-01',
-    category: 'Movies',
-    img: './images/1.png',
-    duration: '1:20',
-    visibility: 'Private',
-    restrictions: 'None',
-    views: 42,
-    comments: [
-      { id: 1, user: 'Ali Khan', avatar: './images/user1.png', text: 'Amazing video!' },
-      { id: 2, user: 'Sara', avatar: './images/user2.png', text: 'Loved the visuals 🔥'},
-      {id: 3, user: 'Saa', avatar: './images/user2.png', text: 'Loved the visuals 🔥'},
-    ],
-    likes: 7,
-    dislikes: 0,
-  },
-  {
-    title: 'Culinary Journeys: Flavors of Italy',
-    description: 'Explore the taste of Italy with us.',
-    date: '2021-03-02',
-    category: 'Shows',
-    img: './images/2.png',
-    duration: '4:30',
-    visibility: 'Public',
-    restrictions: 'None',
-    views: 120,
-    comments: [
-      { id: 3, user: 'John', avatar: './images/user3.png', text: 'Made me hungry 🤤' },
-    ],
-    likes: 30,
-    dislikes: 2,
-  },
-  {
-    title: 'Wilderness Chronicles: Amazon Expedition',
-    description: 'Discover the secrets of the Amazon rainforest.',
-    date: '2021-03-03',
-    category: 'Movies',
-    img: './images/3.png',
-    duration: '2:10',
-    visibility: 'Private',
-    restrictions: 'None',
-    views: 87,
-    comments: [
-      { id: 4, user: 'Zara', avatar: './images/user4.png', text: 'Beautiful shots of nature!' },
-      { id: 5, user: 'Mike', avatar: './images/user5.png', text: 'Great storytelling 👏' },
-    ],
-    likes: 12,
-    dislikes: 1,
-  },
-];
+  const initialVideos = [
+    {
+      title: 'The Galactic Odyssey',
+      description: 'A thrilling space exploration journey.',
+      date: '2021-03-01',
+      category: 'Movies',
+      img: './images/1.png',
+      duration: '1:20',
+      visibility: 'Private',
+      restrictions: 'None',
+      views: 42,
+      comments: [
+        { id: 1, user: 'Ali Khan', avatar: './images/user1.png', text: 'Amazing video!' },
+        { id: 2, user: 'Sara', avatar: './images/user2.png', text: 'Loved the visuals 🔥'},
+        {id: 3, user: 'Saa', avatar: './images/user2.png', text: 'Loved the visuals 🔥'},
+      ],
+      likes: 7,
+      dislikes: 0,
+    },
+    {
+      title: 'Culinary Journeys: Flavors of Italy',
+      description: 'Explore the taste of Italy with us.',
+      date: '2021-03-02',
+      category: 'Shows',
+      img: './images/2.png',
+      duration: '4:30',
+      visibility: 'Public',
+      restrictions: 'None',
+      views: 120,
+      comments: [
+        { id: 3, user: 'John', avatar: './images/user3.png', text: 'Made me hungry 🤤' },
+      ],
+      likes: 30,
+      dislikes: 2,
+    },
+    {
+      title: 'Wilderness Chronicles: Amazon Expedition',
+      description: 'Discover the secrets of the Amazon rainforest.',
+      date: '2021-03-03',
+      category: 'Movies',
+      img: './images/3.png',
+      duration: '2:10',
+      visibility: 'Private',
+      restrictions: 'None',
+      views: 87,
+      comments: [
+        { id: 4, user: 'Zara', avatar: './images/user4.png', text: 'Beautiful shots of nature!' },
+        { id: 5, user: 'Mike', avatar: './images/user5.png', text: 'Great storytelling 👏' },
+      ],
+      likes: 12,
+      dislikes: 1,
+    },
+  ];
 
-const categories = ['All', 'Movies', 'Shows', 'Podcast', 'Music'];
+  const categories = ['All', 'Movies', 'Shows', 'Podcast', 'Music'];
 
-// === Comments Section (No input box) ===
-const CommentsSection = ({ comments }) => (
-  <div className="mt-4 bg-zinc-900/90 p-5 rounded-xl shadow-lg border border-zinc-700 max-w-xl">
-    <h4 className="text-base font-bold mb-4 text-white border-b border-gray-700 pb-2">
-      {comments.length} {comments.length === 1 ? 'Comment' : 'Comments'}
-    </h4>
+  // === Comments Section (No input box) ===
+  const CommentsSection = ({ comments }) => (
+    <div className="mt-4 bg-zinc-900/90 p-5 rounded-xl shadow-lg border border-zinc-700 max-w-xl">
+      <h4 className="text-base font-bold mb-4 text-white border-b border-gray-700 pb-2">
+        {comments.length} {comments.length === 1 ? 'Comment' : 'Comments'}
+      </h4>
 
-    {/* Existing Comments */}
-    <div className="space-y-5">
-      {comments.map((c) => (
-        <div
-          key={c.id}
-          className="flex items-start hover:bg-zinc-800/70 p-3 rounded-lg transition"
-        >
-          <img
-            src={c.avatar}
-            alt={c.user}
-            className="w-9 h-9 rounded-full mr-3 flex-shrink-0"
-          />
-          <div>
-            <div className="flex items-center space-x-2 mb-1">
-              <span className="font-semibold text-white text-sm">{c.user}</span>
-              <span className="text-xs text-gray-400">1 day ago</span>
+      {/* Existing Comments */}
+      <div className="space-y-5">
+        {comments.map((c) => (
+          <div
+            key={c.id}
+            className="flex items-start hover:bg-zinc-800/70 p-3 rounded-lg transition"
+          >
+            <img
+              src={c.avatar}
+              alt={c.user}
+              className="w-9 h-9 rounded-full mr-3 flex-shrink-0"
+            />
+            <div>
+              <div className="flex items-center space-x-2 mb-1">
+                <span className="font-semibold text-white text-sm">{c.user}</span>
+                <span className="text-xs text-gray-400">1 day ago</span>
+              </div>
+              <p className="text-gray-300 text-sm">{c.text}</p>
             </div>
-            <p className="text-gray-300 text-sm">{c.text}</p>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
-  </div>
-);
+  );
 
-const MyVideos = () => {
+  const MyVideos = () => {
   const [videos, setVideos] = useState(initialVideos);
   const [selectedCategory, setSelectedCategory] = useState('Movies');
   const [showFilters, setShowFilters] = useState(false);
@@ -197,20 +197,20 @@ const MyVideos = () => {
   return (
     <div className="bg-black min-h-screen text-white pt-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-6 flex-wrap">
           <h1 className="text-2xl font-bold">My Videos</h1>
           {selectedVideos.length > 0 && (
             <button
               onClick={handleDelete}
-              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
+              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded mt-4 sm:mt-0"
             >
               Delete {selectedVideos.length} Selected
             </button>
           )}
         </div>
 
-        <div className="flex justify-between items-center mb-4">
-          <div className="flex space-x-4 border-b border-gray-700 overflow-x-auto">
+        <div className="flex justify-between items-center mb-4 flex-wrap">
+          <div className="flex space-x-4 border-b border-gray-700 overflow-x-auto flex-wrap">
             {categories.map((cat) => (
               <button
                 key={cat}
@@ -229,7 +229,7 @@ const MyVideos = () => {
             ))}
           </div>
 
-          <div className="relative">
+          <div className="relative mt-4 sm:mt-0">
             <button
               onClick={toggleFilters}
               className="text-sm px-4 py-2 bg-zinc-800 hover:bg-zinc-700 rounded-md border border-gray-600"
