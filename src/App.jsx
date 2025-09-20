@@ -54,6 +54,7 @@ import VideoFeed from "./components/VideoFeed";
 
 // Import the new ReelScroller component
 import ReelScroller from "./components/ReelScroller";
+import PlansPage from "./pages/plans";
 
 // ✅ Layout Wrapper Component
 const MainLayout = ({ children }) => {
@@ -89,7 +90,8 @@ const MainLayout = ({ children }) => {
     "/uploadvideos",
     "/notification",
     "/snips_open",
-    "/VideoFeed"
+    "/VideoFeed",
+    "plans",
      // hide layout on reels as well? Remove if you want navbar/footer there
   ];
 
@@ -200,6 +202,7 @@ function App() {
           <Route path="/notification" element={<Notification/>} />
           <Route path="/AI" element={<AI/>} />
           <Route path="/VideoFeed" element={<VideoFeed/>} />
+          <Route path="/plans" element={<PlansPage/>} />
         </Routes>
       </MainLayout>
     </Router>

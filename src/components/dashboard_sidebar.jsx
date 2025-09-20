@@ -3,10 +3,11 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import {
   FaHome, FaThLarge, FaVideo, FaThumbsUp, FaList,
   FaHeart, FaHistory, FaCog, FaQuestionCircle, FaSignOutAlt,
-  FaBell, FaSearch, FaUpload, FaBars, FaTimes
+  FaBell, FaSearch, FaUpload, FaBars, FaTimes, FaChartBar
 } from 'react-icons/fa';
 
 import Notification from './notification'; // Import your Notification component
+// Optional: If using lazy loading, import the plan component route in your router config, not here.
 
 const DashboardSidebar = ({
   showSearch = true,
@@ -16,13 +17,11 @@ const DashboardSidebar = ({
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
-
   const notifRef = useRef(null);
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
   const toggleNotif = () => setNotifOpen(!notifOpen);
 
-  // Close notification dropdown if clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (notifRef.current && !notifRef.current.contains(event.target)) {
@@ -50,6 +49,7 @@ const DashboardSidebar = ({
   const bottomItems = [
     { label: 'Settings', icon: <FaCog />, path: '/settings' },
     { label: 'Support', icon: <FaQuestionCircle />, path: '/support' },
+    { label: 'Plan', icon: <FaChartBar />, path: '/plans' }, // ✅ NEW Plan item
     {
       label: 'Log out',
       icon: <FaSignOutAlt />,
@@ -74,7 +74,7 @@ const DashboardSidebar = ({
         />
       </aside>
 
-      {/* Mobile/Tablet Sidebar */}
+      {/* Mobile Sidebar */}
       {sidebarOpen && (
         <div className="fixed inset-0 bg-black/60 z-40" onClick={toggleSidebar}></div>
       )}
@@ -92,7 +92,6 @@ const DashboardSidebar = ({
 
       {/* Topbar */}
       <header className="fixed top-0 left-0 right-0 h-16 bg-black text-white flex items-center justify-between px-4 lg:pl-64 z-30 border-b border-gray-800 shadow-md">
-        {/* Left */}
         <div className="flex flex-1 items-center gap-4 justify-start">
           <div className="flex items-center lg:hidden">
             <FaBars className="text-xl cursor-pointer" onClick={toggleSidebar} />
@@ -113,7 +112,7 @@ const DashboardSidebar = ({
           )}
         </div>
 
-        {/* Right */}
+        {/* Right Side */}
         <div className="flex items-center gap-4 ml-4 relative" ref={notifRef}>
           {showUpload && (
             <button
@@ -134,14 +133,10 @@ const DashboardSidebar = ({
               title="Notifications"
             >
               <FaBell className="text-xl text-gray-300 hover:text-white transition duration-200" />
-              {/* Badge example: you can remove or enhance */}
               <span className="absolute -top-1 -right-2 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full shadow">
-                {/* You can count unread notifications here */}
-                {/* For demo, fixed 3 */}
                 3
               </span>
 
-              {/* Notification Dropdown */}
               {notifOpen && (
                 <div className="absolute right-0 mt-3 w-[360px] max-h-[calc(100vh-80px)] overflow-y-auto z-50">
                   <Notification onClose={() => setNotifOpen(false)} />
@@ -158,7 +153,7 @@ const DashboardSidebar = ({
 const SidebarContent = ({ menuItems, bottomItems, onItemClick }) => {
   return (
     <>
-      {/* Profile */}
+      {/* Profile Section */}
       <div className="flex flex-col items-center py-6 border-b border-gray-700">
         <img
           src="https://i.pravatar.cc/100?img=3"
@@ -169,7 +164,7 @@ const SidebarContent = ({ menuItems, bottomItems, onItemClick }) => {
         <p className="text-sm text-gray-400">Web Developer</p>
       </div>
 
-      {/* Main Menu */}
+      {/* Main Navigation */}
       <nav className="flex-grow mt-4">
         {menuItems.map((item) => (
           <NavLink
@@ -177,9 +172,7 @@ const SidebarContent = ({ menuItems, bottomItems, onItemClick }) => {
             to={item.path}
             className={({ isActive }) =>
               `flex items-center px-6 py-3 transition select-none ${
-                isActive
-                  ? 'bg-red-600 text-white'
-                  : 'text-white hover:bg-gray-800'
+                isActive ? 'bg-red-600 text-white' : 'text-white hover:bg-gray-800'
               }`
             }
             onClick={onItemClick}
@@ -190,7 +183,7 @@ const SidebarContent = ({ menuItems, bottomItems, onItemClick }) => {
         ))}
       </nav>
 
-      {/* Bottom Menu */}
+      {/* Bottom Navigation */}
       <div className="mb-6">
         {bottomItems.map((item) =>
           item.label === 'Log out' ? (
@@ -208,9 +201,7 @@ const SidebarContent = ({ menuItems, bottomItems, onItemClick }) => {
               to={item.path}
               className={({ isActive }) =>
                 `flex items-center px-6 py-3 transition select-none ${
-                  isActive
-                    ? 'bg-red-600 text-white'
-                    : 'text-white hover:bg-gray-800'
+                  isActive ? 'bg-red-600 text-white' : 'text-white hover:bg-gray-800'
                 }`
               }
               onClick={onItemClick}
