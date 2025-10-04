@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ChannelContext } from '../context/ChannelContext'; // 👈 Import context
 
 const PersonalSidebar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-  const user = {
-    name: 'Bessie Cooper',
-    image: 'https://i.pravatar.cc/100?img=3',
-  };
+  const { channel } = useContext(ChannelContext);  // 👈 Get user info from context
 
   useEffect(() => {
     const loggedIn = localStorage.getItem('isLoggedIn');
@@ -26,7 +24,7 @@ const PersonalSidebar = () => {
   };
 
   const handleAccountClick = () => {
-    navigate('/dashboard'); // 👈 Navigate to dashboard
+    navigate('/history');   // 👈 You can update to dashboard or wherever
   };
 
   return (
@@ -34,12 +32,12 @@ const PersonalSidebar = () => {
       {isLoggedIn ? (
         <div className="flex flex-col items-center">
           <img
-            src={user.image}
+            src={channel.dp || 'https://i.pravatar.cc/100?img=3'}  // fallback image
             alt="Profile"
             className="w-16 h-16 rounded-full mb-2 border-2 border-zinc-700"
           />
-          <h2 className="text-lg font-semibold">{user.name}</h2>
-          <p className="text-sm text-gray-400">My Channel</p>
+          <h2 className="text-lg font-semibold">{channel.name || 'User Name'}</h2>
+          <p className="text-sm text-gray-400">{channel.description || 'My Channel'}</p>
 
           <div className="mt-4 w-full space-y-2">
             <button

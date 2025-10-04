@@ -369,66 +369,65 @@ const NavbarPage = () => {
                 to={item.path}
                 className={({ isActive }) =>
                   `flex flex-col items-center text-sm font-semibold transition-all ${
-                    isActive ? "text-red-500" : "text-zinc-300 hover:text-white"
+                    isActive ? "text-white" : "text-zinc-400"
                   }`
                 }
               >
-                <div className="text-lg mb-0.5">{item.icon}</div>
-                <span className="text-[13px]">{item.name}</span>
+                {item.icon}
+                <span>{item.name}</span>
               </NavLink>
             ))}
-            <div
-              className={`flex flex-col items-center text-sm font-semibold transition cursor-pointer ${
-                showAccountDropdown
-                  ? "text-green-400"
-                  : "text-zinc-300 hover:text-white"
-              }`}
-              onClick={() => setShowAccountDropdown(true)}
-            >
-              <div className="text-lg mb-0.5">
-                <FaUser />
-              </div>
-              <span className="text-[13px]">Account</span>
-            </div>
           </div>
 
-          {/* Drawer Sidebar */}
-          {showAccountDropdown && (
+          {/* Menu Drawer */}
+          {menuOpen && (
             <div
-              ref={accountDropdownRef}
-              className="fixed inset-0 z-50 bg-black/70 flex justify-end"
-              onClick={() => setShowAccountDropdown(false)}
+              className="fixed inset-0 bg-black/50 z-40"
+              onClick={() => setMenuOpen(false)}
             >
               <div
-                className="bg-zinc-900 w-[80%] max-w-xs h-full shadow-lg"
+                className="absolute top-0 right-0 w-[250px] h-full bg-zinc-900 p-4"
                 onClick={(e) => e.stopPropagation()}
               >
-                <PersonalSidebar onClose={() => setShowAccountDropdown(false)} />
+                <button
+                  onClick={() => setMenuOpen(false)}
+                  className="mb-4 text-white"
+                  aria-label="Close menu"
+                >
+                  <FaTimes size={20} />
+                </button>
+                <div className="space-y-2">
+                  {navItems.map((item, idx) => (
+                    <NavLink
+                      key={idx}
+                      to={item.path}
+                      onClick={() => setMenuOpen(false)}
+                      className={({ isActive }) =>
+                        `block px-4 py-2 rounded-md text-sm font-medium transition ${
+                          isActive
+                            ? "bg-red-500 text-white"
+                            : "text-zinc-300 hover:bg-zinc-800"
+                        }`
+                      }
+                    >
+                      {item.name}
+                    </NavLink>
+                  ))}
+                </div>
               </div>
             </div>
           )}
         </>
       )}
 
-      {/* Parental Control */}
-      {!(isMobile || isTablet) && showParentalControl && (
-        <div ref={dropdownRef} style={dropdownStyles}>
+      {/* Parental Control Dropdown */}
+      {showParentalControl && (
+        <div
+          ref={dropdownRef}
+          style={dropdownStyles}
+          className="bg-zinc-900 rounded-xl shadow-lg p-4"
+        >
           <ParentsControl onClose={() => setShowParentalControl(false)} />
-        </div>
-      )}
-
-      {(isMobile || isTablet) && showParentalControl && (
-        <div className="fixed inset-0 z-50 bg-black/70 flex justify-center items-center p-4">
-          <div className="bg-zinc-900 rounded-lg w-full max-w-lg p-6 shadow-lg relative">
-            <button
-              onClick={() => setShowParentalControl(false)}
-              className="absolute top-2 right-2 text-white hover:text-red-500 p-2"
-              aria-label="Close Parental Control"
-            >
-              <FaTimes size={24} />
-            </button>
-            <ParentsControl onClose={() => setShowParentalControl(false)} />
-          </div>
         </div>
       )}
     </>

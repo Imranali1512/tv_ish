@@ -6,6 +6,11 @@ import {
   useLocation,
 } from "react-router-dom";
 
+// Import your Context Providers
+// import { UserProvider } from "./context/UserContext";      // assuming these exist
+// import { VideoProvider } from "./context/VideoContext";    // assuming these exist
+import { ChannelProvider } from "./context/ChannelContext"; // Add this import
+
 // Page Components
 import ScrollToTop from "./components/ScrollToTop";
 import Footer from "./pages/footer";
@@ -38,6 +43,8 @@ import Settings from "./pages/settings";
 
 // Layout Components
 import DashboardSidebar from "./components/dashboard_sidebar";
+import DashboardSidebar2 from "./components/dashboard_sidebar2"; // New sidebar import
+
 import ProfileInfo from "./components/ProfileInfo";
 import EmailAddress from "./components/EmailAddress";
 import NotificationPreferences from "./components/NotificationPreferences";
@@ -56,6 +63,17 @@ import VideoFeed from "./components/VideoFeed";
 import ReelScroller from "./components/ReelScroller";
 import PlansPage from "./pages/plans";
 
+
+import dashboard_sidebar from "./components/dashboard_sidebar";
+import Analytics from "./pages/analytics";
+import Community from "./pages/community";
+import Subtitles from "./pages/subtitles";
+import Copyright from "./pages/copyright";
+import Copyrightform from "./components/copyrightform";
+import Customization from "./pages/customization";
+
+
+
 // ✅ Layout Wrapper Component
 const MainLayout = ({ children }) => {
   const location = useLocation();
@@ -69,6 +87,7 @@ const MainLayout = ({ children }) => {
     "/forgetpassword_page2",
     "/resetpassword_page",
     "/my-videos",
+    "/my-vedio",          // added for Sidebar2
     "/liked",
     "/playlist",
     "/watch-later",
@@ -91,19 +110,22 @@ const MainLayout = ({ children }) => {
     "/notification",
     "/snips_open",
     "/VideoFeed",
-    "plans",
-     // hide layout on reels as well? Remove if you want navbar/footer there
+    "/plans",
+    "/analytics",
+    "/community",
+    "/subtitles",
+    "/copyright",
+    "/copyrightform",
+    "/customization",
   ];
 
-  // Hide Navbar/Footer if current path matches hide list
+  // Hide Navbar/Footer if current path matches hide list or dashboard subroutes
   const shouldHideLayout =
     hideLayoutPaths.includes(location.pathname) ||
     location.pathname.startsWith("/dashboard");
 
-  // Show Sidebar on dashboard and dashboard-related pages
+  // Show Sidebar on dashboard and dashboard-related pages (old sidebar)
   const shouldShowSidebar =
-    location.pathname.startsWith("/dashboard") ||
-    location.pathname.startsWith("/my-videos") ||
     location.pathname.startsWith("/liked")||
     location.pathname.startsWith("/playlist")|| 
     location.pathname.startsWith("/watch-later")||
@@ -120,6 +142,17 @@ const MainLayout = ({ children }) => {
     location.pathname.startsWith("/emailnotification") || 
     location.pathname.startsWith("/uploadvideos");
 
+  // Show Sidebar2 on specific pages (new sidebar)
+  const shouldShowSidebar2 =
+    location.pathname.startsWith("/dashboard") ||
+    location.pathname.startsWith("/my-videos") || // add more paths here if needed
+    location.pathname.startsWith("/analytics") || 
+    location.pathname.startsWith("/community") ||
+    location.pathname.startsWith("/subtitles") || 
+    location.pathname.startsWith("/copyright") ||
+    location.pathname.startsWith("/copyrightform") ||
+    location.pathname.startsWith("/customization") ;   // new route with Sidebar2
+
   return (
     <div className="min-h-screen flex flex-col bg-black text-white">
       {/* Conditional Navbar */}
@@ -127,10 +160,17 @@ const MainLayout = ({ children }) => {
 
       {/* Main Content with Sidebar */}
       <div className="flex flex-1 flex-col lg:flex-row overflow-hidden">
-        {/* Sidebar - Always visible on dashboard-related pages */}
+        {/* Sidebar - old sidebar */}
         {shouldShowSidebar && (
           <div className="w-full lg:w-64 flex-shrink-0 bg-gray-900 border-r border-gray-700 overflow-y-auto">
             <DashboardSidebar />
+          </div>
+        )}
+
+        {/* Sidebar2 - new sidebar */}
+        {shouldShowSidebar2 && (
+          <div className="w-full lg:w-64 flex-shrink-0 bg-gray-800 border-r border-gray-600 overflow-y-auto">
+            <DashboardSidebar2 />
           </div>
         )}
 
@@ -147,64 +187,75 @@ const MainLayout = ({ children }) => {
 // ✅ App Component
 function App() {
   return (
-    
     <Router>
+      
+          <ChannelProvider> {/* Added ChannelProvider here */}
+            <ScrollToTop />
+            <MainLayout>
+              <Routes>
+                
+                {/* Public Routes */}
+                <Route path="/" element={<HomePage />} />
+                <Route path="/HomePage" element={<HomePage />} />
+                <Route path="/movies" element={<MoviesPage />} />
+                <Route path="/tvshows" element={<TVSHOWSPAGE />} />
+                <Route path="/podcast" element={<PodcastPage />} />
+                <Route path="/snips" element={<Snip />} />
+                <Route path="/music" element={<Music />} />
+                <Route path="/education" element={<Education />} />
+                <Route path="/sports" element={<Sports />} />
+                <Route path="/support" element={<Support />} />
+                <Route path="/snips_open" element={<SnipsOpen />} />
 
-      <ScrollToTop />
+                {/* Auth Routes */}
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/signup_page" element={<SignupPage />} />
+                <Route path="/signup_page2" element={<SignupPage2 />} />
+                <Route path="/forgetpassword_page" element={<ForgotPasswordPage />} />
+                <Route path="/forgetpassword_page2" element={<ForgotPasswordPage2 />} />
+                <Route path="/resetpassword_page" element={<ForgotPasswordPage3 />} />
 
-      <MainLayout>
-        <Routes>
-          
-          {/* Public Routes */}
-          <Route path="/" element={<HomePage />} />
-          <Route path="/HomePage" element={<HomePage />} />
-          <Route path="/movies" element={<MoviesPage />} />
-          <Route path="/tvshows" element={<TVSHOWSPAGE />} />
-          <Route path="/podcast" element={<PodcastPage />} />
-          <Route path="/snips" element={<Snip />} />
-          <Route path="/music" element={<Music />} />
-          <Route path="/education" element={<Education />} />
-          <Route path="/sports" element={<Sports />} />
-          <Route path="/support" element={<Support />} />
-          <Route path="/snips_open" element={<SnipsOpen />} />
+                {/* Navbar test route */}
+                <Route path="/navbar" element={<NavbarPage />} />
 
-          {/* New route for reels scrolling */}
+                {/* Dashboard Routes */}
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/my-videos" element={<MyVideos />} />
+                <Route path="/my-vedio" element={<MyVideos />} /> {/* New route with Sidebar2 */}
+                <Route path="/liked" element={<Liked/>} />
+                <Route path="/playlist" element={<Playlist/>} />
+                <Route path="/watch-later" element={<WatchLater/>} />
+                <Route path="/history" element={<History/>} />
+                <Route path="/settings" element={<Settings/>} />
+                <Route path="/ProfileInfo" element={<ProfileInfo/>} />
+                <Route path="/EmailAddress" element={<EmailAddress/>} />
+                <Route path="/NotificationPreferences" element={<NotificationPreferences/>} />
+                <Route path="/ChangePassword" element={<ChangePassword/>} />
+                <Route path="/TwoFactorAuth" element={<TwoFactorAuthentication/>} />
+                <Route path="/LanguagePreferences" element={<LanguagePreferences/>} />
+                <Route path="/nameedit" element={<NameEdit/>} />
+                <Route path="/AccountOwnership" element={<AccountOwnership/>} />
+                <Route path="/emailnotification" element={<EmailNotification/>} />
+                <Route path="/uploadvideos" element={<UploadVideos/>} />
+                <Route path="/notification" element={<Notification/>} />
+                <Route path="/AI" element={<AI/>} />
+                <Route path="/VideoFeed" element={<VideoFeed/>} />
+                <Route path="/plans" element={<PlansPage/>} />
 
-          {/* Auth Routes */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup_page" element={<SignupPage />} />
-          <Route path="/signup_page2" element={<SignupPage2 />} />
-          <Route path="/forgetpassword_page" element={<ForgotPasswordPage />} />
-          <Route path="/forgetpassword_page2" element={<ForgotPasswordPage2 />} />
-          <Route path="/resetpassword_page" element={<ForgotPasswordPage3 />} />
 
-          {/* Navbar test route */}
-          <Route path="/navbar" element={<NavbarPage />} />
 
-          {/* Dashboard Routes */}
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/my-videos" element={<MyVideos />} />
-          <Route path="/liked" element={<Liked/>} />
-          <Route path="/playlist" element={<Playlist/>} />
-          <Route path="/watch-later" element={<WatchLater/>} />
-          <Route path="/history" element={<History/>} />
-          <Route path="/settings" element={<Settings/>} />
-          <Route path="/ProfileInfo" element={<ProfileInfo/>} />
-          <Route path="/EmailAddress" element={<EmailAddress/>} />
-          <Route path="/NotificationPreferences" element={<NotificationPreferences/>} />
-          <Route path="/ChangePassword" element={<ChangePassword/>} />
-          <Route path="/TwoFactorAuth" element={<TwoFactorAuthentication/>} />
-          <Route path="/LanguagePreferences" element={<LanguagePreferences/>} />
-          <Route path="/nameedit" element={<NameEdit/>} />
-          <Route path="/AccountOwnership" element={<AccountOwnership/>} />
-          <Route path="/emailnotification" element={<EmailNotification/>} />
-          <Route path="/uploadvideos" element={<UploadVideos/>} />
-          <Route path="/notification" element={<Notification/>} />
-          <Route path="/AI" element={<AI/>} />
-          <Route path="/VideoFeed" element={<VideoFeed/>} />
-          <Route path="/plans" element={<PlansPage/>} />
-        </Routes>
-      </MainLayout>
+                <Route path="/dashboard_sidebar" element={<dashboard_sidebar/>} /> {/* New route with Sidebar2 */}
+                <Route path="/analytics" element={<Analytics/>} /> 
+                <Route path="/community" element={<Community/>} /> 
+                <Route path="/subtitles" element={<Subtitles/>} /> 
+                <Route path="/copyright" element={<Copyright/>} />
+                <Route path="/copyrightform" element={<Copyrightform/>} /> 
+                <Route path="/customization" element={<Customization/>} />      {/* New route with Sidebar2 */}
+                
+              </Routes>
+            </MainLayout>
+          </ChannelProvider>
+        
     </Router>
   );
 }

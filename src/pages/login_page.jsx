@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   FaFacebook,
   FaGoogle,
@@ -8,13 +8,17 @@ import {
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { ChannelContext } from "../context/ChannelContext"; // Adjust path as needed
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("");      // We'll treat this as the "user id"
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  // Get login function from context
+  const { login } = useContext(ChannelContext);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -25,19 +29,17 @@ const LoginPage = () => {
   const images = Array.from({ length: 15 }, (_, i) => `/images/login_img${i + 1}.png`);
 
   const handleLogin = () => {
-    const adminEmail = "admin";
-    const adminPassword = "admin";
-
     if (!email || !password) {
-      alert("Please enter both email and password.");
+      alert("Please enter both user ID and password.");
       return;
     }
 
-    if (email === adminEmail && password === adminPassword) {
-      localStorage.setItem("isLoggedIn", "true");
-      navigate("/HomePage");
+    const success = login(email, password);
+    if (success) {
+      localStorage.setItem("isLoggedIn", "true"); // Optional: keep track of login
+      navigate("/HomePage"); // Redirect after login
     } else {
-      alert("Invalid email or password. Please try again.");
+      alert("Invalid user ID or password. Please try again.");
     }
   };
 
@@ -45,8 +47,7 @@ const LoginPage = () => {
     <div className="min-h-screen bg-black text-white flex flex-col md:flex-row overflow-hidden relative">
       {/* LEFT SIDE — Posters + Logo */}
       <div className="relative md:w-1/2 p-4 flex flex-col items-start overflow-hidden">
-        
-        {/* ✅ Clickable Logo */}
+        {/* Clickable Logo */}
         <div
           className="z-50 mt-10 relative cursor-pointer"
           onClick={() => navigate("/")}
@@ -108,10 +109,10 @@ const LoginPage = () => {
           <h2 className="text-red-500 text-2xl font-bold">Welcome</h2>
           <p className="text-sm text-white">Login to continue</p>
 
-          {/* Email Input */}
+          {/* User ID Input (Email field renamed for clarity) */}
           <input
             type="text"
-            placeholder="Your Email"
+            placeholder="User ID"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full p-2 rounded-md bg-gray-800 border border-gray-700 text-white"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   FaHome, FaThLarge, FaVideo, FaThumbsUp, FaList,
@@ -7,7 +7,7 @@ import {
 } from 'react-icons/fa';
 
 import Notification from './notification'; // Import your Notification component
-// Optional: If using lazy loading, import the plan component route in your router config, not here.
+import { ChannelContext } from '../context/ChannelContext';  // 👈 Import your ChannelContext
 
 const DashboardSidebar = ({
   showSearch = true,
@@ -18,6 +18,9 @@ const DashboardSidebar = ({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const notifRef = useRef(null);
+
+  // Get channel data from context
+  const { channel } = useContext(ChannelContext);
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
   const toggleNotif = () => setNotifOpen(!notifOpen);
@@ -38,12 +41,13 @@ const DashboardSidebar = ({
 
   const menuItems = [
     { label: 'Home', icon: <FaHome />, path: '/' },
-    { label: 'Dashboard', icon: <FaThLarge />, path: '/dashboard' },
-    { label: 'My Videos', icon: <FaVideo />, path: '/my-videos' },
+    // { label: 'Dashboard', icon: <FaThLarge />, path: '/dashboard' },
+    { label: 'Content ', icon: <FaVideo />, path: '/my-videos' },
+    { label: 'History', icon: <FaHistory />, path: '/history' },
     { label: 'Liked Videos', icon: <FaThumbsUp />, path: '/liked' },
     { label: 'Playlist', icon: <FaList />, path: '/playlist' },
     { label: 'Watch Later', icon: <FaHeart />, path: '/watch-later' },
-    { label: 'History', icon: <FaHistory />, path: '/history' },
+    
   ];
 
   const bottomItems = [
@@ -71,6 +75,7 @@ const DashboardSidebar = ({
           menuItems={menuItems}
           bottomItems={bottomItems}
           onItemClick={() => {}}
+          channel={channel}
         />
       </aside>
 
@@ -87,6 +92,7 @@ const DashboardSidebar = ({
           menuItems={menuItems}
           bottomItems={bottomItems}
           onItemClick={() => setSidebarOpen(false)}
+          channel={channel}
         />
       </aside>
 
@@ -150,18 +156,18 @@ const DashboardSidebar = ({
   );
 };
 
-const SidebarContent = ({ menuItems, bottomItems, onItemClick }) => {
+const SidebarContent = ({ menuItems, bottomItems, onItemClick, channel }) => {
   return (
     <>
       {/* Profile Section */}
       <div className="flex flex-col items-center py-6 border-b border-gray-700">
         <img
-          src="https://i.pravatar.cc/100?img=3"
+          src={channel?.dp || 'https://i.pravatar.cc/100?img=3'}
           alt="Profile"
           className="w-20 h-20 rounded-full mb-2 border-4 border-red-500 shadow-md"
         />
-        <h2 className="text-lg font-semibold">Brooke Cooper</h2>
-        <p className="text-sm text-gray-400">Web Developer</p>
+        <h2 className="text-lg font-semibold">{channel?.name || 'User Name'}</h2>
+        <p className="text-sm text-gray-400">{channel?.description || 'Web Developer'}</p>
       </div>
 
       {/* Main Navigation */}
