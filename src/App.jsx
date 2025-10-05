@@ -71,6 +71,7 @@ import Subtitles from "./pages/subtitles";
 import Copyright from "./pages/copyright";
 import Copyrightform from "./components/copyrightform";
 import Customization from "./pages/customization";
+import SearchBar from "./components/searchbar";
 
 
 
@@ -206,6 +207,9 @@ function App() {
                 <Route path="/sports" element={<Sports />} />
                 <Route path="/support" element={<Support />} />
                 <Route path="/snips_open" element={<SnipsOpen />} />
+
+                <Route path="/search" element={<SearchBar />} />
+                
 
                 {/* Auth Routes */}
                 <Route path="/login" element={<LoginPage />} />

@@ -6,7 +6,7 @@ export const ChannelContext = createContext();
 const GUEST_CHANNEL = {
   name: "Guest User",
   handle: "@guest",
-  description: "Welcome — please login to see profile details",
+  description: "content Creator",
   email: "guest@example.com",
   dp: "https://i.pravatar.cc/150?img=1",
   banner: "https://source.unsplash.com/1200x300/?abstract",

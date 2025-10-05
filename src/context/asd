@@ -165,7 +165,7 @@ const NavbarPage = () => {
 
   const bottomNavItems = [
     { name: "Home", icon: <FaHome />, path: "/" },
-    { name: "Search", icon: <FaSearch />, path: "#" }, // updated path
+    { name: "Search", icon: <FaSearch />, path: "#" },
     { name: "Snips", icon: <FaVideo />, path: "/VideoFeed" },
     { name: "Notifications", icon: <FaBell />, path: "/notification" },
   ];
@@ -290,6 +290,7 @@ const NavbarPage = () => {
           </div>
         </div>
 
+        {/* Mobile/Tablet dropdown menu */}
         {(isMobile || isTablet) && menuOpen && (
           <div className="bg-zinc-900 mt-3 p-4 rounded-lg shadow-lg space-y-2">
             {navItems.map((item, idx) => (
@@ -317,34 +318,34 @@ const NavbarPage = () => {
         <div className="fixed inset-0 z-[1000] bg-black/80 flex justify-center items-start pt-20 px-4 sm:px-8">
           <div className="w-full max-w-2xl">
             <SearchBar
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              handleSearch={handleSearch}
-              recentSearches={recentSearches}
               onClose={() => setShowSearch(false)}
+              onSearch={handleSearch}
+              query={searchQuery}
+              setQuery={setSearchQuery}
+              recentSearches={recentSearches}
             />
           </div>
         </div>
       )}
 
+      {/* Notifications dropdown */}
       {showNotifications && (
-        <div className="absolute top-[70px] left-0 right-0 z-50 flex justify-center pointer-events-none">
-          <div
-            className="relative bg-zinc-900 rounded-lg w-[360px] max-h-[70vh] overflow-y-auto shadow-lg pointer-events-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setShowNotifications(false)}
-              className="absolute top-2 right-2 text-white hover:text-red-500 p-2"
-              aria-label="Close notifications"
-            >
-              <FaTimes size={20} />
-            </button>
-            <Notification onClose={() => setShowNotifications(false)} />
-          </div>
+        <div
+          ref={notifRef}
+          className="fixed top-16 right-4 z-[999] w-72 max-w-full bg-zinc-900 rounded-lg shadow-lg"
+        >
+          <Notification />
         </div>
       )}
 
+      {/* Parental Control dropdown */}
+      {showParentalControl && !isMobile && !isTablet && (
+        <div ref={dropdownRef} style={dropdownStyles} className="bg-zinc-900 rounded-lg shadow-lg p-4">
+          <ParentsControl onClose={() => setShowParentalControl(false)} />
+        </div>
+      )}
+
+      {/* ========== BOTTOM NAVIGATION (always visible on mobile/tablet) ========== */}
       {(isMobile || isTablet) && (
         <>
           <div className="fixed bottom-0 left-0 right-0 z-50 bg-zinc-900 border-t-[3px] border-zinc-700 flex justify-around items-center py-4">
@@ -353,8 +354,20 @@ const NavbarPage = () => {
                 return (
                   <div
                     key={idx}
-                    className="flex flex-col items-center text-sm font-semibold transition cursor-pointer text-zinc-300 hover:text-white"
-                    onClick={() => setShowSearch(true)} // ✅ Mobile search icon triggers search
+                    className="flex flex-col items-center text-sm font-semibold cursor-pointer text-zinc-300 hover:text-white transition"
+                    onClick={() => setShowSearch(true)}
+                  >
+                    <div className="text-lg mb-0.5">{item.icon}</div>
+                    <span className="text-[13px]">{item.name}</span>
+                  </div>
+                );
+              }
+              if (item.name === "Notifications") {
+                return (
+                  <div
+                    key={idx}
+                    className="flex flex-col items-center text-sm font-semibold cursor-pointer text-zinc-300 hover:text-white transition"
+                    onClick={() => setShowNotifications(true)}
                   >
                     <div className="text-lg mb-0.5">{item.icon}</div>
                     <span className="text-[13px]">{item.name}</span>
@@ -380,12 +393,11 @@ const NavbarPage = () => {
             })}
 
             <div
-              className={`flex flex-col items-center text-sm font-semibold transition cursor-pointer ${
-                showAccountDropdown
-                  ? "text-green-400"
-                  : "text-zinc-300 hover:text-white"
+              className={`flex flex-col items-center text-sm font-semibold cursor-pointer transition ${
+                showAccountDropdown ? "text-green-400" : "text-zinc-300 hover:text-white"
               }`}
               onClick={() => setShowAccountDropdown(true)}
+              ref={accountRef}
             >
               <div className="text-lg mb-0.5">
                 <FaUser />
@@ -409,27 +421,6 @@ const NavbarPage = () => {
             </div>
           )}
         </>
-      )}
-
-      {!isMobile && !isTablet && showParentalControl && (
-        <div ref={dropdownRef} style={dropdownStyles}>
-          <ParentsControl onClose={() => setShowParentalControl(false)} />
-        </div>
-      )}
-
-      {(isMobile || isTablet) && showParentalControl && (
-        <div className="fixed inset-0 z-50 bg-black/70 flex justify-center items-center p-4">
-          <div className="bg-zinc-900 rounded-lg w-full max-w-lg p-6 shadow-lg relative">
-            <button
-              onClick={() => setShowParentalControl(false)}
-              className="absolute top-2 right-2 text-white hover:text-red-500 p-2"
-              aria-label="Close Parental Control"
-            >
-              <FaTimes size={24} />
-            </button>
-            <ParentsControl onClose={() => setShowParentalControl(false)} />
-          </div>
-        </div>
       )}
     </>
   );

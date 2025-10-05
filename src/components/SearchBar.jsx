@@ -1,64 +1,72 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useRef } from "react";
+import { FaSearch, FaTimes } from "react-icons/fa";
+import { IoReturnUpForwardOutline } from "react-icons/io5";
 
-const SearchBar = () => {
-  const [query, setQuery] = useState("");
-  const [recentSearches, setRecentSearches] = useState([]);
+const SearchBar = ({
+  searchQuery,
+  setSearchQuery,
+  onClose,
+  recentSearches,
+  handleSearch,
+}) => {
+  const inputRef = useRef(null);
 
-  // Load recent searches from localStorage on mount
   useEffect(() => {
-    const storedSearches = JSON.parse(localStorage.getItem("recentSearches")) || [];
-    setRecentSearches(storedSearches);
+    if (inputRef.current) inputRef.current.focus();
   }, []);
 
-  // Save recent searches to localStorage whenever it updates
-  useEffect(() => {
-    localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
-  }, [recentSearches]);
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (!query.trim()) return;
-
-    // Add new search to recent searches
-    setRecentSearches((prev) => {
-      const filtered = prev.filter((item) => item.toLowerCase() !== query.toLowerCase());
-      return [query, ...filtered].slice(0, 5); // max 5 recent items
-    });
-    setQuery("");
-  };
-
   return (
-    <div className="max-w-md mx-auto mt-10 p-4">
-      <form onSubmit={handleSearch} className="flex gap-2">
-        <input
-          type="text"
-          className="flex-grow border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Search..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-        >
-          Search
-        </button>
-      </form>
+    <div className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md flex flex-col transition-all duration-300 animate-slideDown">
+      {/* Search Bar */}
+      <div className="w-full mt-6 px-3 sm:px-6 md:px-10">
+        <div className="relative w-full bg-zinc-900 border border-zinc-800 rounded-2xl flex items-center px-4 py-3 shadow-lg">
+          <FaSearch className="text-zinc-400 mr-3" size={22} />
+          <form onSubmit={handleSearch} className="flex-1">
+            <input
+              ref={inputRef}
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search movies, shows, podcasts..."
+              className="w-full bg-transparent outline-none text-white placeholder-zinc-500 text-lg"
+            />
+          </form>
+          <button
+            onClick={onClose}
+            className="text-zinc-400 hover:text-red-500 ml-3 transition"
+          >
+            <FaTimes size={24} />
+          </button>
+        </div>
+      </div>
 
-      {recentSearches.length > 0 && (
-        <div className="mt-4">
-          <h4 className="font-semibold mb-2">Recent Searches:</h4>
-          <ul className="list-disc list-inside space-y-1 text-gray-700">
-            {recentSearches.map((item, index) => (
-              <li key={index} className="cursor-pointer hover:text-blue-600"
-                onClick={() => setQuery(item)}
+      {/* Recent Searches - YouTube Style Vertical List */}
+      <div className="mt-4 px-3 sm:px-10 max-h-[50vh] overflow-y-auto">
+        {recentSearches?.length > 0 ? (
+          <ul className="divide-y divide-zinc-800">
+            {recentSearches.map((item, idx) => (
+              <li
+                key={idx}
+                className="flex items-center justify-between px-2 py-3 hover:bg-zinc-900 rounded-lg cursor-pointer transition"
+                onClick={() => setSearchQuery(item)}
               >
-                {item}
+                <div className="flex items-center gap-3">
+                  <FaSearch className="text-zinc-500" size={15} />
+                  <span className="text-white text-base">{item}</span>
+                </div>
+                <IoReturnUpForwardOutline
+                  size={18}
+                  className="text-zinc-500 hover:text-white transition"
+                />
               </li>
             ))}
           </ul>
-        </div>
-      )}
+        ) : (
+          <p className="text-zinc-500 text-sm mt-4 text-center">
+            No recent searches yet.
+          </p>
+        )}
+      </div>
     </div>
   );
 };
