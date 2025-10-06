@@ -64,11 +64,11 @@ const Notification = ({ onClose }) => {
     notifications.thisWeek.length;
 
   return (
-    <div className="fixed top-[80px] right-0 w-full max-w-md h-[70vh] bg-black text-white p-6 shadow-lg z-50 overflow-y-auto scrollbar-hide scroll-smooth">
-      {/* Close Button */}
+    <div className="fixed top-0 right-0 w-full h-screen md:max-w-md md:h-[60vh] md:mt-20 bg-black text-white p-4 shadow-lg z-50 overflow-y-auto scrollbar-hide scroll-smooth">
+      {/* Close Button for Desktop */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 text-white text-xl font-bold hover:text-red-600"
+        className="absolute top-4 right-4 text-white text-xl font-bold hover:text-red-600 md:block hidden"
         aria-label="Close notifications"
       >
         &times;
@@ -96,9 +96,7 @@ const Notification = ({ onClose }) => {
                 <div key={id}>
                   <div className="flex items-center space-x-4">
                     <div
-                      className={`w-3 h-3 rounded-full mt-1 ${
-                        read ? 'bg-transparent' : 'bg-blue-600'
-                      }`}
+                      className={`w-3 h-3 rounded-full mt-1 ${read ? 'bg-transparent' : 'bg-blue-600'}`}
                     />
                     <img
                       src={image}
@@ -108,9 +106,7 @@ const Notification = ({ onClose }) => {
                     <div className="flex flex-col">
                       <a
                         href="#"
-                        className={`text-sm font-semibold ${
-                          read ? 'text-gray-400' : 'text-blue-600 hover:underline'
-                        }`}
+                        className={`text-sm font-semibold ${read ? 'text-gray-400' : 'text-blue-600 hover:underline'}`}
                       >
                         {title}
                       </a>

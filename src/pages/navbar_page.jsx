@@ -119,6 +119,7 @@ const NavbarPage = () => {
     }
   }, [showParentalControl, isMobile, isTablet]);
 
+  // ✅ Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
@@ -165,13 +166,14 @@ const NavbarPage = () => {
 
   const bottomNavItems = [
     { name: "Home", icon: <FaHome />, path: "/" },
-    { name: "Search", icon: <FaSearch />, path: "#" }, // updated path
+    { name: "Search", icon: <FaSearch />, path: "#" },
     { name: "Snips", icon: <FaVideo />, path: "/VideoFeed" },
     { name: "Notifications", icon: <FaBell />, path: "/notification" },
   ];
 
   return (
     <>
+      {/* Top Navbar */}
       <nav className="fixed top-0 w-full z-50 bg-black/30 backdrop-blur-sm px-4 py-3 sm:px-10">
         <div className="max-w-7xl mx-auto flex items-center justify-between relative">
           <NavLink
@@ -191,6 +193,7 @@ const NavbarPage = () => {
             />
           </NavLink>
 
+          {/* Desktop Nav */}
           {!isMobile && !isTablet && (
             <div className="bg-zinc-900 rounded-xl px-6 py-2 flex flex-wrap justify-center gap-3 shadow-lg">
               {navItems.map((item, idx) => (
@@ -211,6 +214,7 @@ const NavbarPage = () => {
             </div>
           )}
 
+          {/* Icons */}
           <div className="flex items-center space-x-4 text-lg text-white relative">
             {!isMobile && !isTablet ? (
               <>
@@ -312,7 +316,7 @@ const NavbarPage = () => {
         )}
       </nav>
 
-      {/* ✅ Fullscreen SearchBar Overlay */}
+      {/* Overlays */}
       {showSearch && (
         <div className="fixed inset-0 z-[1000] bg-black/80 flex justify-center items-start pt-20 px-4 sm:px-8">
           <div className="w-full max-w-2xl">
@@ -328,7 +332,7 @@ const NavbarPage = () => {
       )}
 
       {showNotifications && (
-        <div className="absolute top-[70px] left-0 right-0 z-50 flex justify-center pointer-events-none">
+        <div className="absolute top-[70px] left-0 right-0 z-[1000] flex justify-center pointer-events-none">
           <div
             className="relative bg-zinc-900 rounded-lg w-[360px] max-h-[70vh] overflow-y-auto shadow-lg pointer-events-auto"
             onClick={(e) => e.stopPropagation()}
@@ -343,72 +347,6 @@ const NavbarPage = () => {
             <Notification onClose={() => setShowNotifications(false)} />
           </div>
         </div>
-      )}
-
-      {(isMobile || isTablet) && (
-        <>
-          <div className="fixed bottom-0 left-0 right-0 z-50 bg-zinc-900 border-t-[3px] border-zinc-700 flex justify-around items-center py-4">
-            {bottomNavItems.map((item, idx) => {
-              if (item.name === "Search") {
-                return (
-                  <div
-                    key={idx}
-                    className="flex flex-col items-center text-sm font-semibold transition cursor-pointer text-zinc-300 hover:text-white"
-                    onClick={() => setShowSearch(true)} // ✅ Mobile search icon triggers search
-                  >
-                    <div className="text-lg mb-0.5">{item.icon}</div>
-                    <span className="text-[13px]">{item.name}</span>
-                  </div>
-                );
-              }
-              return (
-                <NavLink
-                  key={idx}
-                  to={item.path}
-                  className={({ isActive }) =>
-                    `flex flex-col items-center text-sm font-semibold transition-all ${
-                      isActive
-                        ? "text-red-500"
-                        : "text-zinc-300 hover:text-white"
-                    }`
-                  }
-                >
-                  <div className="text-lg mb-0.5">{item.icon}</div>
-                  <span className="text-[13px]">{item.name}</span>
-                </NavLink>
-              );
-            })}
-
-            <div
-              className={`flex flex-col items-center text-sm font-semibold transition cursor-pointer ${
-                showAccountDropdown
-                  ? "text-green-400"
-                  : "text-zinc-300 hover:text-white"
-              }`}
-              onClick={() => setShowAccountDropdown(true)}
-            >
-              <div className="text-lg mb-0.5">
-                <FaUser />
-              </div>
-              <span className="text-[13px]">Account</span>
-            </div>
-          </div>
-
-          {showAccountDropdown && (
-            <div
-              ref={accountDropdownRef}
-              className="fixed inset-0 z-50 bg-black/70 flex justify-end"
-              onClick={() => setShowAccountDropdown(false)}
-            >
-              <div
-                className="bg-zinc-900 w-[80%] max-w-xs h-full shadow-lg"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <PersonalSidebar onClose={() => setShowAccountDropdown(false)} />
-              </div>
-            </div>
-          )}
-        </>
       )}
 
       {!isMobile && !isTablet && showParentalControl && (
@@ -430,6 +368,83 @@ const NavbarPage = () => {
             <ParentsControl onClose={() => setShowParentalControl(false)} />
           </div>
         </div>
+      )}
+
+      {/* ✅ Fixed Bottom Bar */}
+      {(isMobile || isTablet) && (
+        <>
+          <div className="fixed bottom-0 left-0 right-0 z-[1100] bg-zinc-900 border-t-[3px] border-zinc-700 flex justify-around items-center py-4">
+            {bottomNavItems.map((item, idx) => {
+              if (item.name === "Search") {
+                return (
+                  <div
+                    key={idx}
+                    className={`flex flex-col items-center text-sm font-semibold transition cursor-pointer ${
+                      showSearch
+                        ? "text-red-500"
+                        : "text-zinc-300 hover:text-white"
+                    }`}
+                    onClick={() => setShowSearch(true)}
+                  >
+                    <div className="text-lg mb-0.5">{item.icon}</div>
+                    <span className="text-[13px]">{item.name}</span>
+                  </div>
+                );
+              }
+
+              return (
+                <NavLink
+                  key={idx}
+                  to={item.path}
+                  end
+                  className={({ isActive }) =>
+                    `flex flex-col items-center text-sm font-semibold transition-all ${
+                      isActive && !showSearch
+                        ? "text-red-500"
+                        : "text-zinc-300 hover:text-white"
+                    }`
+                  }
+                  onClick={() => setShowSearch(false)}
+                >
+                  <div className="text-lg mb-0.5">{item.icon}</div>
+                  <span className="text-[13px]">{item.name}</span>
+                </NavLink>
+              );
+            })}
+
+            {/* ✅ Mobile Account Button (TOGGLE FIX) */}
+            <div
+              ref={accountRef}
+              className={`flex flex-col items-center text-sm font-semibold transition cursor-pointer ${
+                showAccountDropdown
+                  ? "text-green-400"
+                  : "text-zinc-300 hover:text-white"
+              }`}
+              onClick={() => setShowAccountDropdown((prev) => !prev)} // ✅ FIXED HERE
+            >
+              <div className="text-lg mb-0.5">
+                <FaUser />
+              </div>
+              <span className="text-[13px]">Account</span>
+            </div>
+          </div>
+
+          {/* ✅ Close on outside click */}
+          {showAccountDropdown && (
+            <div
+              ref={accountDropdownRef}
+              className="fixed inset-0 z-[1050] bg-black/70 flex justify-end"
+              onClick={() => setShowAccountDropdown(false)}
+            >
+              <div
+                className="bg-zinc-900 w-[80%] max-w-xs h-full shadow-lg"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <PersonalSidebar onClose={() => setShowAccountDropdown(false)} />
+              </div>
+            </div>
+          )}
+        </>
       )}
     </>
   );

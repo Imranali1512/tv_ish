@@ -108,9 +108,9 @@ const MainLayout = ({ children }) => {
     "/accountownership",
     "/emailnotification",
     "/uploadvideos",
-    "/notification",
+    // "/notification",
     "/snips_open",
-    "/VideoFeed",
+    // "/VideoFeed",
     "/plans",
     "/analytics",
     "/community",
@@ -208,7 +208,7 @@ function App() {
                 <Route path="/support" element={<Support />} />
                 <Route path="/snips_open" element={<SnipsOpen />} />
 
-                <Route path="/search" element={<SearchBar />} />
+                <Route path="/searchBar" element={<SearchBar />} />
                 
 
                 {/* Auth Routes */}
