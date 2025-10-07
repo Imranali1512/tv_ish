@@ -73,7 +73,7 @@ import Subtitles from "./pages/subtitles";
 import Copyright from "./pages/copyright";
 import Copyrightform from "./components/copyrightform";
 import Customization from "./pages/customization";
-import SearchBar from "./components/searchBar"; 
+import SearchBar from "./components/SearchBar"; 
 
 // ✅ Layout Wrapper Component
 const MainLayout = ({ children }) => {
