@@ -13,7 +13,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import ParentsControl from "../components/parentscontrol";
 import PersonalSidebar from "../components/personalsidebar";
 import Notification from "../components/notification";
-import SearchBar from "../components/searchbar";
+import SearchBar from "../components/searchBar";
 
 const NavbarPage = () => {
   const [isMobile, setIsMobile] = useState(() => {
