@@ -64,6 +64,8 @@ import ReelScroller from "./components/ReelScroller";
 import PlansPage from "./pages/plans";
 
 
+
+
 import dashboard_sidebar from "./components/dashboard_sidebar";
 import Analytics from "./pages/analytics";
 import Community from "./pages/community";
@@ -71,7 +73,9 @@ import Subtitles from "./pages/subtitles";
 import Copyright from "./pages/copyright";
 import Copyrightform from "./components/copyrightform";
 import Customization from "./pages/customization";
-import SearchBar from "./components/searchbar";
+// import SearchBar from "./components/SearchBar";
+
+
 
 
 
@@ -190,7 +194,9 @@ function App() {
   return (
     <Router>
       
-          <ChannelProvider> {/* Added ChannelProvider here */}
+          
+          <ChannelProvider> 
+            {/* Added ChannelProvider here */}
             <ScrollToTop />
             <MainLayout>
               <Routes>
