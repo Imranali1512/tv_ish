@@ -1,6 +1,16 @@
 import React, { useState, useContext } from "react";
 import { ChannelContext } from "../context/ChannelContext";
 
+// Helper to convert image file to Base64 string
+function toBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+}
+
 export default function ChannelCustomization() {
   const { channel, updateChannel } = useContext(ChannelContext);
   const [activeTab, setActiveTab] = useState("branding");
@@ -9,33 +19,38 @@ export default function ChannelCustomization() {
   const [isEditingName, setIsEditingName] = useState(false);
   const [description, setDescription] = useState(channel.description);
   const [email, setEmail] = useState(channel.email);
-  const [phone, setPhone] = useState(channel.phone || "");  // New field for contact number
+  const [phone, setPhone] = useState(channel.phone || "");
   const [links, setLinks] = useState(channel.links || []);
-  const [socialLinks, setSocialLinks] = useState(channel.socialLinks || []); // New field for social links
+  const [socialLinks, setSocialLinks] = useState(channel.socialLinks || []);
 
   const [banner, setBanner] = useState(channel.banner);
   const [profile, setProfile] = useState(channel.dp);
   const [watermark, setWatermark] = useState(channel.watermark);
 
   const handleAddLink = () => {
-    setLinks([...links, { title: "New Link", url: "https://" }]);
+    setLinks([...links, { title: "e.g..facebook,insta ", url: "https://" }]);
   };
 
   const handleAddSocialLink = () => {
     setSocialLinks([...socialLinks, { platform: "Platform Name", url: "https://" }]);
   };
 
-  const handleChangeImage = (type) => {
+  // Updated handler: convert image to Base64 before saving
+  const handleChangeImage = async (type) => {
     const fileInput = document.createElement("input");
     fileInput.type = "file";
     fileInput.accept = "image/*";
-    fileInput.onchange = (e) => {
+    fileInput.onchange = async (e) => {
       const file = e.target.files[0];
       if (file) {
-        const url = URL.createObjectURL(file);
-        if (type === "banner") setBanner(url);
-        if (type === "profile") setProfile(url);
-        if (type === "watermark") setWatermark(url);
+        try {
+          const base64 = await toBase64(file);
+          if (type === "banner") setBanner(base64);
+          if (type === "profile") setProfile(base64);
+          if (type === "watermark") setWatermark(base64);
+        } catch (err) {
+          console.error("Failed to convert image to Base64", err);
+        }
       }
     };
     fileInput.click();
@@ -50,12 +65,12 @@ export default function ChannelCustomization() {
   const handlePublish = () => {
     updateChannel({
       name,
-      handle: channel.handle, // keep handle same
+      handle: channel.handle,
       description,
       email,
-      phone, // Add phone to update
+      phone,
       links,
-      socialLinks, // Add socialLinks to update
+      socialLinks,
       banner,
       dp: profile,
       watermark,
@@ -256,7 +271,8 @@ export default function ChannelCustomization() {
               />
             </div>
 
-            {/* Links */}
+            {/* Links (Commented Out) */}
+            {/*
             <div>
               <h2 className="text-xl font-semibold mb-3">Links</h2>
               {links.map((link, idx) => (
@@ -290,6 +306,7 @@ export default function ChannelCustomization() {
                 + Add Link
               </button>
             </div>
+            */}
 
             {/* Social Media Links */}
             <div>
