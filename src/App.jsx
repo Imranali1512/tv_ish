@@ -73,7 +73,12 @@ import Subtitles from "./pages/subtitles";
 import Copyright from "./pages/copyright";
 import Copyrightform from "./components/copyrightform";
 import Customization from "./pages/customization";
-import SearchBar from "./components/SearchBar"; 
+import SearchBar from "./components/SearchBar";
+
+
+import Content from "./components/Content";
+import Trend from "./components/Trend" ; 
+import Audience from "./components/Audience" ;
 
 // ✅ Layout Wrapper Component
 const MainLayout = ({ children }) => {
@@ -252,11 +257,18 @@ function App() {
 
                 <Route path="/dashboard_sidebar" element={<dashboard_sidebar/>} /> {/* New route with Sidebar2 */}
                 <Route path="/analytics" element={<Analytics/>} /> 
+
+                <Route path="/Content" element={<Content/>} />
+
                 <Route path="/community" element={<Community/>} /> 
                 <Route path="/subtitles" element={<Subtitles/>} /> 
                 <Route path="/copyright" element={<Copyright/>} />
                 <Route path="/copyrightform" element={<Copyrightform/>} /> 
-                <Route path="/customization" element={<Customization/>} />      {/* New route with Sidebar2 */}
+                <Route path="/customization" element={<Customization/>} />
+
+                <Route path="/content" element={<Content />} />      {/* New route with Sidebar2 */}
+                <Route path="/Trend" element={<Trend />} />  
+                <Route path="/Audience" element={<Audience />} />  
                 
               </Routes>
             </MainLayout>
