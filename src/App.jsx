@@ -74,6 +74,7 @@ import Copyright from "./pages/copyright";
 import Copyrightform from "./components/copyrightform";
 import Customization from "./pages/customization";
 import SearchBar from "./components/SearchBar";
+import News from "./pages/news";
 
 
 import Content from "./components/Content";
@@ -116,13 +117,14 @@ const MainLayout = ({ children }) => {
     // "/notification",
     "/snips_open",
     // "/VideoFeed",
-    "/plans",
+    //"/plans",
     "/analytics",
     "/community",
     "/subtitles",
     "/copyright",
     "/copyrightform",
     "/customization",
+    "/news",
   ];
 
   // Hide Navbar/Footer if current path matches hide list or dashboard subroutes
@@ -157,7 +159,8 @@ const MainLayout = ({ children }) => {
     location.pathname.startsWith("/subtitles") || 
     location.pathname.startsWith("/copyright") ||
     location.pathname.startsWith("/copyrightform") ||
-    location.pathname.startsWith("/customization") ;   // new route with Sidebar2
+    location.pathname.startsWith("/customization") ||
+    location.pathname.startsWith("/news")   // new route with Sidebar2
 
   return (
     <div className="min-h-screen flex flex-col bg-black text-white">
@@ -265,6 +268,7 @@ function App() {
                 <Route path="/copyright" element={<Copyright/>} />
                 <Route path="/copyrightform" element={<Copyrightform/>} /> 
                 <Route path="/customization" element={<Customization/>} />
+                <Route path="/news" element={<News/>} /> 
 
                 <Route path="/content" element={<Content />} />      {/* New route with Sidebar2 */}
                 <Route path="/Trend" element={<Trend />} />  

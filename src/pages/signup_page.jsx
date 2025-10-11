@@ -1,18 +1,46 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { ChannelContext } from "../context/ChannelContext"; // adjust path if needed
 
 const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const navigate = useNavigate();
 
+  const { setSignupDraft } = useContext(ChannelContext);
+
+  // Form values
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const handleContinue = () => {
+    // Validate required fields
+    if (!firstName || !lastName || !email || !password) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    setSignupDraft({
+      name: `${firstName} ${lastName}`,
+      handle: `@${firstName}-${lastName}`.toLowerCase().replace(/\s+/g, ""),
+      email,
+      phone,
+      password,
+    });
+
+    navigate("/signup_page2");
+  };
 
   const images = Array.from({ length: 15 }, (_, i) => `/images/login_img${i + 1}.png`);
   const imagesToShow = isMobile ? [] : images.slice(0, 10); // Posters hidden on mobile
@@ -29,19 +57,16 @@ const SignupPage = () => {
 
   return (
     <div className="min-h-screen md:h-[150vh] bg-black text-white flex flex-col md:flex-row overflow-hidden">
-
       {/* Left Side — Logo and Posters (Posters only on Desktop) */}
       <div className="relative md:w-1/2 p-4 flex flex-col items-start overflow-hidden">
-
-        {/* ✅ Clickable Logo */}
         <div 
           className="z-50 mt-10 relative cursor-pointer"
           onClick={() => navigate("/")}
           style={{
-            marginLeft: "-12px",  
+            marginLeft: "-12px",
             transform: "translateY(-10px)",
             width: isMobile ? "150px" : "200px",
-            height: isMobile ? "65px" : "85px", 
+            height: isMobile ? "65px" : "85px",
             filter: isMobile 
               ? `
                 drop-shadow(0 0 4px rgba(255, 255, 255, 0.5)) 
@@ -61,14 +86,10 @@ const SignupPage = () => {
           />
         </div>
 
-        {/* Posters Only on Desktop */}
         {!isMobile && (
           <>
-            {/* Fades */}
             <div className="absolute top-[100px] left-0 w-full h-32 bg-gradient-to-b from-black/60 to-transparent z-20 pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/60 to-transparent z-20 pointer-events-none" />
-
-            {/* Posters Grid */}
             <motion.div
               className="grid grid-cols-5 gap-3 relative z-0 overflow-hidden"
               variants={containerVariants}
@@ -97,8 +118,6 @@ const SignupPage = () => {
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
         <div className="w-full max-w-md space-y-6">
-
-          {/* Form Header Navigation */}
           <div className="w-full flex items-center justify-between text-sm text-gray-300 mb-2">
             <button
               onClick={() => navigate("/")}
@@ -112,7 +131,6 @@ const SignupPage = () => {
             </div>
           </div>
 
-          {/* Title */}
           <div>
             <h2 className="text-red-500 text-2xl font-bold">Register your account</h2>
             <p className="text-sm text-gray-300 mt-1">
@@ -124,11 +142,15 @@ const SignupPage = () => {
           <div className="flex flex-col sm:flex-row gap-4">
             <input
               type="text"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
               placeholder="Your firstname"
               className="w-full sm:w-1/2 p-2 rounded-md bg-gray-800 border border-gray-700 text-white"
             />
             <input
               type="text"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
               placeholder="Your lastname"
               className="w-full sm:w-1/2 p-2 rounded-md bg-gray-800 border border-gray-700 text-white"
             />
@@ -137,6 +159,8 @@ const SignupPage = () => {
           {/* Email */}
           <input
             type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="Your email"
             className="w-full p-2 rounded-md bg-gray-800 border border-gray-700 text-white"
           />
@@ -144,14 +168,18 @@ const SignupPage = () => {
           {/* Phone */}
           <input
             type="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
             placeholder="(+123) 9876543210"
             className="w-full p-2 rounded-md bg-gray-800 border border-gray-700 text-white"
           />
 
           {/* Password Field */}
-          <div className="relative"> 
+          <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Your Password"
               className="w-full p-3 pr-12 rounded-md bg-gray-800 border border-gray-700 text-white"
             />
@@ -165,22 +193,19 @@ const SignupPage = () => {
             </button>
           </div>
 
-          {/* Terms */}
           <p className="text-xs text-gray-400">
             By signing in, you're agree to our{" "}
             <span className="text-blue-400 underline cursor-pointer">Terms & Condition</span> and{" "}
             <span className="text-blue-400 underline cursor-pointer">Privacy Policy.</span>
           </p>
 
-          {/* Submit Button */}
           <button
             className="w-full bg-blue-700 hover:bg-blue-800 transition p-2 rounded-md"
-            onClick={() => navigate("/signup_page2")}
+            onClick={handleContinue}
           >
             Continue
           </button>
 
-          {/* Already have an account */}
           <p className="text-center text-sm text-gray-400">
             Already have account?{" "}
             <button

@@ -1,12 +1,25 @@
 import React, { useState, useContext } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import {
-  FaThLarge, FaPlayCircle, FaChartBar, FaUsers,
-  FaClosedCaptioning, FaCopyright, FaCog, FaCommentDots,
-  FaBars, FaTimes, FaSearch, FaUpload, FaBell, FaArrowLeft, FaDollarSign, FaPencilAlt
+  FaThLarge,
+  FaPlayCircle,
+  FaChartBar,
+  FaUsers,
+  FaClosedCaptioning,
+  FaCopyright,
+  FaCog,
+  FaBars,
+  FaTimes,
+  FaSearch,
+  FaUpload,
+  FaBell,
+  FaArrowLeft,
+  FaPencilAlt,
+  FaSignOutAlt,
+  FaClock,
 } from 'react-icons/fa';
 
-import { ChannelContext } from "../context/ChannelContext"; // ✅ Import context
+import { ChannelContext } from "../context/ChannelContext";
 
 const DashboardSidebar2 = ({
   showSearch = true,
@@ -27,13 +40,21 @@ const DashboardSidebar2 = ({
     { label: 'Community', icon: <FaUsers />, path: '/community' },
     { label: 'Subtitles', icon: <FaClosedCaptioning />, path: '/subtitles' },
     { label: 'Copyright', icon: <FaCopyright />, path: '/copyright' },
-    { label: 'Customization', icon: <FaPencilAlt />, path: '/customization' }
+    { label: 'Customization', icon: <FaPencilAlt />, path: '/customization' },
   ];
 
   const bottomItems = [
     { label: 'Settings', icon: <FaCog />, path: '/settings' },
-    { label: 'Send feedback', icon: <FaCommentDots />, path: '/feedback' },
+    { label: 'News', icon: <FaClock />, path: '/news' },
+    // feedback removed as requested
   ];
+
+  // Logout handler
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
+    // Add any other logout cleanup here (e.g., tokens, context)
+    navigate('/login');
+  };
 
   return (
     <>
@@ -43,6 +64,7 @@ const DashboardSidebar2 = ({
           menuItems={menuItems}
           bottomItems={bottomItems}
           onItemClick={() => setSidebarOpen(false)}
+          onLogout={handleLogout}
         />
       </aside>
 
@@ -68,6 +90,7 @@ const DashboardSidebar2 = ({
           menuItems={menuItems}
           bottomItems={bottomItems}
           onItemClick={() => setSidebarOpen(false)}
+          onLogout={handleLogout}
         />
       </aside>
 
@@ -118,10 +141,10 @@ const DashboardSidebar2 = ({
   );
 };
 
-const SidebarContent = ({ menuItems, bottomItems, onItemClick }) => {
+const SidebarContent = ({ menuItems, bottomItems, onItemClick, onLogout }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { channel } = useContext(ChannelContext); // ✅ Use context
+  const { channel } = useContext(ChannelContext);
 
   const fixedItems = menuItems.slice(0, 6);
   const scrollableItems = menuItems.slice(6);
@@ -140,7 +163,7 @@ const SidebarContent = ({ menuItems, bottomItems, onItemClick }) => {
         <FaArrowLeft />
       </button>
 
-      {/* ✅ Profile Info from context */}
+      {/* Profile Info */}
       <div className="flex flex-col items-center py-6 border-b border-gray-700">
         <img
           src={channel.dp}
@@ -198,7 +221,7 @@ const SidebarContent = ({ menuItems, bottomItems, onItemClick }) => {
         })}
       </nav>
 
-      {/* Bottom Items */}
+      {/* Bottom Items + Logout */}
       <div className="mt-auto mb-4">
         {bottomItems.map(({ label, icon, path }) => {
           const isActive = location.pathname === path;
@@ -218,6 +241,18 @@ const SidebarContent = ({ menuItems, bottomItems, onItemClick }) => {
             </NavLink>
           );
         })}
+
+        {/* Logout Button with red text */}
+        <button
+          onClick={() => {
+            onLogout();
+            onItemClick();
+          }}
+          className="flex items-center px-6 py-3 space-x-4 text-sm font-medium text-red-500 hover:bg-gray-800 hover:text-red-600 w-full"
+        >
+          <FaSignOutAlt className="text-lg" />
+          <span>Logout</span>
+        </button>
       </div>
     </div>
   );

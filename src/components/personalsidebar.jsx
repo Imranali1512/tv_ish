@@ -24,7 +24,7 @@ const PersonalSidebar = () => {
   };
 
   const handleAccountClick = () => {
-    navigate('/history');   // 👈 You can update to dashboard or wherever
+    navigate('/history');
   };
 
   return (
@@ -32,7 +32,7 @@ const PersonalSidebar = () => {
       {isLoggedIn ? (
         <div className="flex flex-col items-center">
           <img
-            src={channel.dp || 'https://i.pravatar.cc/100?img=3'}  // fallback image
+            src={channel.dp || 'https://i.pravatar.cc/100?img=3'}
             alt="Profile"
             className="w-16 h-16 rounded-full mb-2 border-2 border-zinc-700"
           />
@@ -47,11 +47,20 @@ const PersonalSidebar = () => {
               <span>👤</span>
               <span>Account</span>
             </button>
-            <button className="flex items-center w-full gap-2 hover:bg-zinc-800 px-3 py-2 rounded transition">
+
+            <button
+              onClick={() => navigate('/news')}
+              className="flex items-center w-full gap-2 hover:bg-zinc-800 px-3 py-2 rounded transition"
+            >
               <span>🕒</span>
-              <span>NEW</span>
+              <span>News</span>
             </button>
-            <button className="flex items-center w-full gap-2 hover:bg-zinc-800 px-3 py-2 rounded transition">
+
+            {/* ✅ Updated Support Button */}
+            <button
+              onClick={() => navigate('/support')}
+              className="flex items-center w-full gap-2 hover:bg-zinc-800 px-3 py-2 rounded transition"
+            >
               <span>💬</span>
               <span>Support</span>
             </button>
