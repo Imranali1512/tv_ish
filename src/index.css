@@ -2,22 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 🔁 Reset base scroll behavior and layout */
+/* ✅ Base layout */
 html,
 body {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100%;
-  overflow: auto; /* Allow scrolling */
-  overflow-x: hidden;
-  background-color: #000; /* ✅ Fullscreen black background */
+  min-height: 100vh;
+  background-color: #000;
   color: white;
+  overflow-x: hidden;
+  overflow-y: auto; /* allow full page scroll */
+  scroll-behavior: smooth;
 }
 
-
-
-/* ✅ Hide scrollbars while keeping scroll functionality */
+/* ✅ Hide scrollbars but keep scroll functionality */
 .scrollbar-hide {
   scrollbar-width: none;          /* Firefox */
   -ms-overflow-style: none;       /* IE and Edge */
@@ -27,14 +26,19 @@ body {
   display: none;                  /* Chrome, Safari, Opera */
 }
 
-/* ✅ Remove default borders/outlines from all elements */
+/* ✅ Remove unwanted borders/outlines */
 * {
   border: none !important;
   outline: none !important;
   box-shadow: none !important;
 }
 
-/* ✅ Tailwind animation: scroll images upward infinitely */
+/* ✅ Only fix cases where parent blocks scrolling incorrectly */
+.layout-fix {
+  overflow: visible !important;
+}
+
+/* ✅ Smooth upward animation */
 @layer utilities {
   @keyframes scrollUp {
     0% {
