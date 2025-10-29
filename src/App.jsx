@@ -66,6 +66,7 @@ import PlansPage from "./pages/plans";
 import UploadVideos2 from "./components/uploadvideos2";
 import UploadVideos3 from "./components/uploadvideos3";
 import UploadVideos4 from "./components/uploadVideos4";
+import UploadVideos5 from "./components/uploadvideos5";
 
 
 
@@ -85,7 +86,7 @@ import News from "./pages/news";
 import Content from "./components/Content";
 import Trend from "./components/Trend" ; 
 import Audience from "./components/Audience" ;
-import UploadVideos5 from "./components/uploadvideos5";
+
 
 // ✅ Layout Wrapper Component
 const MainLayout = ({ children }) => {
