@@ -59,9 +59,14 @@ import AI from "./pages/AI";
 import SnipsOpen from "./pages/snips_open";
 import VideoFeed from "./components/VideoFeed";
 
+
 // Import the new ReelScroller component
 import ReelScroller from "./components/ReelScroller";
 import PlansPage from "./pages/plans";
+import UploadVideos2 from "./components/uploadvideos2";
+import UploadVideos3 from "./components/uploadvideos3";
+import UploadVideos4 from "./components/uploadVideos4";
+
 
 
 
@@ -80,6 +85,7 @@ import News from "./pages/news";
 import Content from "./components/Content";
 import Trend from "./components/Trend" ; 
 import Audience from "./components/Audience" ;
+import UploadVideos5 from "./components/uploadvideos5";
 
 // ✅ Layout Wrapper Component
 const MainLayout = ({ children }) => {
@@ -125,6 +131,10 @@ const MainLayout = ({ children }) => {
     "/copyrightform",
     "/customization",
     "/news",
+    "/uploadvideos2" ,
+    "/uploadvideos3" ,
+    "/uploadvideos4" ,
+    "/uploadvideos5" , 
   ];
 
   // Hide Navbar/Footer if current path matches hide list or dashboard subroutes
@@ -148,7 +158,11 @@ const MainLayout = ({ children }) => {
     location.pathname.startsWith("/nameedit")||
     location.pathname.startsWith("/accountownership") ||
     location.pathname.startsWith("/emailnotification") || 
-    location.pathname.startsWith("/uploadvideos");
+    location.pathname.startsWith("/uploadvideos") || 
+    location.pathname.startsWith("/uploadvideos2") || 
+    location.pathname.startsWith("/uploadvideos3") ||
+    location.pathname.startsWith("/uploadvideos4") || 
+    location.pathname.startsWith("/uploadvideos5") ;
 
   // Show Sidebar2 on specific pages (new sidebar)
   const shouldShowSidebar2 =
@@ -160,7 +174,7 @@ const MainLayout = ({ children }) => {
     location.pathname.startsWith("/copyright") ||
     location.pathname.startsWith("/copyrightform") ||
     location.pathname.startsWith("/customization") ||
-    location.pathname.startsWith("/news")   // new route with Sidebar2
+    location.pathname.startsWith("/news") ;  // new route with Sidebar2
 
   return (
     <div className="min-h-screen flex flex-col bg-black text-white">
@@ -250,7 +264,12 @@ function App() {
                 <Route path="/nameedit" element={<NameEdit/>} />
                 <Route path="/AccountOwnership" element={<AccountOwnership/>} />
                 <Route path="/emailnotification" element={<EmailNotification/>} />
-                <Route path="/uploadvideos" element={<UploadVideos/>} />
+                <Route path="/uploadvideos" element={<UploadVideos />} /> 
+                <Route path="/uploadvideos2" element={<UploadVideos2 />} /> 
+                <Route path="/uploadvideos3" element={<UploadVideos3 />} />
+                <Route path="/uploadvideos4" element={<UploadVideos4 />} />
+                <Route path="/uploadvideos5" element={<UploadVideos5 />} />
+                
                 <Route path="/notification" element={<Notification/>} />
                 <Route path="/AI" element={<AI/>} />
                 <Route path="/VideoFeed" element={<VideoFeed/>} />

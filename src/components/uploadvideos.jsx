@@ -1,224 +1,188 @@
-import React, { useState } from 'react';
-import Profile from './Profile';
-import Listing from './Listing';
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, Upload, CheckCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-const UploadVideos = () => {
-  const [mainVideo, setMainVideo] = useState(null);
-  const [audioLanguage, setAudioLanguage] = useState('');
-  const [captionSource, setCaptionSource] = useState('');
-  const [captionFile, setCaptionFile] = useState(null);
-  const [additionalLanguageFile, setAdditionalLanguageFile] = useState(null);
-  const [trailerFile, setTrailerFile] = useState(null);
+export default function UploadVideos() {
+  const [open, setOpen] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [completed, setCompleted] = useState(false);
+  const navigate = useNavigate();
+  const fileInputRef = useRef(null);
 
-  const [activeTab, setActiveTab] = useState('Video');
+  useEffect(() => {
+    setOpen(true);
+  }, []);
 
-  const languageOptions = [
-    'English',
-    'Spanish',
-    'French',
-    'German',
-    'Hindi',
-    'Arabic',
-    'Chinese',
-  ];
-
-  const handleMainVideoChange = (e) => {
-    setMainVideo(e.target.files[0]);
+  const handleClose = () => {
+    setOpen(false);
+    setTimeout(() => {
+      navigate(-1);
+    }, 250);
   };
 
-  const handleRemoveVideo = () => {
-    setMainVideo(null);
+  const handleSelectFiles = () => {
+    fileInputRef.current?.click();
   };
 
-  const handleCaptionFileChange = (e) => {
-    setCaptionFile(e.target.files[0]);
-  };
-
-  const handleSubmit = () => {
-    console.log({
-      mainVideo,
-      audioLanguage,
-      captionSource,
-      captionFile,
-      additionalLanguageFile,
-      trailerFile,
-    });
-
-    alert('Form submitted! (Check console for details)');
-  };
-
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case 'Video':
-        return (
-          <div>
-            {/* Video Upload Section */}
-            <div className="bg-gray-800 p-6 rounded-lg shadow-md mb-6">
-              <h3 className="text-xl font-semibold text-white mb-2">Upload Video</h3>
-              <p className="text-sm text-gray-400 mb-4">This is the primary video asset for your title.</p>
-
-              {mainVideo ? (
-                <div className="border border-dashed border-gray-500 p-4 mb-4 rounded-md">
-                  <div className="flex justify-between items-center">
-                    <div className="text-sm text-gray-200">
-                      <p className="font-semibold">Main Video</p>
-                      <p className="text-xs">{mainVideo.name}</p>
-                    </div>
-                    <p className="text-sm text-gray-400">Uploaded</p>
-                  </div>
-                  <button
-                    onClick={handleRemoveVideo}
-                    className="mt-4 text-blue-400 hover:text-red-500"
-                  >
-                    Remove
-                  </button>
-                </div>
-              ) : (
-                <input
-                  type="file"
-                  accept="video/*"
-                  onChange={handleMainVideoChange}
-                  className="mb-4"
-                />
-              )}
-
-              {/* Audio Language */}
-              <div>
-                <label className="text-sm text-gray-300">Audio Language</label>
-                <select
-                  value={audioLanguage}
-                  onChange={(e) => setAudioLanguage(e.target.value)}
-                  className="w-full mt-2 px-4 py-2 border border-gray-600 rounded-md bg-gray-900 text-sm text-white"
-                >
-                  <option value="">Select Language</option>
-                  {languageOptions.map((lang) => (
-                    <option key={lang} value={lang}>
-                      {lang}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* Caption Upload */}
-            <div className="bg-gray-800 p-6 rounded-lg shadow-md mb-6">
-              <h3 className="text-xl font-semibold text-white mb-2">Upload Captions</h3>
-              <p className="text-sm text-gray-400 mb-4">
-                Purchase or upload captions in as many languages as you’d like. We only require English captions.
-              </p>
-
-              <div className="flex justify-between items-center mb-4 gap-4">
-                <div className="w-full">
-                  <label className="text-sm text-gray-300">English Captions</label>
-                  <select
-                    value={captionSource}
-                    onChange={(e) => {
-                      setCaptionSource(e.target.value);
-                      setCaptionFile(null);
-                    }}
-                    className="w-full mt-2 px-4 py-2 border border-gray-600 rounded-md bg-gray-900 text-sm text-white"
-                  >
-                    <option value="">Select Captions</option>
-                    <option value="upload">Upload Your Own</option>
-                  </select>
-                </div>
-                <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md mt-6">
-                  Create Captions
-                </button>
-              </div>
-
-              {captionSource === 'upload' && (
-                <div className="mb-4">
-                  <label className="text-sm text-gray-300">Upload Caption File (.srt, .vtt)</label>
-                  <input
-                    type="file"
-                    accept=".srt,.vtt"
-                    onChange={handleCaptionFileChange}
-                    className="w-full mt-2 px-4 py-2 border border-gray-600 rounded-md bg-gray-900 text-sm text-white"
-                  />
-                  {captionFile && (
-                    <p className="mt-2 text-sm text-green-400">Uploaded: {captionFile.name}</p>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* Additional Languages */}
-            <div className="bg-gray-800 p-6 rounded-lg shadow-md mb-6">
-              <h3 className="text-xl font-semibold text-white mb-2">Additional Languages</h3>
-              <input
-                type="file"
-                accept=".srt,.vtt"
-                onChange={(e) => setAdditionalLanguageFile(e.target.files[0])}
-                className="w-full mt-2 px-4 py-2 border border-gray-600 rounded-md bg-gray-900 text-sm text-white"
-              />
-            </div>
-
-            {/* Upload Trailer */}
-            <div className="bg-gray-800 p-6 rounded-lg shadow-md mb-6">
-              <h3 className="text-xl font-semibold text-white mb-2">Upload Trailer</h3>
-              <p className="text-sm text-gray-400 mb-4">This will be the primary trailer asset channels will use.</p>
-              <div className="border border-dashed border-gray-500 p-4 rounded-md bg-gray-900 text-gray-400">
-                <input
-                  type="file"
-                  accept="video/*"
-                  onChange={(e) => setTrailerFile(e.target.files[0])}
-                  className="w-full text-white"
-                />
-              </div>
-            </div>
-          </div>
-        );
-      case 'Profile':
-        return <Profile />;
-      case 'Listing':
-        return <Listing />;
-      default:
-        return null;
+  const handleFilesChosen = (e) => {
+    const files = e.target.files;
+    if (files.length > 0) {
+      console.log("Selected files:", files);
+      startFakeUpload();
     }
   };
 
+  // Simulate upload progress
+  const startFakeUpload = () => {
+    setUploading(true);
+    setCompleted(false);
+    setProgress(0);
+
+    let percent = 0;
+    const interval = setInterval(() => {
+      percent += 5;
+      setProgress(percent);
+      if (percent >= 100) {
+        clearInterval(interval);
+        setUploading(false);
+        setCompleted(true);
+      }
+    }, 150);
+  };
+
+  // ✅ Navigate to uploadvideos2.jsx after upload complete
+  const handleNext = () => {
+    setOpen(false);
+    setTimeout(() => {
+      navigate("/uploadvideos2");
+    }, 250);
+  };
+
   return (
-    <div className="bg-black text-white pt-24 px-6 min-h-screen">
-      <div className="max-w-7xl mx-auto">
-        {/* Header and Navigation Menu */}
-        <div className="sticky top-0 bg-black z-50">
-          <div className="flex justify-between items-center mb-10">
-            <h1 className="text-4xl font-bold text-white">🎬 New Title</h1>
-            <button
-              onClick={handleSubmit}
-              className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-md font-medium"
+    <div className="relative min-h-screen flex items-center justify-center bg-black text-white">
+      {/* Hidden File Input */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFilesChosen}
+        accept="video/*"
+        multiple
+        className="hidden"
+      />
+
+      {/* Modal */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="relative w-full max-w-3xl bg-[#181818] text-white rounded-2xl shadow-2xl overflow-hidden"
+              initial={{ scale: 0.9, opacity: 0, y: 50 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 50 }}
+              transition={{ duration: 0.25 }}
             >
-              Submit
-            </button>
-          </div>
+              {/* Header */}
+              <div className="flex justify-between items-center px-6 py-4 border-b border-gray-700">
+                <h2 className="text-lg font-semibold">Upload videos</h2>
+                <button
+                  onClick={handleClose}
+                  className="p-2 hover:bg-gray-700 rounded-full"
+                >
+                  <X size={20} />
+                </button>
+              </div>
 
-          {/* Navigation Menu (Cleaned) */}
-          <nav className="mb-8 border-b border-gray-700">
-            <ul className="flex space-x-6 text-sm font-medium">
-              {['Video', 'Profile', 'Listing'].map((tab) => (
-                <li key={tab}>
-                  <button
-                    onClick={() => setActiveTab(tab)}
-                    className={`pb-2 ${
-                      activeTab === tab
-                        ? 'text-white border-b-2 border-blue-500'
-                        : 'text-gray-400 hover:text-white hover:border-b-2 hover:border-gray-500 transition'
-                    }`}
-                  >
-                    {tab === 'Profile' ? 'Video Info' : tab}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </div>
+              {/* Upload Area */}
+              <div className="flex flex-col items-center justify-center py-16 px-6 text-center min-h-[320px]">
+                {uploading ? (
+                  <div className="w-full max-w-md">
+                    <div className="flex flex-col items-center">
+                      <Upload
+                        size={36}
+                        className="text-gray-400 mb-4 animate-bounce"
+                      />
+                      <p className="font-medium mb-2">Uploading your video...</p>
+                      <p className="text-sm text-gray-400 mb-4">
+                        Please wait while your video is being uploaded.
+                      </p>
+                      <div className="w-full bg-gray-700 rounded-full h-2 overflow-hidden">
+                        <motion.div
+                          className="bg-red-600 h-2 rounded-full"
+                          initial={{ width: "0%" }}
+                          animate={{ width: `${progress}%` }}
+                          transition={{ ease: "linear", duration: 0.1 }}
+                        />
+                      </div>
+                      <p className="text-gray-400 text-sm mt-2">{progress}%</p>
+                    </div>
+                  </div>
+                ) : completed ? (
+                  <div className="flex flex-col items-center text-center">
+                    <CheckCircle
+                      size={60}
+                      className="text-green-500 mb-4 animate-pulse"
+                    />
+                    <h3 className="font-semibold text-lg mb-2">
+                      Upload Complete!
+                    </h3>
+                    <p className="text-gray-400 text-sm mb-6">
+                      Your video has been successfully uploaded.
+                    </p>
+                    {/* ✅ NEXT Button */}
+                    <button
+                      onClick={handleNext}
+                      className="px-6 py-2 bg-white text-black font-medium rounded-full hover:bg-gray-200 transition"
+                    >
+                      Next
+                    </button>
+                  </div>
+                ) : (
+                  // Default view
+                  <div className="flex flex-col items-center justify-center text-center">
+                    <div className="w-16 h-16 flex items-center justify-center rounded-full bg-gray-800 mb-6">
+                      <Upload size={36} className="text-gray-300" />
+                    </div>
+                    <h3 className="font-medium mb-2">
+                      Drag and drop video files to upload
+                    </h3>
+                    <p className="text-sm text-gray-400 mb-6">
+                      Your videos will be private until you publish them.
+                    </p>
+                    <button
+                      onClick={handleSelectFiles}
+                      className="px-5 py-2.5 bg-white text-black font-medium rounded-full hover:bg-gray-200 transition"
+                    >
+                      Select files
+                    </button>
+                  </div>
+                )}
+              </div>
 
-        {/* Render Tab Content */}
-        {renderTabContent()}
-      </div>
+              {/* Footer */}
+              <div className="px-6 py-4 text-xs text-gray-500 border-t border-gray-700">
+                By submitting your videos to YouTube, you acknowledge that you
+                agree to YouTube’s{" "}
+                <span className="text-blue-400 cursor-pointer hover:underline">
+                  Terms of Service
+                </span>{" "}
+                and{" "}
+                <span className="text-blue-400 cursor-pointer hover:underline">
+                  Community Guidelines
+                </span>
+                . Please make sure you do not violate others' copyright or
+                privacy rights.
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
-};
-
-export default UploadVideos;
+}
