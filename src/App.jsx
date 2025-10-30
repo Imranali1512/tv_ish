@@ -65,7 +65,7 @@ import ReelScroller from "./components/ReelScroller";
 import PlansPage from "./pages/plans";
 import UploadVideos2 from "./components/uploadvideos2";
 import UploadVideos3 from "./components/uploadvideos3";
-import UploadVideos4 from "./components/uploadVideos4";
+import UploadVideos4 from "./components/uploadvideos4";
 import UploadVideos5 from "./components/uploadvideos5";
 
 
